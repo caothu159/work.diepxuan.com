@@ -1,2 +1,0 @@
-# insider.diepxuan.com
-insider
