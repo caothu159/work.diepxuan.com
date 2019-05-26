@@ -1,9 +1,13 @@
 <?php
 
+/*
+ * Copyright © 2019 Dxvn, Inc. All rights reserved.
+ */
+
 namespace App;
 
-use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
 {

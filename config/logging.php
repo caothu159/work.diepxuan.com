@@ -1,5 +1,9 @@
 <?php
 
+/*
+ * Copyright © 2019 Dxvn, Inc. All rights reserved.
+ */
+
 use Monolog\Handler\StreamHandler;
 use Monolog\Handler\SyslogUdpHandler;
 
