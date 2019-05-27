@@ -5,5 +5,5 @@
  */
 
 return [
-    'datadir' => env('SALARY_DATADIR','/cloud.diepxuan.vn/data/ductn/files/'),
+    'datadir' => env('SALARY_DATADIR', '/cloud.diepxuan.vn/data/ductn/files/'),
 ];
