@@ -1,13 +1,15 @@
 <?php
 
-namespace App\Salary;
+/*
+ * Copyright © 2019 Dxvn, Inc. All rights reserved.
+ */
 
-use Illuminate\Database\Eloquent\Model;
+namespace App\Salary;
 
 trait Time
 {
     /**
-     * List all years
+     * List all years.
      */
     public function months($year)
     {
@@ -15,7 +17,7 @@ trait Time
     }
 
     /**
-     * List all years
+     * List all years.
      */
     public function years()
     {
@@ -24,7 +26,7 @@ trait Time
     }
 
     /**
-     * get datadir path
+     * get datadir path.
      */
     public function datadir()
     {
