@@ -11,8 +11,12 @@ trait Time
     /**
      * List all years.
      */
-    public function months($year)
+    public function months($year = false)
     {
+        if (! $year) {
+            return [];
+        }
+
         return array_diff(scandir($this->datadir().DIRECTORY_SEPARATOR.$year), ['.', '..']);
     }
 
