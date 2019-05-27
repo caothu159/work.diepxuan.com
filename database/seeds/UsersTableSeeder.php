@@ -1,4 +1,9 @@
 <?php
+
+/*
+ * Copyright © 2019 Dxvn, Inc. All rights reserved.
+ */
+
 use App\User;
 use Illuminate\Database\Seeder;
 

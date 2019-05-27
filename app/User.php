@@ -46,10 +46,10 @@ class User extends Authenticatable
     ];
 
     /**
-     * Check user is admin
+     * Check user is admin.
      */
     public function isAdmin()
     {
-        return $this->role==5;
+        return $this->role == 5;
     }
 }
