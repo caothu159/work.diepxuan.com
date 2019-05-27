@@ -6,6 +6,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Salary;
 class HomeController extends Controller
 {
     /**
@@ -39,6 +40,6 @@ class HomeController extends Controller
      */
     public function admin()
     {
-        return view('admin');
+        return view('admin', ['salary' => new Salary]);
     }
 }

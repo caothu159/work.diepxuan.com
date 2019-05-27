@@ -14,7 +14,8 @@
                         </div>
                     @endif
 
-                    You are logged in!
+                    @include('salary/time', ['salary' => $salary])
+
                 </div>
             </div>
         </div>
