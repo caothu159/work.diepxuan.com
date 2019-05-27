@@ -13,11 +13,11 @@ trait Time
      */
     public function months($year = false)
     {
-        if (!$year) {
+        if (! $year) {
             return [];
         }
 
-        return array_diff(scandir($this->datadir() . DIRECTORY_SEPARATOR . $year), ['.', '..']);
+        return array_diff(scandir($this->datadir().DIRECTORY_SEPARATOR.$year), ['.', '..']);
     }
 
     /**
@@ -33,6 +33,6 @@ trait Time
      */
     public function datadir()
     {
-        return dirname(base_path()) . config('salary.datadir');
+        return dirname(base_path()).config('salary.datadir');
     }
 }
