@@ -21,7 +21,6 @@ trait Time
      */
     public function years()
     {
-        // return dirname(base_path()).config('salary.datadir');
         return array_diff(scandir($this->datadir()), ['.', '..']);
     }
 
