@@ -1,13 +1,26 @@
-// Fonts
-@import url('https://fonts.googleapis.com/css?family=Nunito');
+@import 'vendors/bootstrap';
 
-// Variables
-@import 'variables';
+@import 'abstracts/variables';
+// @import 'abstracts/functions';
+// @import 'abstracts/mixins';
 
-// Bootstrap
-@import '~bootstrap/scss/bootstrap';
+// @import 'base/reset';
+@import 'base/typography';
 
-.navbar-laravel {
-    background-color: #fff;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
-}
+@import 'layout/navigation';
+// @import 'layout/grid';
+// @import 'layout/header';
+// @import 'layout/footer';
+// @import 'layout/sidebar';
+// @import 'layout/forms';
+
+// @import 'components/buttons';
+// @import 'components/carousel';
+// @import 'components/slider';
+
+// @import 'pages/home';
+// @import 'pages/about';
+// @import 'pages/contact';
+
+// @import 'themes/theme';
+// @import 'themes/admin';
