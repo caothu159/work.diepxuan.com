@@ -25,6 +25,20 @@ class HomeController extends Controller
      */
     public function index()
     {
+        if(auth()->user()->isAdmin()){
+            return $this->admin();
+        }
+
         return view('home');
+    }
+
+    /**
+     * Show the application admin.
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function admin()
+    {
+        return view('admin');
     }
 }
