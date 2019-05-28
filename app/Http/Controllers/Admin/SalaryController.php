@@ -1,9 +1,13 @@
 <?php
 
+/*
+ * Copyright © 2019 Dxvn, Inc. All rights reserved.
+ */
+
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller as Controller;
 use App\Salary;
+use App\Http\Controllers\Controller as Controller;
 
 class SalaryController extends Controller
 {

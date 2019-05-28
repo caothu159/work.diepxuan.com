@@ -13,11 +13,11 @@ trait Time
      */
     public function months($year = false)
     {
-        if (!$year) {
+        if (! $year) {
             return [];
         }
 
-        return array_diff(scandir($this->_datadir() . DIRECTORY_SEPARATOR . $year), ['.', '..']);
+        return array_diff(scandir($this->_datadir().DIRECTORY_SEPARATOR.$year), ['.', '..']);
     }
 
     /**
@@ -29,18 +29,18 @@ trait Time
     }
 
     /**
-     * get Link go to view salary
+     * get Link go to view salary.
      */
     public function link(int $year = null, int $month = null)
     {
-        if (!$year) {
+        if (! $year) {
             return route('salary');
         }
-        if (!$month) {
+        if (! $month) {
             return route('salary', ['year' => $year]);
         }
-        return route('salary', ['year' => $year, 'month' => $month]);
 
+        return route('salary', ['year' => $year, 'month' => $month]);
     }
 
     /**
@@ -48,6 +48,6 @@ trait Time
      */
     protected function _datadir()
     {
-        return dirname(base_path()) . config('salary.datadir');
+        return dirname(base_path()).config('salary.datadir');
     }
 }

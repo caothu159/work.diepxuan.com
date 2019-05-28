@@ -6,8 +6,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Salary;
-
 class HomeController extends Controller
 {
     /**
