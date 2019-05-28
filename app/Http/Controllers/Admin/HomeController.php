@@ -4,7 +4,10 @@
  * Copyright © 2019 Dxvn, Inc. All rights reserved.
  */
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
+
+use App\Salary;
+use App\Http\Controllers\Controller as Controller;
 
 class HomeController extends Controller
 {
@@ -16,15 +19,16 @@ class HomeController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
+        $this->middleware('admin');
     }
 
     /**
-     * Show the application dashboard.
+     * Show the application admin dashboard.
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
     public function index()
     {
-        return view('home');
+        return view('admin', ['salary' => new Salary]);
     }
 }
