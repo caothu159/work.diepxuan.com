@@ -5,9 +5,9 @@
  */
 
 namespace App\Http\Controllers\Admin;
-use App\Http\Controllers\Controller as Controller;
 
 use App\Salary;
+use App\Http\Controllers\Controller as Controller;
 
 class HomeController extends Controller
 {
