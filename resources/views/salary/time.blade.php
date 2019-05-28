@@ -2,7 +2,7 @@
     <details>
         <summary>{{ $year }}</summary>
         @foreach ($salary->months($year) as $month)
-            <a href="{{ $month }}">{{ $month }}</a>
+            <a href="{{ $salary->link($year, $month) }}">{{ $month }}</a>
         @endforeach
     </details>
 @endforeach

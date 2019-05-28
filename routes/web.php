@@ -8,9 +8,18 @@ Auth::routes([
     'register' => false,
 ]);
 
-Route::get('/', 'HomeController@index')->name('home')->middleware('auth');
-Route::get('home', 'HomeController@index')->name('home')->middleware('auth');
+Route::group(['middleware' => ['auth']], function () {
+    Route::get('/', 'HomeController@index')->name('home');
+    Route::get('home', 'HomeController@index');
+    Route::get('salary', 'SalaryController@index')->name('salary');
+});
 
-Route::group(['middleware' => ['admin']], function () {
-    Route::get('admin', 'HomeController@admin');
+Route::group(['middleware' => ['admin', 'auth']], function () {
+    Route::get('/', 'Admin\\HomeController@index')->name('home');
+    Route::get('home', 'Admin\\HomeController@index');
+    Route::get('salary', 'Admin\\SalaryController@index')->name('salary');
+
+    Route::get('salary/{year?}/{month?}', 'Admin\\SalaryController@show')
+        ->name('salary')
+        ->where(['year' => '[0-9]+', 'month' => '[0-9]+']);
 });
