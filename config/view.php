@@ -37,4 +37,5 @@ return [
         realpath(storage_path('framework/views'))
     ),
 
+    'cache' => in_array(env('APP_ENV', 'local'), ['production', 'staging']),
 ];
