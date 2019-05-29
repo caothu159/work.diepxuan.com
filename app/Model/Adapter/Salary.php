@@ -7,4 +7,5 @@
 namespace App\Model\Adapter;
 
 trait Salary
-{ }
+{
+}

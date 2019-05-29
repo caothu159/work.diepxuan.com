@@ -1,5 +1,9 @@
 <?php
 
+/*
+ * Copyright © 2019 Dxvn, Inc. All rights reserved.
+ */
+
 namespace App\Model\Implementation;
 
 interface Salary
@@ -14,7 +18,7 @@ interface Salary
     /**
      * List all month in year.
      *
-     * @param boolean $year
+     * @param bool $year
      * @return void
      */
     public function months();
@@ -22,8 +26,8 @@ interface Salary
     /**
      * Get Link go to view salary.
      *
-     * @param integer $year
-     * @param integer $month
+     * @param int $year
+     * @param int $month
      * @return void
      */
     public function link(int $year = null, int $month = null);
