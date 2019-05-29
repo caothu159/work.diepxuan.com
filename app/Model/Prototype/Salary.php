@@ -11,24 +11,24 @@ use Illuminate\Database\Eloquent\Model;
 class Salary extends Model
 {
     /**
-     * Add extra attributes
+     * Add extra attributes.
      *
      * @var array
      */
     protected $attributes = [
         'year',
-        'month'
+        'month',
     ];
 
     /**
-     * Make attributes available in the json response
+     * Make attributes available in the json response.
      *
      * @var array
      */
-    protected $appends = array(
+    protected $appends = [
         'year',
-        'month'
-    );
+        'month',
+    ];
 
     /**
      * The model's default values for attributes.
