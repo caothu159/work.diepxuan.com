@@ -4,24 +4,30 @@
  * Copyright © 2019 Dxvn, Inc. All rights reserved.
  */
 
-namespace App\Salary;
+namespace App\Model\Factory;
 
-trait Time
+
+trait Salary
 {
     /**
-     * List all years.
+     * List all month in year.
+     *
+     * @param boolean $year
+     * @return void
      */
     public function months($year = false)
     {
-        if (! $year) {
+        if (!$year) {
             return [];
         }
 
-        return array_diff(scandir($this->_datadir().DIRECTORY_SEPARATOR.$year), ['.', '..']);
+        return array_diff(scandir($this->_datadir() . DIRECTORY_SEPARATOR . $year), ['.', '..']);
     }
 
     /**
-     * List all years.
+     * List all years .
+     *
+     * @return void
      */
     public function years()
     {
@@ -29,14 +35,18 @@ trait Time
     }
 
     /**
-     * get Link go to view salary.
+     * Get Link go to view salary.
+     *
+     * @param integer $year
+     * @param integer $month
+     * @return void
      */
     public function link(int $year = null, int $month = null)
     {
-        if (! $year) {
+        if (!$year) {
             return route('salary');
         }
-        if (! $month) {
+        if (!$month) {
             return route('salary', ['year' => $year]);
         }
 
@@ -48,6 +58,6 @@ trait Time
      */
     protected function _datadir()
     {
-        return dirname(base_path()).config('salary.datadir');
+        return dirname(base_path()) . config('salary.datadir');
     }
 }
