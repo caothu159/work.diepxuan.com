@@ -1,5 +1,9 @@
 <?php
 
+/*
+ * Copyright © 2019 Dxvn, Inc. All rights reserved.
+ */
+
 namespace App\Model\Adapter;
 
 trait AbstractAdapter
@@ -22,7 +26,7 @@ trait AbstractAdapter
      */
     public function datapath(string $file = null)
     {
-        return $this->datadir() . $file;
+        return $this->datadir().$file;
     }
 
     /**
@@ -46,8 +50,8 @@ trait AbstractAdapter
     {
         if ($year && $month) {
             return $this->__datadir()
-            . $this->year . DIRECTORY_SEPARATOR
-            . $this->month . DIRECTORY_SEPARATOR;
+            .$this->year.DIRECTORY_SEPARATOR
+            .$this->month.DIRECTORY_SEPARATOR;
         }
 
         return $this->__datadir();
@@ -60,6 +64,6 @@ trait AbstractAdapter
      */
     private function __datadir()
     {
-        return dirname(base_path()) . config('salary.datadir');
+        return dirname(base_path()).config('salary.datadir');
     }
 }
