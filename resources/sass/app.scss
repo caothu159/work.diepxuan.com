@@ -4,15 +4,15 @@
 // @import 'abstracts/functions';
 // @import 'abstracts/mixins';
 
-// @import 'base/reset';
+@import 'base/reset';
 @import 'base/typography';
 
 @import 'layout/navigation';
-// @import 'layout/grid';
-// @import 'layout/header';
-// @import 'layout/footer';
-// @import 'layout/sidebar';
-// @import 'layout/forms';
+@import 'layout/grid';
+@import 'layout/header';
+@import 'layout/footer';
+@import 'layout/sidebar';
+@import 'layout/forms';
 
 // @import 'components/buttons';
 // @import 'components/carousel';
@@ -22,5 +22,5 @@
 // @import 'pages/about';
 // @import 'pages/contact';
 
-// @import 'themes/theme';
-// @import 'themes/admin';
+@import 'themes/theme';
+@import 'themes/admin';

@@ -30,7 +30,7 @@ class SalaryController extends Controller
      */
     public function show(int $year = null, int $month = null)
     {
-        return view('admin', ['salary' => new Salary]);
+        return view('admin', ['salary' => new Salary($year, $month)]);
     }
 
     /**

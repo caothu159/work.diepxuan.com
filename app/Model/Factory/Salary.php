@@ -8,6 +8,23 @@ namespace App\Model\Factory;
 
 trait Salary
 {
+    public function __construct(int $year = null, int $month = null)
+    {
+        if ($year) {
+            $this->year = $year;
+        }
+
+        if ($month) {
+            $this->month = $month;
+        }
+
+        if ($this->hasData()) {
+
+        }
+
+        return parent::__construct();
+    }
+
     /**
      * List all month in year.
      *
@@ -16,11 +33,11 @@ trait Salary
      */
     public function months($year = false)
     {
-        if (! $year) {
+        if (!$year) {
             return [];
         }
 
-        return array_diff(scandir($this->_datadir().DIRECTORY_SEPARATOR.$year), ['.', '..']);
+        return array_diff(scandir($this->_datadir() . DIRECTORY_SEPARATOR . $year), ['.', '..']);
     }
 
     /**
@@ -42,21 +59,13 @@ trait Salary
      */
     public function link(int $year = null, int $month = null)
     {
-        if (! $year) {
+        if (!$year) {
             return route('salary');
         }
-        if (! $month) {
+        if (!$month) {
             return route('salary', ['year' => $year]);
         }
 
         return route('salary', ['year' => $year, 'month' => $month]);
-    }
-
-    /**
-     * get datadir path.
-     */
-    protected function _datadir()
-    {
-        return dirname(base_path()).config('salary.datadir');
     }
 }

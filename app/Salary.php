@@ -10,4 +10,5 @@ use App\Model\Salary as Model;
 
 class Salary extends Model
 {
+    //
 }

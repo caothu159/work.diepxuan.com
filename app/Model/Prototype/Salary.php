@@ -10,25 +10,17 @@ use Illuminate\Database\Eloquent\Model;
 
 class Salary extends Model
 {
-    /**
-     * Add extra attributes.
-     *
-     * @var array
-     */
-    protected $attributes = [
-        'year',
-        'month',
-    ];
+    public $year  = null;
+    public $month = null;
+
+    public $employees;
 
     /**
      * Make attributes available in the json response.
      *
      * @var array
      */
-    protected $appends = [
-        'year',
-        'month',
-    ];
+    protected $_appends = [];
 
     /**
      * The model's default values for attributes.

@@ -6,8 +6,8 @@
 
 namespace App\Model\Adapter;
 
-trait Salary
+trait Employee
 {
     use AbstractAdapter;
-
+    use Data;
 }

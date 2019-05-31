@@ -8,13 +8,13 @@ Auth::routes([
     'register' => false,
 ]);
 
-Route::group(['middleware' => ['auth']], function () {
+Route::group(['middleware' => ['auth', 'clearcache']], function () {
     Route::get('/', 'HomeController@index')->name('home');
     Route::get('home', 'HomeController@index');
     Route::get('salary', 'SalaryController@index')->name('salary');
 });
 
-Route::group(['middleware' => ['admin', 'auth']], function () {
+Route::group(['middleware' => ['admin', 'auth', 'clearcache']], function () {
     Route::get('/', 'Admin\\HomeController@index')->name('home');
     Route::get('home', 'Admin\\HomeController@index');
     Route::get('salary', 'Admin\\SalaryController@index')->name('salary');

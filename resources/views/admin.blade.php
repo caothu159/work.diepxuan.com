@@ -17,12 +17,16 @@
             <div class="card">
                 <div class="card-body">
                     @if (session('status'))
-                        <div class="alert alert-success" role="alert">
-                            {{ session('status') }}
-                        </div>
+                    <div class="alert alert-success" role="alert">
+                        {{ session('status') }}
+                    </div>
                     @endif
 
+                    @if (!$salary->hasData())
+                    Please select time to view salary
+                    @else
                     @include('salary/salary', ['salary' => $salary])
+                    @endif
 
                 </div>
             </div>
