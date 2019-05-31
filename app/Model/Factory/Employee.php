@@ -25,7 +25,6 @@ trait Employee
         }
 
         if ($this->hasData()) {
-
         }
 
         return parent::__construct();
@@ -33,6 +32,6 @@ trait Employee
 
     public function employees()
     {
-        # code...
+        // code...
     }
 }

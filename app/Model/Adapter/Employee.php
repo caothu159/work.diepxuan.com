@@ -13,7 +13,7 @@ trait Employee
 
     public function fileContent()
     {
-        # code...
+        // code...
         return $this->_fileContent($this->datapath($this->_datafile));
         // return $this->datapath($this->_datafile);
     }

@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Salary extends Model
 {
-    public $year  = null;
+    public $year = null;
     public $month = null;
 
     public $employee;

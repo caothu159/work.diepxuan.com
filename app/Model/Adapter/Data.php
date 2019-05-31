@@ -25,11 +25,11 @@ trait Data
 
         $spreadsheet = IOFactory::load($path);
 
-        $sheet      = $spreadsheet->getActiveSheet();
+        $sheet = $spreadsheet->getActiveSheet();
         $highestRow = $sheet->getHighestRow();
-        $isHeader   = true;
-        $content    = [];
-        $cols       = [];
+        $isHeader = true;
+        $content = [];
+        $cols = [];
         for ($row = 1; $row <= $highestRow; $row++) {
             $rowData = $this->__rowContent($sheet, $row);
             foreach ($rowData as $cells) {
@@ -38,7 +38,7 @@ trait Data
                         continue;
                     }
                     $cellData = $this->__contentRepair($cellData);
-                    if (!$isHeader) {
+                    if (! $isHeader) {
                         $content[$cells['A']][$cols[$cellRef]] = $cellData;
                     } else {
                         $cols[$cellRef] = $cellData;
@@ -47,6 +47,7 @@ trait Data
                 $isHeader = false;
             }
         }
+
         return $content;
     }
 
@@ -57,8 +58,8 @@ trait Data
     private function __getHighestColumn($sheet)
     {
         $highestColumn = $sheet->getHighestColumn();
-        $headerRow     = 1;
-        $rowsData      = $sheet->rangeToArray('A' . $headerRow . ':' . $highestColumn . $headerRow,
+        $headerRow = 1;
+        $rowsData = $sheet->rangeToArray('A'.$headerRow.':'.$highestColumn.$headerRow,
             null,
             true,
             false,
@@ -74,6 +75,7 @@ trait Data
                 $highestColumn = $cellRef;
             }
         }
+
         return $highestColumn;
     }
 
@@ -86,8 +88,9 @@ trait Data
     private function __rowContent($sheet, $row)
     {
         $highestColumn = $this->__getHighestColumn($sheet);
+
         return $sheet->rangeToArray(
-            'A' . $row . ':' . $highestColumn . $row,
+            'A'.$row.':'.$highestColumn.$row,
             null,
             true,
             false,
@@ -111,6 +114,7 @@ trait Data
         $content = preg_replace('/[\x00-\x1F\x7F]/u', '', $content);
         $content = preg_replace('/[\x00-\x1F\x7F\xA0]/u', '', $content);
         $content = nl2br($content);
+
         return $content;
     }
 }

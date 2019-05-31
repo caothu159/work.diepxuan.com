@@ -9,5 +9,4 @@ namespace App\Model\Adapter;
 trait Salary
 {
     use AbstractAdapter;
-
 }
