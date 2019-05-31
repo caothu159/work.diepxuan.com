@@ -13,7 +13,7 @@ class Salary extends Model
     public $year  = null;
     public $month = null;
 
-    public $employees;
+    public $employee;
 
     /**
      * Make attributes available in the json response.

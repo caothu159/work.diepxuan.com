@@ -6,8 +6,8 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Salary;
 use App\Http\Controllers\Controller as Controller;
+use App\Salary;
 
 class SalaryController extends Controller
 {
@@ -24,13 +24,15 @@ class SalaryController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $year
-     * @param  int  $month
-     * @return \Illuminate\Http\Response
+     * @param string $year
+     * @param string $month
+     * @return void|\Illuminate\Http\Response
      */
-    public function show(int $year = null, int $month = null)
+    public function show(string $year = null, string $month = null)
     {
-        return view('admin', ['salary' => new Salary($year, $month)]);
+        $salary = new Salary($year, $month);
+        // dd($salary->employee->fileContent());
+        return view('admin', ['salary' => $salary]);
     }
 
     /**

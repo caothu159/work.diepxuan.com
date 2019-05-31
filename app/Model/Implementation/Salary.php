@@ -11,7 +11,7 @@ interface Salary
     /**
      * List all years .
      *
-     * @return void
+     * @return array
      */
     public function years();
 
@@ -19,16 +19,16 @@ interface Salary
      * List all month in year.
      *
      * @param bool $year
-     * @return void
+     * @return array
      */
     public function months();
 
     /**
      * Get Link go to view salary.
      *
-     * @param int $year
-     * @param int $month
-     * @return void
+     * @param string $year
+     * @param string $month
+     * @return string
      */
-    public function link(int $year = null, int $month = null);
+    public function link(string $year = null, string $month = null);
 }

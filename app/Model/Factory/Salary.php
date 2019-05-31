@@ -6,9 +6,16 @@
 
 namespace App\Model\Factory;
 
+use App\Employee;
 trait Salary
 {
-    public function __construct(int $year = null, int $month = null)
+    /**
+     * Employee Construct.
+     *
+     * @param string $year
+     * @param string $month
+     */
+    public function __construct(string $year = null, string $month = null)
     {
         if ($year) {
             $this->year = $year;
@@ -19,7 +26,7 @@ trait Salary
         }
 
         if ($this->hasData()) {
-
+            $this->employee = new Employee($this->year, $this->month);
         }
 
         return parent::__construct();
@@ -53,11 +60,11 @@ trait Salary
     /**
      * Get Link go to view salary.
      *
-     * @param int $year
-     * @param int $month
-     * @return void
+     * @param string $year
+     * @param string $month
+     * @return string
      */
-    public function link(int $year = null, int $month = null)
+    public function link(string $year = null, string $month = null)
     {
         if (!$year) {
             return route('salary');

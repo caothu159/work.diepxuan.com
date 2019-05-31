@@ -36,13 +36,13 @@ trait AbstractAdapter
     }
 
     /**
-     * get datadir path.
+     * Get datadir path.
      *
-     * @param integer $year
-     * @param integer $month
+     * @param string $year
+     * @param string $month
      * @return string
      */
-    protected function _datadir(int $year = null, int $month = null)
+    protected function _datadir(string $year = null, string $month = null)
     {
         if ($year && $month) {
             return $this->__datadir()

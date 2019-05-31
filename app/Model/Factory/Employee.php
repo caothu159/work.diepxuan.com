@@ -8,14 +8,20 @@ namespace App\Model\Factory;
 
 trait Employee
 {
-    public function __construct(int $year = null, int $month = null)
+    /**
+     * Employee construct.
+     *
+     * @param string $year
+     * @param string $month
+     */
+    public function __construct(string $year = null, string $month = null)
     {
         if ($year) {
-            $this->__year = $year;
+            $this->year = $year;
         }
 
         if ($month) {
-            $this->__month = $month;
+            $this->month = $month;
         }
 
         if ($this->hasData()) {

@@ -10,4 +10,11 @@ trait Employee
 {
     use AbstractAdapter;
     use Data;
+
+    public function fileContent()
+    {
+        # code...
+        return $this->_fileContent($this->datapath($this->_datafile));
+        // return $this->datapath($this->_datafile);
+    }
 }
