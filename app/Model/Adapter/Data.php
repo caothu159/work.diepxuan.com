@@ -10,7 +10,6 @@ use PhpOffice\PhpSpreadsheet\IOFactory;
 
 trait Data
 {
-
     /**
      * @return void
      */
@@ -34,11 +33,11 @@ trait Data
 
         $spreadsheet = IOFactory::load($path);
 
-        $sheet      = $spreadsheet->getActiveSheet();
+        $sheet = $spreadsheet->getActiveSheet();
         $highestRow = $sheet->getHighestRow();
-        $isHeader   = true;
-        $content    = [];
-        $cols       = [];
+        $isHeader = true;
+        $content = [];
+        $cols = [];
         for ($row = 1; $row <= $highestRow; $row++) {
             $rowData = $this->__rowContent($sheet, $row);
             foreach ($rowData as $cells) {
@@ -47,7 +46,7 @@ trait Data
                         continue;
                     }
                     $cellData = $this->__contentRepair($cellData);
-                    if (!$isHeader) {
+                    if (! $isHeader) {
                         $content[$cells['A']][$cols[$cellRef]] = $cellData;
                     } else {
                         $cols[$cellRef] = $cellData;
@@ -67,8 +66,8 @@ trait Data
     private function __getHighestColumn($sheet)
     {
         $highestColumn = $sheet->getHighestColumn();
-        $headerRow     = 1;
-        $rowsData      = $sheet->rangeToArray('A' . $headerRow . ':' . $highestColumn . $headerRow,
+        $headerRow = 1;
+        $rowsData = $sheet->rangeToArray('A'.$headerRow.':'.$highestColumn.$headerRow,
             null,
             true,
             false,
@@ -99,7 +98,7 @@ trait Data
         $highestColumn = $this->__getHighestColumn($sheet);
 
         return $sheet->rangeToArray(
-            'A' . $row . ':' . $highestColumn . $row,
+            'A'.$row.':'.$highestColumn.$row,
             null,
             true,
             false,

@@ -6,8 +6,8 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller as Controller;
 use App\Salary;
+use App\Http\Controllers\Controller as Controller;
 
 class SalaryController extends Controller
 {
@@ -34,6 +34,7 @@ class SalaryController extends Controller
         // dd($salary->employee->fileContent());
         // dd($salary->productivity->fileContent());
         dd($salary->division->fileContent());
+
         return view('admin', ['salary' => $salary]);
     }
 
