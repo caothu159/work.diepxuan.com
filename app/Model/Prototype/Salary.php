@@ -31,6 +31,11 @@ class Salary extends Model
     public $productivity;
 
     /**
+     * @var \App\Division
+     */
+    public $division;
+
+    /**
      * Make attributes available in the json response.
      *
      * @var array
