@@ -6,13 +6,13 @@
 
 namespace App\Model\Adapter;
 
-trait Employee
+trait Productivity
 {
     use AbstractAdapter;
     use Data;
 
     /**
-     * @return void
+     * @return array
      */
     public function fileContent()
     {
