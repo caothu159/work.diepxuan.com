@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Presence extends Model
 {
-    public $year  = null;
+    public $year = null;
     public $month = null;
 
     protected $_datafile = 'chamcong.xlsx';
