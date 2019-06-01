@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Productivity extends Model
 {
-    public $year  = null;
+    public $year = null;
     public $month = null;
 
     protected $_datafile = 'nangsuat.xlsx';
