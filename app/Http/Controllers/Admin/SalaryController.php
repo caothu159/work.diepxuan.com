@@ -33,6 +33,8 @@ class SalaryController extends Controller
         $salary = new Salary($year, $month);
         // dd($salary->employee->fileContent());
         // dd($salary->productivity->fileContent());
+        dd($salary->division->fileContent());
+
         return view('admin', ['salary' => $salary]);
     }
 

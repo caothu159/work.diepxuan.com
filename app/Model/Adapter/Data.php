@@ -11,6 +11,14 @@ use PhpOffice\PhpSpreadsheet\IOFactory;
 trait Data
 {
     /**
+     * @return void
+     */
+    public function fileContent()
+    {
+        return $this->_fileContent($this->datapath($this->_datafile));
+    }
+
+    /**
      * Read data from file.
      *
      * @param [type] $path

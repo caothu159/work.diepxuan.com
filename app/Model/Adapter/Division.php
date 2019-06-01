@@ -6,7 +6,7 @@
 
 namespace App\Model\Adapter;
 
-trait Productivity
+trait Division
 {
     use AbstractAdapter;
     use Data;

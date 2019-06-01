@@ -6,6 +6,7 @@
 
 namespace App\Model\Factory;
 
+use App\Division;
 use App\Employee;
 use App\Productivity;
 
@@ -30,6 +31,7 @@ trait Salary
         if ($this->hasData()) {
             $this->employee = new Employee($this->year, $this->month);
             $this->productivity = new Productivity($this->year, $this->month);
+            $this->division = new Division($this->year, $this->month);
         }
 
         return parent::__construct();
