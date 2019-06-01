@@ -6,7 +6,7 @@
 
 namespace App\Model\Factory;
 
-trait Division
+trait Presence
 {
     /**
      * Employee construct.

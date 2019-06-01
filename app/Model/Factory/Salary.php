@@ -8,6 +8,7 @@ namespace App\Model\Factory;
 
 use App\Division;
 use App\Employee;
+use App\Presence;
 use App\Productivity;
 
 trait Salary
@@ -32,6 +33,7 @@ trait Salary
             $this->employee = new Employee($this->year, $this->month);
             $this->productivity = new Productivity($this->year, $this->month);
             $this->division = new Division($this->year, $this->month);
+            $this->presence = new Presence($this->year, $this->month);
         }
 
         return parent::__construct();
