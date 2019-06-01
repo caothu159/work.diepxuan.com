@@ -6,9 +6,9 @@
 
 namespace App;
 
-use App\Model\Salary as Model;
+use App\Model\Productivity as Model;
 
-class Salary extends Model
+class Productivity extends Model
 {
     //
 }

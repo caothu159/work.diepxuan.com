@@ -4,9 +4,8 @@
  * Copyright © 2019 Dxvn, Inc. All rights reserved.
  */
 
-namespace App\Model\Adapter;
+namespace App\Model\Implementation;
 
-trait Salary
+interface Employee
 {
-    use AbstractAdapter;
 }
