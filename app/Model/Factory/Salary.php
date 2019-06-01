@@ -8,6 +8,7 @@ namespace App\Model\Factory;
 
 use App\Division;
 use App\Employee;
+use App\Presence;
 use App\Productivity;
 
 trait Salary
@@ -29,9 +30,10 @@ trait Salary
         }
 
         if ($this->hasData()) {
-            $this->employee = new Employee($this->year, $this->month);
+            $this->employee     = new Employee($this->year, $this->month);
             $this->productivity = new Productivity($this->year, $this->month);
-            $this->division = new Division($this->year, $this->month);
+            $this->division     = new Division($this->year, $this->month);
+            $this->presence     = new Presence($this->year, $this->month);
         }
 
         return parent::__construct();
@@ -45,11 +47,11 @@ trait Salary
      */
     public function months($year = false)
     {
-        if (! $year) {
+        if (!$year) {
             return [];
         }
 
-        return array_diff(scandir($this->_datadir().DIRECTORY_SEPARATOR.$year), ['.', '..']);
+        return array_diff(scandir($this->_datadir() . DIRECTORY_SEPARATOR . $year), ['.', '..']);
     }
 
     /**
@@ -71,10 +73,10 @@ trait Salary
      */
     public function link(string $year = null, string $month = null)
     {
-        if (! $year) {
+        if (!$year) {
             return route('salary');
         }
-        if (! $month) {
+        if (!$month) {
             return route('salary', ['year' => $year]);
         }
 

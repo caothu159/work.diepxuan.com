@@ -36,6 +36,11 @@ class Salary extends Model
     public $division;
 
     /**
+     * @var \App\Presence
+     */
+    public $presence;
+
+    /**
      * Make attributes available in the json response.
      *
      * @var array
