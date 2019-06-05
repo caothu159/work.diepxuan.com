@@ -24,18 +24,19 @@ trait Productivity
      */
     public function getByTime()
     {
-        if (!$this->hasData()) {
+        if (! $this->hasData()) {
             return $this::all();
         }
 
-        $dt    = sprintf('%s-%s', $this->getYear(), $this->getMonth());
-        $first = date("Y-m-01", strtotime($dt));
+        $dt = sprintf('%s-%s', $this->getYear(), $this->getMonth());
+        $first = date('Y-m-01', strtotime($dt));
         $first = new \DateTime($first);
         $first = $first->getTimestamp() / (24 * 60 * 60) + 25569;
 
-        $last = date("Y-m-t", strtotime($dt));
+        $last = date('Y-m-t', strtotime($dt));
         $last = new \DateTime($last);
         $last = $last->getTimestamp() / (24 * 60 * 60) + 25569;
-        return $this->whereBetween('time', array($first, $last))->get();
+
+        return $this->whereBetween('time', [$first, $last])->get();
     }
 }

@@ -27,11 +27,11 @@ trait Salary
      */
     public function months($year = false)
     {
-        if (!$year) {
+        if (! $year) {
             return [];
         }
 
-        return array_diff(scandir($this->_datadir() . DIRECTORY_SEPARATOR . $year), ['.', '..']);
+        return array_diff(scandir($this->_datadir().DIRECTORY_SEPARATOR.$year), ['.', '..']);
     }
 
     /**
@@ -54,13 +54,13 @@ trait Salary
      */
     public function link(string $year = null, string $month = null, string $type = null)
     {
-        if (!$year) {
+        if (! $year) {
             return route('salary');
         }
-        if (!$month) {
+        if (! $month) {
             return route('salary', ['year' => $year]);
         }
-        if (!$type) {
+        if (! $type) {
             return route('salary', ['year' => $year, 'month' => $month]);
         }
 

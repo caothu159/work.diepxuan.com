@@ -6,8 +6,6 @@
 
 namespace App\Model\Prototype;
 
-use Illuminate\Database\Eloquent\Model;
-
 class Employee extends AbstractPrototype
 {
     protected $_datafile = 'nhanvien.xlsx';
