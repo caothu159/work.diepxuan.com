@@ -6,12 +6,7 @@
 
 namespace App\Model\Prototype;
 
-use Illuminate\Database\Eloquent\Model;
-
-class Division extends Model
+class Division extends AbstractPrototype
 {
-    public $year = null;
-    public $month = null;
-
     protected $_datafile = 'phancong.xlsx';
 }

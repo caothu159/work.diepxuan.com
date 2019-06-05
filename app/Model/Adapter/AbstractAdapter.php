@@ -15,7 +15,7 @@ trait AbstractAdapter
      */
     public function hasData()
     {
-        return $this->year and $this->month;
+        return $this->getYear() and $this->getMonth();
     }
 
     /**
@@ -36,7 +36,7 @@ trait AbstractAdapter
      */
     public function datadir()
     {
-        return $this->_datadir($this->year, $this->month);
+        return $this->_datadir($this->getYear(), $this->getMonth());
     }
 
     /**
@@ -50,8 +50,8 @@ trait AbstractAdapter
     {
         if ($year && $month) {
             return $this->__datadir()
-            .$this->year.DIRECTORY_SEPARATOR
-            .$this->month.DIRECTORY_SEPARATOR;
+                .$year.DIRECTORY_SEPARATOR
+                .$month.DIRECTORY_SEPARATOR;
         }
 
         return $this->__datadir();

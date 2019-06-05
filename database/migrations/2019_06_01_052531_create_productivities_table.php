@@ -18,7 +18,16 @@ class CreateProductivitiesTable extends Migration
     public function up()
     {
         Schema::create('productivities', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->bigInteger('time')->unique()->primary();
+            $table->decimal('ns 01593', 9, 0);
+            $table->decimal('no 01593', 9, 0);
+            $table->decimal('thu no 01593', 9, 0);
+            $table->decimal('ns 03166', 9, 0);
+            $table->decimal('no 03166', 9, 0);
+            $table->decimal('thu no 03166', 9, 0);
+            $table->decimal('ns 05605', 9, 0);
+            $table->decimal('no 05605', 9, 0);
+            $table->decimal('thu no 05605', 9, 0);
             $table->timestamps();
         });
     }

@@ -9,24 +9,13 @@ namespace App\Model\Factory;
 trait Presence
 {
     /**
-     * Employee construct.
+     * Presence construct.
      *
      * @param string $year
      * @param string $month
      */
     public function __construct(string $year = null, string $month = null)
     {
-        if ($year) {
-            $this->year = $year;
-        }
-
-        if ($month) {
-            $this->month = $month;
-        }
-
-        if ($this->hasData()) {
-        }
-
-        return parent::__construct();
+        parent::__construct($year, $month);
     }
 }

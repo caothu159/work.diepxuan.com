@@ -16,17 +16,6 @@ trait Division
      */
     public function __construct(string $year = null, string $month = null)
     {
-        if ($year) {
-            $this->year = $year;
-        }
-
-        if ($month) {
-            $this->month = $month;
-        }
-
-        if ($this->hasData()) {
-        }
-
-        return parent::__construct();
+        parent::__construct($year, $month);
     }
 }

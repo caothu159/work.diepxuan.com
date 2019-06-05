@@ -13,7 +13,7 @@ trait Data
     /**
      * @return void
      */
-    public function fileContent()
+    public function loadFromFile()
     {
         return $this->_fileContent($this->datapath($this->_datafile));
     }
@@ -47,6 +47,10 @@ trait Data
                     }
                     $cellData = $this->__contentRepair($cellData);
                     if (! $isHeader) {
+                        if ('' == $cells['A'] || '' == $cols[$cellRef]) {
+                            continue;
+                        }
+                        $cellData = $cellData ? $cellData : 0;
                         $content[$cells['A']][$cols[$cellRef]] = $cellData;
                     } else {
                         $cols[$cellRef] = $cellData;

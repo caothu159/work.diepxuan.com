@@ -8,38 +8,8 @@ namespace App\Model\Prototype;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Salary extends Model
+class Salary extends AbstractPrototype
 {
-    /**
-     * @var string
-     */
-    public $year = null;
-
-    /**
-     * @var string
-     */
-    public $month = null;
-
-    /**
-     * @var \App\Employee
-     */
-    public $employee;
-
-    /**
-     * @var \App\Productivity
-     */
-    public $productivity;
-
-    /**
-     * @var \App\Division
-     */
-    public $division;
-
-    /**
-     * @var \App\Presence
-     */
-    public $presence;
-
     /**
      * Make attributes available in the json response.
      *

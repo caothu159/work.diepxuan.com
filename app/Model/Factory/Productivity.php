@@ -14,24 +14,29 @@ trait Productivity
      * @param string $year
      * @param string $month
      */
-    public function __construct(string $year = null, string $month = null)
+    public function __construct()
     {
-        if ($year) {
-            $this->year = $year;
-        }
-
-        if ($month) {
-            $this->month = $month;
-        }
-
-        if ($this->hasData()) {
-        }
-
-        return parent::__construct();
+        parent::__construct();
     }
 
-    public function productivities()
+    /**
+     * @return array
+     */
+    public function getByTime()
     {
-        // code...
+        if (! $this->hasData()) {
+            return $this::all();
+        }
+
+        $dt = sprintf('%s-%s', $this->getYear(), $this->getMonth());
+        $first = date('Y-m-01', strtotime($dt));
+        $first = new \DateTime($first);
+        $first = $first->getTimestamp() / (24 * 60 * 60) + 25569;
+
+        $last = date('Y-m-t', strtotime($dt));
+        $last = new \DateTime($last);
+        $last = $last->getTimestamp() / (24 * 60 * 60) + 25569;
+
+        return $this->whereBetween('time', [$first, $last])->get();
     }
 }

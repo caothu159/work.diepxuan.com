@@ -6,37 +6,17 @@
 
 namespace App\Model\Factory;
 
-use App\Division;
-use App\Employee;
-use App\Presence;
-use App\Productivity;
-
 trait Salary
 {
     /**
-     * Employee Construct.
+     * Salary Construct.
      *
      * @param string $year
      * @param string $month
      */
-    public function __construct(string $year = null, string $month = null)
+    public function __construct()
     {
-        if ($year) {
-            $this->year = $year;
-        }
-
-        if ($month) {
-            $this->month = $month;
-        }
-
-        if ($this->hasData()) {
-            $this->employee = new Employee($this->year, $this->month);
-            $this->productivity = new Productivity($this->year, $this->month);
-            $this->division = new Division($this->year, $this->month);
-            $this->presence = new Presence($this->year, $this->month);
-        }
-
-        return parent::__construct();
+        parent::__construct();
     }
 
     /**
@@ -69,9 +49,10 @@ trait Salary
      *
      * @param string $year
      * @param string $month
+     * @param string $type
      * @return string
      */
-    public function link(string $year = null, string $month = null)
+    public function link(string $year = null, string $month = null, string $type = null)
     {
         if (! $year) {
             return route('salary');
@@ -79,7 +60,10 @@ trait Salary
         if (! $month) {
             return route('salary', ['year' => $year]);
         }
+        if (! $type) {
+            return route('salary', ['year' => $year, 'month' => $month]);
+        }
 
-        return route('salary', ['year' => $year, 'month' => $month]);
+        return route($type, ['year' => $year, 'month' => $month]);
     }
 }
