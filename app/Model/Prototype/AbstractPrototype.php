@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class AbstractPrototype extends Model
 {
-    protected $_year  = null;
+    protected $_year = null;
     protected $_month = null;
 
     public $datafile;
@@ -54,6 +54,7 @@ class AbstractPrototype extends Model
     public function setYear(string $year = null)
     {
         $this->_year = $year;
+
         return $this;
     }
 
@@ -72,7 +73,7 @@ class AbstractPrototype extends Model
     public function setMonth(string $month = null)
     {
         $this->_month = $month;
+
         return $this;
     }
-
 }
