@@ -8,10 +8,7 @@ namespace App\Model\Prototype;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Employee extends Model
+class Employee extends AbstractPrototype
 {
-    public $year = null;
-    public $month = null;
-
     protected $_datafile = 'nhanvien.xlsx';
 }

@@ -8,7 +8,8 @@
                 <div class="card-header">System Management</div>
 
                 <div class="card-body">
-                    @include('salary/time', ['salary' => $salary])
+                    @include('salary/sidebar', ['salary' => $salary])
+                    @include('salary/type', ['salary' => $salary])
                 </div>
             </div>
         </div>
@@ -25,7 +26,10 @@
                     @if (!$salary->hasData())
                     Please select time to view salary
                     @else
-                    @include('salary/salary', ['salary' => $salary])
+                    @include('salary/salary', [
+                        'salary' => $salary,
+                        'data' => $data,
+                    ])
                     @endif
 
                 </div>

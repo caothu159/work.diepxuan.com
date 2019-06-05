@@ -9,4 +9,12 @@ namespace App\Model\Adapter;
 trait Salary
 {
     use AbstractAdapter;
+
+    public function data($type)
+    {
+        return [
+            'test' => 'data',
+            'type' => $type,
+        ];
+    }
 }

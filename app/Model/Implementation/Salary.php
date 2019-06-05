@@ -28,7 +28,8 @@ interface Salary
      *
      * @param string $year
      * @param string $month
+     * @param string $type
      * @return string
      */
-    public function link(string $year = null, string $month = null);
+    public function link(string $year = null, string $month = null, string $type = null);
 }
