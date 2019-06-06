@@ -48,7 +48,6 @@ class Productivity extends AbstractPrototype
      * @var array
      */
     protected $attributes = [
-        'time' => 0,
     ];
 
     /**
