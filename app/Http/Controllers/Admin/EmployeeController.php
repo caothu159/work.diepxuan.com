@@ -1,17 +1,13 @@
 <?php
 
-/*
- * Copyright © 2019 Dxvn, Inc. All rights reserved.
- */
-
 namespace App\Http\Controllers\Admin;
 
-use App\Salary;
-use App\Productivity;
-use Illuminate\Http\Request;
+use App\Employee;
 use App\Http\Controllers\Controller as Controller;
+use App\Salary;
+use Illuminate\Http\Request;
 
-class ProductivityControllers extends Controller
+class EmployeeController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -23,18 +19,18 @@ class ProductivityControllers extends Controller
      */
     public function index(Request $request, string $year = null, string $month = null)
     {
-        $productivity = (new Productivity())->setYear($year)->setMonth($month);
-        $salary = (new Salary())->setYear($year)->setMonth($month);
+        $employee = (new Employee())->setYear($year)->setMonth($month);
+        $salary   = (new Salary())->setYear($year)->setMonth($month);
 
         if ($request->isMethod('post')) {
             if ($request->has('import')) {
-                $productivity->importFromFile();
+                $employee->importFromFile();
             }
         }
 
         return view('admin', [
             'salary' => $salary,
-            'data'   => $productivity->getByTime(),
+            'data'   => $employee->getByTime(),
         ]);
     }
 
