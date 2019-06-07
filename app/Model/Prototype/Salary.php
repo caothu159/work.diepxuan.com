@@ -30,4 +30,11 @@ class Salary extends AbstractPrototype
      * @var array
      */
     protected $_fillable = [];
+
+    /**
+     * Indicates if the model should be timestamped.
+     *
+     * @var bool
+     */
+    public $timestamps = false;
 }

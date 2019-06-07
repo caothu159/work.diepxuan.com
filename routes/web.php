@@ -41,7 +41,10 @@ Route::group(['middleware' => ['admin', 'auth', 'clearcache']], function () {
         ->where(['year' => '[0-9]+', 'month' => '[0-9]+']);
 
     /** Division */
-    Route::get('division/{year?}/{month?}', 'Admin\\ProductivityController@index')
+    Route::get('division/{year?}/{month?}', 'Admin\\DivisionController@index')
+        ->name('division')
+        ->where(['year' => '[0-9]+', 'month' => '[0-9]+']);
+    Route::post('division/{year?}/{month?}', 'Admin\\DivisionController@store')
         ->name('division')
         ->where(['year' => '[0-9]+', 'month' => '[0-9]+']);
 

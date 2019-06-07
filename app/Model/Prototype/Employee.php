@@ -58,4 +58,11 @@ class Employee extends AbstractPrototype
     protected $hidden = [
         //
     ];
+
+    /**
+     * Indicates if the model should be timestamped.
+     *
+     * @var bool
+     */
+    public $timestamps = false;
 }
