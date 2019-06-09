@@ -1,6 +1,8 @@
 <?php
 
-/* @var $factory \Illuminate\Database\Eloquent\Factory */
+/*
+ * Copyright © 2019 Dxvn, Inc. All rights reserved.
+ */
 
 use App\Productivity;
 use Faker\Generator as Faker;

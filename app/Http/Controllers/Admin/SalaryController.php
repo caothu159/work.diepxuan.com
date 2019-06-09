@@ -6,8 +6,8 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller as Controller;
 use App\Salary;
+use App\Http\Controllers\Controller as Controller;
 
 class SalaryController extends Controller
 {
@@ -82,13 +82,13 @@ class SalaryController extends Controller
      */
     public function link(string $year = null, string $month = null, string $type = null)
     {
-        if (!$year) {
+        if (! $year) {
             return route('salary');
         }
-        if (!$month) {
+        if (! $month) {
             return route('salary', ['year' => $year]);
         }
-        if (!$type) {
+        if (! $type) {
             return route('salary', ['year' => $year, 'month' => $month]);
         }
 
