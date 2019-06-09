@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Admin;
 
 use App\Division;
 use App\Http\Controllers\Controller as Controller;
-use App\Salary;
 use Illuminate\Http\Request;
 
 class DivisionController extends Controller
@@ -12,19 +11,11 @@ class DivisionController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @param string $year
-     * @param string $month
      * @return \Illuminate\Http\Response
      */
-    public function index(string $year = null, string $month = null)
+    public function index()
     {
-        $division = (new Division())->setYear($year)->setMonth($month);
-        $salary   = (new Salary())->setYear($year)->setMonth($month);
-
-        return view('admin', [
-            'salary' => $salary,
-            'data'   => $division->getByTime(),
-        ]);
+        //
     }
 
     /**
@@ -48,15 +39,11 @@ class DivisionController extends Controller
     public function store(Request $request, string $year = null, string $month = null)
     {
         $division = (new Division())->setYear($year)->setMonth($month);
-        $salary   = (new Salary())->setYear($year)->setMonth($month);
+        $division->importFromFile();
 
-        if ($request->has('import')) {
-            $division->importFromFile();
-        }
-
-        return view('admin', [
-            'salary' => $salary,
-            'data'   => $division->getByTime(),
+        return redirect()->route('presence', [
+            'year'  => $year,
+            'month' => $month,
         ]);
     }
 

@@ -1,8 +1,5 @@
-<ul class="nav flex-column">
-    @foreach (['employee', 'presence', 'division', 'productivity', 'salary'] as $t)
-    <li class="nav-item">
-        <a class="nav-link{{ $t == 'type' ? ' active' : '' }}"
-           href="{{ $salary->link($salary->getYear(), $salary->getMonth(), $t) }}">{{ $t }}</a>
-    </li>
-    @endforeach
-</ul>
+<form class="form-inline" method="post" action="{{ route($type, ['year' => $salary->getYear(), 'month' => $salary->getMonth()]) }}">
+    @method('POST')
+    @csrf
+    <button class="btn btn-outline-success" type="submit" name="import" value="import" >import {{ $type }}</button>
+</form>

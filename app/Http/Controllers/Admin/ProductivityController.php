@@ -6,36 +6,20 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Salary;
+use App\Http\Controllers\Controller as Controller;
 use App\Productivity;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller as Controller;
 
 class ProductivityController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @param string $year
-     * @param string $month
-     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request, string $year = null, string $month = null)
+    public function index()
     {
-        $productivity = (new Productivity())->setYear($year)->setMonth($month);
-        $salary = (new Salary())->setYear($year)->setMonth($month);
-
-        if ($request->isMethod('post')) {
-            if ($request->has('import')) {
-                $productivity->importFromFile();
-            }
-        }
-
-        return view('admin', [
-            'salary' => $salary,
-            'data'   => $productivity->getByTime(),
-        ]);
+        //
     }
 
     /**
@@ -54,9 +38,15 @@ class ProductivityController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, string $year = null, string $month = null)
     {
-        //
+        $productivity = (new Productivity())->setYear($year)->setMonth($month);
+        $productivity->importFromFile();
+
+        return redirect()->route('presence', [
+            'year'  => $year,
+            'month' => $month,
+        ]);
     }
 
     /**

@@ -28,7 +28,7 @@ Route::group(['middleware' => ['admin', 'auth', 'clearcache']], function () {
     Route::get('employee/{year?}/{month?}', 'Admin\\EmployeeController@index')
         ->name('employee')
         ->where(['year' => '[0-9]+', 'month' => '[0-9]+']);
-    Route::post('employee/{year?}/{month?}', 'Admin\\EmployeeController@index')
+    Route::post('employee/{year?}/{month?}', 'Admin\\EmployeeController@store')
         ->name('employee')
         ->where(['year' => '[0-9]+', 'month' => '[0-9]+']);
 
@@ -36,7 +36,7 @@ Route::group(['middleware' => ['admin', 'auth', 'clearcache']], function () {
     Route::get('presence/{year?}/{month?}', 'Admin\\PresenceController@index')
         ->name('presence')
         ->where(['year' => '[0-9]+', 'month' => '[0-9]+']);
-    Route::post('presence/{year?}/{month?}', 'Admin\\PresenceController@index')
+    Route::post('presence/{year?}/{month?}', 'Admin\\PresenceController@store')
         ->name('presence')
         ->where(['year' => '[0-9]+', 'month' => '[0-9]+']);
 
@@ -52,7 +52,7 @@ Route::group(['middleware' => ['admin', 'auth', 'clearcache']], function () {
     Route::get('productivity/{year?}/{month?}', 'Admin\\ProductivityController@index')
         ->name('productivity')
         ->where(['year' => '[0-9]+', 'month' => '[0-9]+']);
-    Route::post('productivity/{year?}/{month?}', 'Admin\\ProductivityController@index')
+    Route::post('productivity/{year?}/{month?}', 'Admin\\ProductivityController@store')
         ->name('productivity')
         ->where(['year' => '[0-9]+', 'month' => '[0-9]+']);
 });
