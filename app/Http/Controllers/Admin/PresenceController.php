@@ -1,14 +1,17 @@
 <?php
 
+/*
+ * Copyright © 2019 Dxvn, Inc. All rights reserved.
+ */
+
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller as Controller;
 use App\Presence;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller as Controller;
 
 class PresenceController extends Controller
 {
-
     /**
      * Display a listing of the resource.
      *

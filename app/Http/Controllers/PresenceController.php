@@ -1,8 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
+/*
+ * Copyright © 2019 Dxvn, Inc. All rights reserved.
+ */
 
-use Illuminate\Http\Request;
+namespace App\Http\Controllers;
 
 class PresenceController extends Controller
 {
