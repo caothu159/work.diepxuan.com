@@ -6,10 +6,11 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Salary;
+use App\Presence;
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller as Controller;
 
-class SalaryController extends Controller
+class PresenceController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -18,22 +19,47 @@ class SalaryController extends Controller
      * @param string $month
      * @return \Illuminate\Http\Response
      */
-    public function index(string $year = null, string $month = null)
+    public function index()
     {
-        $salary = (new Salary())->setYear($year)->setMonth($month);
+        //
+    }
 
-        return view('admin', [
-            'salary' => $salary,
-            'data'   => $salary,
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        //
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param string $year
+     * @param string $month
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request, string $year = null, string $month = null)
+    {
+        $presence = (new Presence())->setYear($year)->setMonth($month);
+        $presence->importFromFile();
+
+        return redirect()->route('salary', [
+            'year'  => $year,
+            'month' => $month,
         ]);
     }
 
     /**
      * Display the specified resource.
      *
-     * @return void|\Illuminate\Http\Response
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
      */
-    public function show()
+    public function show($id)
     {
         //
     }

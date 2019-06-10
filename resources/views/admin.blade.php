@@ -9,7 +9,6 @@
 
                 <div class="card-body">
                     @include('salary/sidebar', ['salary' => $salary])
-                    @include('salary/type', ['salary' => $salary])
                 </div>
             </div>
         </div>
@@ -23,14 +22,10 @@
                     </div>
                     @endif
 
-                    @if (!$salary->hasData())
-                    Please select time to view salary
-                    @else
                     @include('salary/salary', [
                         'salary' => $salary,
                         'data' => $data,
                     ])
-                    @endif
 
                 </div>
             </div>

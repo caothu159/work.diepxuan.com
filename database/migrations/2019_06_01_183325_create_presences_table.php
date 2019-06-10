@@ -19,6 +19,9 @@ class CreatePresencesTable extends Migration
     {
         Schema::create('presences', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->bigInteger('time');
+            $table->string('salary_id');
+            $table->tinyInteger('presence');
             $table->timestamps();
         });
     }

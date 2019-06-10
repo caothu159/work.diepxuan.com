@@ -4,18 +4,112 @@
  * Copyright © 2019 Dxvn, Inc. All rights reserved.
  */
 
-namespace App\Model\Adapter;
+namespace App\model;
 
+use Illuminate\Database\Eloquent\Model;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 
-trait Data
+class Data extends Model
 {
     /**
-     * @return void
+     * Current year.
+     *
+     * @var string
      */
-    public function loadFromFile()
+    protected $_year = null;
+
+    /**
+     * Current month.
+     *
+     * @var string
+     */
+    protected $_month = null;
+
+    /**
+     * Data construct.
+     *
+     * @param string $year
+     * @param string $month
+     */
+    public function __construct(string $year = null, string $month = null)
     {
-        return $this->_fileContent($this->datapath($this->_datafile));
+        $this->setYear($year);
+        $this->setMonth($month);
+
+        parent::__construct();
+    }
+
+    /**
+     * Load data from file.
+     *
+     * @param string $datafile
+     * @return array data
+     */
+    public function loadFromFile($datafile)
+    {
+        return $this->_fileContent($this->datapath($datafile));
+    }
+
+    /**
+     * Get data file path.
+     *
+     * @param string $file
+     * @return string
+     */
+    public function datapath(string $file)
+    {
+        return $this->datadir().$file;
+    }
+
+    /**
+     * Get data directory path.
+     *
+     * @param string $year
+     * @param string $month
+     * @return string
+     */
+    public function datadir(string $year = null, string $month = null)
+    {
+        if ($year) {
+            $this->setYear($year);
+        }
+        if ($month) {
+            $this->setMonth($month);
+        }
+
+        return $this->_datadir($this->getYear(), $this->getMonth());
+    }
+
+    /**
+     * Get datadir path.
+     *
+     * @param string $year
+     * @param string $month
+     * @return string
+     */
+    protected function _datadir(string $year = null, string $month = null)
+    {
+        if (! $year) {
+            return $this->__datadir();
+        }
+
+        if (! $month) {
+            return $this->__datadir().$year.DIRECTORY_SEPARATOR;
+        }
+
+        return $this->__datadir()
+            .$year.DIRECTORY_SEPARATOR
+            .$month.DIRECTORY_SEPARATOR;
+    }
+
+    /**
+     * Get datadir path.
+     *
+     * @return string
+     */
+    private function __datadir()
+    {
+        return dirname(base_path()).config('salary.datadir');
     }
 
     /**
@@ -26,11 +120,6 @@ trait Data
      */
     protected function _fileContent($path)
     {
-
-        // $reader = \PhpOffice\PhpSpreadsheet\IOFactory::createReaderForFile($path);
-        // $reader->setReadDataOnly(true);
-        // $reader->load($path);
-
         $spreadsheet = IOFactory::load($path);
 
         $sheet = $spreadsheet->getActiveSheet();
@@ -71,17 +160,21 @@ trait Data
     {
         $highestColumn = $sheet->getHighestColumn();
         $headerRow = 1;
-        $rowsData = $sheet->rangeToArray('A'.$headerRow.':'.$highestColumn.$headerRow,
+        $rowsData = $sheet->rangeToArray(
+            'A'.$headerRow.':'.$highestColumn.$headerRow,
             null,
             true,
             false,
-            true);
+            true
+        );
         foreach ($rowsData as $rowData) {
             foreach ($rowData as $cellRef => $cellOriginData) {
                 $cellData = $this->__contentRepair($cellOriginData);
-                if (empty($cellData)
+                if (
+                    empty($cellData)
                     || is_null($cellData)
-                    || '' == $cellData) {
+                    || '' == $cellData
+                ) {
                     continue;
                 }
                 $highestColumn = $cellRef;
@@ -128,5 +221,43 @@ trait Data
         $content = nl2br($content);
 
         return $content;
+    }
+
+    /**
+     * @return string
+     */
+    public function getYear()
+    {
+        return $this->_year;
+    }
+
+    /**
+     * @param string $year
+     * @return object $this
+     */
+    public function setYear(string $year = null)
+    {
+        $this->_year = $year;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMonth()
+    {
+        return $this->_month;
+    }
+
+    /**
+     * @param string $year
+     * @return object $this
+     */
+    public function setMonth(string $month = null)
+    {
+        $this->_month = $month;
+
+        return $this;
     }
 }

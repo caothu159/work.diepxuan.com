@@ -19,26 +19,40 @@ Route::group(['middleware' => ['admin', 'auth', 'clearcache']], function () {
     Route::get('home', 'Admin\\HomeController@index');
     Route::get('salary', 'Admin\\SalaryController@index')->name('salary');
 
+    /* Salary */
     Route::get('salary/{year?}/{month?}/{type?}', 'Admin\\SalaryController@index')
         ->name('salary')
         ->where(['year' => '[0-9]+', 'month' => '[0-9]+', 'type' => '[a-z]+']);
 
-    Route::get('employee/{year?}/{month?}', 'Admin\\ProductivityControllers@index')
+    /* Employee */
+    Route::get('employee/{year?}/{month?}', 'Admin\\EmployeeController@index')
+        ->name('employee')
+        ->where(['year' => '[0-9]+', 'month' => '[0-9]+']);
+    Route::post('employee/{year?}/{month?}', 'Admin\\EmployeeController@store')
         ->name('employee')
         ->where(['year' => '[0-9]+', 'month' => '[0-9]+']);
 
-    Route::get('presence/{year?}/{month?}', 'Admin\\ProductivityControllers@index')
+    /* Presence */
+    Route::get('presence/{year?}/{month?}', 'Admin\\PresenceController@index')
+        ->name('presence')
+        ->where(['year' => '[0-9]+', 'month' => '[0-9]+']);
+    Route::post('presence/{year?}/{month?}', 'Admin\\PresenceController@store')
         ->name('presence')
         ->where(['year' => '[0-9]+', 'month' => '[0-9]+']);
 
-    Route::get('division/{year?}/{month?}', 'Admin\\ProductivityControllers@index')
+    /* Division */
+    Route::get('division/{year?}/{month?}', 'Admin\\DivisionController@index')
+        ->name('division')
+        ->where(['year' => '[0-9]+', 'month' => '[0-9]+']);
+    Route::post('division/{year?}/{month?}', 'Admin\\DivisionController@store')
         ->name('division')
         ->where(['year' => '[0-9]+', 'month' => '[0-9]+']);
 
-    Route::get('productivity/{year?}/{month?}', 'Admin\\ProductivityControllers@index')
+    /* Productivity */
+    Route::get('productivity/{year?}/{month?}', 'Admin\\ProductivityController@index')
         ->name('productivity')
         ->where(['year' => '[0-9]+', 'month' => '[0-9]+']);
-    Route::post('productivity/{year?}/{month?}', 'Admin\\ProductivityControllers@index')
+    Route::post('productivity/{year?}/{month?}', 'Admin\\ProductivityController@store')
         ->name('productivity')
         ->where(['year' => '[0-9]+', 'month' => '[0-9]+']);
 });

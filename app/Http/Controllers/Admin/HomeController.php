@@ -29,6 +29,11 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('admin', ['salary' => new Salary]);
+        $salary = new Salary;
+
+        return view('admin', [
+            'salary' => $salary,
+            'data'   => $salary,
+        ]);
     }
 }

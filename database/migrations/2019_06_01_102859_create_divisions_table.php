@@ -19,6 +19,9 @@ class CreateDivisionsTable extends Migration
     {
         Schema::create('divisions', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->bigInteger('time')->default(0);
+            $table->string('car_id')->default('');
+            $table->string('salary_id')->nullable();
             $table->timestamps();
         });
     }

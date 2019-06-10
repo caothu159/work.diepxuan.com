@@ -4,9 +4,11 @@
  * Copyright © 2019 Dxvn, Inc. All rights reserved.
  */
 
-namespace App\Model\Implementation;
+namespace App;
 
-interface Presence
+use App\Model\Data as Model;
+
+class Data extends Model
 {
     //
 }
