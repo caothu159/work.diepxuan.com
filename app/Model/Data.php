@@ -58,7 +58,7 @@ class Data extends Model
      */
     public function datapath(string $file)
     {
-        return $this->datadir() . $file;
+        return $this->datadir().$file;
     }
 
     /**
@@ -89,17 +89,17 @@ class Data extends Model
      */
     protected function _datadir(string $year = null, string $month = null)
     {
-        if (!$year) {
+        if (! $year) {
             return $this->__datadir();
         }
 
-        if (!$month) {
-            return $this->__datadir() . $year . DIRECTORY_SEPARATOR;
+        if (! $month) {
+            return $this->__datadir().$year.DIRECTORY_SEPARATOR;
         }
 
         return $this->__datadir()
-            . $year . DIRECTORY_SEPARATOR
-            . $month . DIRECTORY_SEPARATOR;
+            .$year.DIRECTORY_SEPARATOR
+            .$month.DIRECTORY_SEPARATOR;
     }
 
     /**
@@ -109,7 +109,7 @@ class Data extends Model
      */
     private function __datadir()
     {
-        return dirname(base_path()) . config('salary.datadir');
+        return dirname(base_path()).config('salary.datadir');
     }
 
     /**
@@ -122,11 +122,11 @@ class Data extends Model
     {
         $spreadsheet = IOFactory::load($path);
 
-        $sheet      = $spreadsheet->getActiveSheet();
+        $sheet = $spreadsheet->getActiveSheet();
         $highestRow = $sheet->getHighestRow();
-        $isHeader   = true;
-        $content    = [];
-        $cols       = [];
+        $isHeader = true;
+        $content = [];
+        $cols = [];
         for ($row = 1; $row <= $highestRow; $row++) {
             $rowData = $this->__rowContent($sheet, $row);
             foreach ($rowData as $cells) {
@@ -135,11 +135,11 @@ class Data extends Model
                         continue;
                     }
                     $cellData = $this->__contentRepair($cellData);
-                    if (!$isHeader) {
+                    if (! $isHeader) {
                         if ('' == $cells['A'] || '' == $cols[$cellRef]) {
                             continue;
                         }
-                        $cellData                              = $cellData ? $cellData : 0;
+                        $cellData = $cellData ? $cellData : 0;
                         $content[$cells['A']][$cols[$cellRef]] = $cellData;
                     } else {
                         $cols[$cellRef] = $cellData;
@@ -159,9 +159,9 @@ class Data extends Model
     private function __getHighestColumn($sheet)
     {
         $highestColumn = $sheet->getHighestColumn();
-        $headerRow     = 1;
-        $rowsData      = $sheet->rangeToArray(
-            'A' . $headerRow . ':' . $highestColumn . $headerRow,
+        $headerRow = 1;
+        $rowsData = $sheet->rangeToArray(
+            'A'.$headerRow.':'.$highestColumn.$headerRow,
             null,
             true,
             false,
@@ -195,7 +195,7 @@ class Data extends Model
         $highestColumn = $this->__getHighestColumn($sheet);
 
         return $sheet->rangeToArray(
-            'A' . $row . ':' . $highestColumn . $row,
+            'A'.$row.':'.$highestColumn.$row,
             null,
             true,
             false,
