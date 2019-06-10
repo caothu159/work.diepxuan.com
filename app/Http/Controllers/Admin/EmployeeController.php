@@ -1,10 +1,14 @@
 <?php
 
+/*
+ * Copyright © 2019 Dxvn, Inc. All rights reserved.
+ */
+
 namespace App\Http\Controllers\Admin;
 
 use App\Employee;
-use App\Http\Controllers\Controller as Controller;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller as Controller;
 
 class EmployeeController extends Controller
 {
