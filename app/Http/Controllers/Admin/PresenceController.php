@@ -1,17 +1,14 @@
 <?php
 
-/*
- * Copyright © 2019 Dxvn, Inc. All rights reserved.
- */
-
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller as Controller;
 use App\Presence;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller as Controller;
 
 class PresenceController extends Controller
 {
+
     /**
      * Display a listing of the resource.
      *
@@ -47,7 +44,7 @@ class PresenceController extends Controller
         $presence = (new Presence())->setYear($year)->setMonth($month);
         $presence->importFromFile();
 
-        return redirect()->route('presence', [
+        return redirect()->route('salary', [
             'year'  => $year,
             'month' => $month,
         ]);

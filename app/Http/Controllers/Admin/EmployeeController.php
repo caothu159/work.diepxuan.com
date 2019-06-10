@@ -1,14 +1,10 @@
 <?php
 
-/*
- * Copyright © 2019 Dxvn, Inc. All rights reserved.
- */
-
 namespace App\Http\Controllers\Admin;
 
 use App\Employee;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller as Controller;
+use Illuminate\Http\Request;
 
 class EmployeeController extends Controller
 {
@@ -45,7 +41,7 @@ class EmployeeController extends Controller
         $employee = (new Employee())->setYear($year)->setMonth($month);
         $employee->importFromFile();
 
-        return redirect()->route('presence', [
+        return redirect()->route('salary', [
             'year'  => $year,
             'month' => $month,
         ]);

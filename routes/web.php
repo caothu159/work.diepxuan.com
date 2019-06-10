@@ -19,12 +19,12 @@ Route::group(['middleware' => ['admin', 'auth', 'clearcache']], function () {
     Route::get('home', 'Admin\\HomeController@index');
     Route::get('salary', 'Admin\\SalaryController@index')->name('salary');
 
-    /* Salary */
+    /** Salary */
     Route::get('salary/{year?}/{month?}/{type?}', 'Admin\\SalaryController@index')
         ->name('salary')
         ->where(['year' => '[0-9]+', 'month' => '[0-9]+', 'type' => '[a-z]+']);
 
-    /* Employee */
+    /** Employee */
     Route::get('employee/{year?}/{month?}', 'Admin\\EmployeeController@index')
         ->name('employee')
         ->where(['year' => '[0-9]+', 'month' => '[0-9]+']);
@@ -32,7 +32,7 @@ Route::group(['middleware' => ['admin', 'auth', 'clearcache']], function () {
         ->name('employee')
         ->where(['year' => '[0-9]+', 'month' => '[0-9]+']);
 
-    /* Presence */
+    /** Presence */
     Route::get('presence/{year?}/{month?}', 'Admin\\PresenceController@index')
         ->name('presence')
         ->where(['year' => '[0-9]+', 'month' => '[0-9]+']);
@@ -40,7 +40,7 @@ Route::group(['middleware' => ['admin', 'auth', 'clearcache']], function () {
         ->name('presence')
         ->where(['year' => '[0-9]+', 'month' => '[0-9]+']);
 
-    /* Division */
+    /** Division */
     Route::get('division/{year?}/{month?}', 'Admin\\DivisionController@index')
         ->name('division')
         ->where(['year' => '[0-9]+', 'month' => '[0-9]+']);
@@ -48,7 +48,7 @@ Route::group(['middleware' => ['admin', 'auth', 'clearcache']], function () {
         ->name('division')
         ->where(['year' => '[0-9]+', 'month' => '[0-9]+']);
 
-    /* Productivity */
+    /** Productivity */
     Route::get('productivity/{year?}/{month?}', 'Admin\\ProductivityController@index')
         ->name('productivity')
         ->where(['year' => '[0-9]+', 'month' => '[0-9]+']);

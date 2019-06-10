@@ -72,17 +72,17 @@ class Presence extends Model
     public $timestamps = false;
 
     /**
-     * Get data in a month.
+     * Get data in a month
      *
      * @return array data
      */
     public function getByTime()
     {
-        if (! $this->hasData()) {
+        if (!$this->hasData()) {
             return $this::all();
         }
 
-        $dt = sprintf('%s-%s', $this->getYear(), $this->getMonth());
+        $dt    = sprintf('%s-%s', $this->getYear(), $this->getMonth());
         $first = date('Y-m-01', strtotime($dt));
         $first = new \DateTime($first);
         $first = $first->getTimestamp() / (24 * 60 * 60) + 25569;
@@ -95,7 +95,7 @@ class Presence extends Model
     }
 
     /**
-     * Import Data from file to database.
+     * Import Data from file to database
      *
      * @return void
      */

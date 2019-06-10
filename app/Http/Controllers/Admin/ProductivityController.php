@@ -6,9 +6,9 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller as Controller;
 use App\Productivity;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller as Controller;
 
 class ProductivityController extends Controller
 {
@@ -43,7 +43,7 @@ class ProductivityController extends Controller
         $productivity = (new Productivity())->setYear($year)->setMonth($month);
         $productivity->importFromFile();
 
-        return redirect()->route('presence', [
+        return redirect()->route('salary', [
             'year'  => $year,
             'month' => $month,
         ]);

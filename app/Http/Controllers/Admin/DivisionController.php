@@ -1,14 +1,10 @@
 <?php
 
-/*
- * Copyright © 2019 Dxvn, Inc. All rights reserved.
- */
-
 namespace App\Http\Controllers\Admin;
 
 use App\Division;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller as Controller;
+use Illuminate\Http\Request;
 
 class DivisionController extends Controller
 {
@@ -45,7 +41,7 @@ class DivisionController extends Controller
         $division = (new Division())->setYear($year)->setMonth($month);
         $division->importFromFile();
 
-        return redirect()->route('presence', [
+        return redirect()->route('salary', [
             'year'  => $year,
             'month' => $month,
         ]);

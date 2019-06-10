@@ -82,10 +82,10 @@ class Salary extends Model
      */
     public function link(string $year = null, string $month = null)
     {
-        if (! $year) {
+        if (!$year) {
             return route('salary');
         }
-        if (! $month) {
+        if (!$month) {
             return route('salary', ['year' => $year]);
         }
 

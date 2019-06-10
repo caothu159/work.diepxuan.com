@@ -6,8 +6,8 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Salary;
 use App\Http\Controllers\Controller as Controller;
+use App\Salary;
 
 class HomeController extends Controller
 {
@@ -29,6 +29,11 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('admin', ['salary' => new Salary]);
+        $salary = new Salary;
+
+        return view('admin', [
+            'salary' => $salary,
+            'data'   => $salary,
+        ]);
     }
 }
