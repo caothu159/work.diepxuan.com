@@ -33,7 +33,7 @@ class HomeController extends Controller
                 'year'  => null,
                 'month' => null,
             ],
-            'data' => array(),
+            'data' => [],
         ]);
     }
 }
