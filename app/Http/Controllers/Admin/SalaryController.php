@@ -6,10 +6,10 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Employee;
-use App\Http\Controllers\Controller as Controller;
 use App\Salary;
+use App\Employee;
 use Illuminate\Database\Eloquent\Collection;
+use App\Http\Controllers\Controller as Controller;
 
 class SalaryController extends Controller
 {
@@ -105,10 +105,10 @@ class SalaryController extends Controller
      */
     public static function link(string $year = null, string $month = null)
     {
-        if (!$year) {
+        if (! $year) {
             return route('admin.salary');
         }
-        if (!$month) {
+        if (! $month) {
             return route('admin.salary', ['year' => $year]);
         }
 
@@ -155,15 +155,15 @@ class SalaryController extends Controller
      * Load employees.
      *
      * @param Collection $collection
-     * @param integer $month
+     * @param int $month
      * @return Collection $collection
      */
     private function __loadEmployees(Collection $collection, int $month)
     {
         $employees = \App\Employee::where('month', $month)->get()->sortBy('salary_id');
         foreach ($employees as $employee) {
-            $salary           = new Salary;
-            $salary->name     = $employee->salary_id;
+            $salary = new Salary;
+            $salary->name = $employee->salary_id;
             $salary->employee = $employee;
 
             $collection->put($salary->name, $salary);
@@ -176,7 +176,7 @@ class SalaryController extends Controller
      * Load Presences.
      *
      * @param Collection $collection
-     * @param integer $month
+     * @param int $month
      * @return Collection $collection
      */
     private function __loadPresences(Collection $collection, int $month)
@@ -200,8 +200,8 @@ class SalaryController extends Controller
      * Load Divisions.
      *
      * @param Collection $collection
-     * @param integer $first
-     * @param integer $last
+     * @param int $first
+     * @param int $last
      * @return Collection $collection
      */
     private function __loadDivisions(Collection $collection, int $first, int $last)
@@ -220,14 +220,14 @@ class SalaryController extends Controller
      * Load Productivities.
      *
      * @param Collection $collection
-     * @param integer $first
-     * @param integer $last
+     * @param int $first
+     * @param int $last
      * @return Collection $collection
      */
     private function __loadProductivities(Collection $collection, int $month)
     {
         foreach ($collection as $salary) {
-            $productivities         = \App\Productivity::where('month', $month)->get();
+            $productivities = \App\Productivity::where('month', $month)->get();
             $salary->productivities = $productivities;
         }
 

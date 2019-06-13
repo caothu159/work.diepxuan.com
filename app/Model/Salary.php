@@ -10,7 +10,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class Salary extends Model
 {
-
     /**
      * The attributes that are mass assignable.
      *
@@ -62,5 +61,4 @@ class Salary extends Model
 
         return $return;
     }
-
 }

@@ -6,8 +6,8 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller as Controller;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller as Controller;
 
 class DivisionController extends Controller
 {
@@ -118,7 +118,7 @@ class DivisionController extends Controller
                 }
 
                 $car_id = str_replace('x', '', $car_id);
-                $car    = \App\Car::where('name', $car_id)->first();
+                $car = \App\Car::where('name', $car_id)->first();
 
                 if (null == $car) {
                     continue;
@@ -142,7 +142,7 @@ class DivisionController extends Controller
                         'salary_id'    => $salary->id,
                         'car_id'       => $car->id,
                         'date'         => $date,
-                        'salary_count' => \sizeof($salary_ids),
+                        'salary_count' => \count($salary_ids),
                     ]);
                 }
             }

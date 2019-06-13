@@ -38,6 +38,5 @@ class UsersTableSeeder extends Seeder
                 'password' => Hash::make('bg2tob699'),
             ]);
         }
-
     }
 }
