@@ -4,24 +4,19 @@
  * Copyright © 2019 Dxvn, Inc. All rights reserved.
  */
 
-namespace App\Model;
+namespace App\model;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Division extends Model
+class Car extends Model
 {
-    const DATAFILE = 'phancong.xlsx';
-
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
+/**
+ * The attributes that are mass assignable.
+ *
+ * @var array
+ */
     protected $fillable = [
-        'date',
-        'car_id',
-        'salary_id',
-        'salary_count',
+        'name',
     ];
 
     /**
@@ -58,13 +53,13 @@ class Division extends Model
      */
     public $timestamps = true;
 
-    public function salary()
+    public function divisions()
     {
-        return $this->belongsTo(\App\Salary::class);
+        return $this->hasMany(\App\Division::class);
     }
 
-    public function car()
+    public function productivity()
     {
-        return $this->belongsTo(\App\Car::class);
+        return $this->belongsTo(App\Productivity::class, 'car_id', 'id');
     }
 }

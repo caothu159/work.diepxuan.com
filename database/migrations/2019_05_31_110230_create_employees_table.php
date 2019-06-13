@@ -4,9 +4,9 @@
  * Copyright © 2019 Dxvn, Inc. All rights reserved.
  */
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class CreateEmployeesTable extends Migration
 {
@@ -19,9 +19,8 @@ class CreateEmployeesTable extends Migration
     {
         Schema::create('employees', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->bigInteger('time');
-            $table->string('salary_id');
-            $table->decimal('Luong co ban', 9, 0);
+            $table->unsignedBigInteger('salary_id');
+            $table->decimal('default', 9, 0);
             $table->float('_0', 6, 4);
             $table->float('_13', 6, 4);
             $table->float('_20', 6, 4);
@@ -31,9 +30,13 @@ class CreateEmployeesTable extends Migration
             $table->float('_60', 6, 4);
             $table->float('_70', 6, 4);
             $table->float('_80', 6, 4);
-            $table->float('Ti le', 6, 4);
-            $table->string('Bat cap');
+            $table->float('percent', 6, 4);
+            $table->string('with');
             $table->timestamps();
+        });
+
+        Schema::table('employees', function ($table) {
+            $table->foreign('salary_id')->references('id')->on('salaries');
         });
     }
 

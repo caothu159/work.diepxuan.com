@@ -4,9 +4,9 @@
  * Copyright © 2019 Dxvn, Inc. All rights reserved.
  */
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class CreateDivisionsTable extends Migration
 {
@@ -19,10 +19,14 @@ class CreateDivisionsTable extends Migration
     {
         Schema::create('divisions', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->bigInteger('time')->default(0);
-            $table->string('car_id')->default('');
-            $table->string('salary_id')->nullable();
+            $table->unsignedBigInteger('salary_id');
+            $table->bigInteger('date');
+            $table->tinyInteger('salary_count');
             $table->timestamps();
+        });
+
+        Schema::table('divisions', function ($table) {
+            $table->foreign('salary_id')->references('id')->on('salaries');
         });
     }
 

@@ -15,7 +15,7 @@ class Productivity extends Model
      *
      * @var string
      */
-    protected $_datafile = 'nangsuat.xlsx';
+    const DATAFILE = 'nangsuat.xlsx';
 
     /**
      * The primary key associated with the table.
@@ -30,16 +30,12 @@ class Productivity extends Model
      * @var array
      */
     protected $fillable = [
-        'time',
-        'ns 01593',
-        'no 01593',
-        'thu no 01593',
-        'ns 03166',
-        'no 03166',
-        'thu no 03166',
-        'ns 05605',
-        'no 05605',
-        'thu no 05605',
+        'date',
+        'month',
+        'car_id',
+        'nang suat',
+        'cho no',
+        'thu no',
     ];
 
     /**
@@ -75,95 +71,8 @@ class Productivity extends Model
      */
     public $timestamps = false;
 
-    /**
-     * Get data in a month.
-     *
-     * @return array data
-     */
-    public function getByTime()
+    public function car()
     {
-        if (! $this->hasData()) {
-            return $this::all();
-        }
-
-        $dt = sprintf('%s-%s', $this->getYear(), $this->getMonth());
-        $first = date('Y-m-01', strtotime($dt));
-        $first = new \DateTime($first);
-        $first = $first->getTimestamp() / (24 * 60 * 60) + 25569;
-
-        $last = date('Y-m-t', strtotime($dt));
-        $last = new \DateTime($last);
-        $last = $last->getTimestamp() / (24 * 60 * 60) + 25569;
-
-        return $this->whereBetween('time', [$first, $last])->get();
-    }
-
-    /**
-     * Import Data from file to database.
-     *
-     * @return void
-     */
-    public function importFromFile()
-    {
-        $data = new \App\Data($this->getYear(), $this->getMonth());
-        foreach ($data->loadFromFile($this->_datafile) as $time => $val) {
-            $val['time'] = $time;
-            $this::updateOrCreate([
-                'time' => $time,
-            ], $val);
-        }
-    }
-
-    /**
-     * @return string
-     */
-    public function getYear()
-    {
-        return $this->_year;
-    }
-
-    /**
-     * @param string $year
-     * @return object
-     */
-
-    /**
-     * @param string $year
-     * @return object $this
-     */
-    public function setYear(string $year = null)
-    {
-        $this->_year = $year;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getMonth()
-    {
-        return $this->_month;
-    }
-
-    /**
-     * @param string $year
-     * @return object $this
-     */
-    public function setMonth(string $month = null)
-    {
-        $this->_month = $month;
-
-        return $this;
-    }
-
-    /**
-     * Valid Data to build salary.
-     *
-     * @return bool
-     */
-    public function hasData()
-    {
-        return $this->getYear() and $this->getMonth();
+        return $this->hasOne(App\Car::class, 'id', 'car_id');
     }
 }
