@@ -16,6 +16,8 @@ class UsersTableSeeder extends Seeder
      */
     public function run()
     {
+        echo "\e[32mSeeding:\e[0m UsersTableSeeder\r\n";
+
         // Seed admin
         if (User::where('email', '=', 'caothu91@gmail.com')->first() === null) {
             User::create([
@@ -36,7 +38,5 @@ class UsersTableSeeder extends Seeder
                 'password' => Hash::make('bg2tob699'),
             ]);
         }
-
-        echo "\e[32mSeeding:\e[0m UsersTableSeeder\r\n";
     }
 }

@@ -19,10 +19,14 @@ class CreatePresencesTable extends Migration
     {
         Schema::create('presences', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->bigInteger('time');
-            $table->string('salary_id');
+            $table->unsignedBigInteger('salary_id');
+            $table->unsignedBigInteger('date');
             $table->tinyInteger('presence');
             $table->timestamps();
+        });
+
+        Schema::table('presences', function ($table) {
+            $table->foreign('salary_id')->references('id')->on('salaries');
         });
     }
 

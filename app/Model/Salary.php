@@ -11,122 +11,54 @@ use Illuminate\Database\Eloquent\Model;
 class Salary extends Model
 {
     /**
-     * Current year.
+     * The attributes that are mass assignable.
      *
-     * @var string
+     * @var array
      */
-    protected $_year = null;
-
-    /**
-     * Current month.
-     *
-     * @var string
-     */
-    protected $_month = null;
+    protected $fillable = [
+        'name',
+        'month',
+    ];
 
     /**
      * Make attributes available in the json response.
      *
      * @var array
      */
-    protected $_appends = [];
+    protected $appends = [
+        //
+    ];
 
     /**
      * The model's default values for attributes.
      *
      * @var array
      */
-    protected $_attributes = [];
+    protected $attributes = [
+        //
+    ];
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
-    protected $_fillable = [];
-
-    /**
-     * Indicates if the model should be timestamped.
-     *
-     * @var bool
-     */
-    public $timestamps = false;
-
-    /**
-     * List all month in year.
-     *
-     * @param string $year
-     * @return void
-     */
-    public function months(string $year = null)
+    public function employee()
     {
-        return array_diff(scandir((new \App\Data)->datadir($year)), ['.', '..']);
+        return $this->hasOne(\App\Employee::class);
     }
 
-    /**
-     * List all years .
-     *
-     * @return void
-     */
-    public function years()
+    public function presences()
     {
-        return array_diff(scandir((new \App\Data)->datadir()), ['.', '..']);
+        return $this->hasMany(\App\Presence::class);
     }
 
-    /**
-     * Get Link go to view salary.
-     *
-     * @param string $year
-     * @param string $month
-     * @return string
-     */
-    public function link(string $year = null, string $month = null)
+    public function divisions()
     {
-        if (! $year) {
-            return route('salary');
-        }
-        if (! $month) {
-            return route('salary', ['year' => $year]);
-        }
-
-        return route('salary', ['year' => $year, 'month' => $month]);
+        return $this->hasMany(\App\Division::class);
     }
 
-    /**
-     * @return string
-     */
-    public function getYear()
+    public function getDefaultAttribute()
     {
-        return $this->_year;
-    }
+        $return = $this->employee->default / 30;
+        $return *= $this->presences->sum('presence');
+        $return = number_format($return, 0);
 
-    /**
-     * @param string $year
-     * @return object $this
-     */
-    public function setYear(string $year = null)
-    {
-        $this->_year = $year;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getMonth()
-    {
-        return $this->_month;
-    }
-
-    /**
-     * @param string $year
-     * @return object $this
-     */
-    public function setMonth(string $month = null)
-    {
-        $this->_month = $month;
-
-        return $this;
+        return $return;
     }
 }

@@ -6,7 +6,6 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Presence;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller as Controller;
 
@@ -44,10 +43,9 @@ class PresenceController extends Controller
      */
     public function store(Request $request, string $year = null, string $month = null)
     {
-        $presence = (new Presence())->setYear($year)->setMonth($month);
-        $presence->importFromFile();
+        $this->__importFromFile($year, $month);
 
-        return redirect()->route('salary', [
+        return redirect()->route('admin.salary', [
             'year'  => $year,
             'month' => $month,
         ]);
@@ -96,5 +94,37 @@ class PresenceController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    /**
+     * Import Data from file to database.
+     *
+     * @param string $year
+     * @param string $month
+     * @return void
+     */
+    private function __importFromFile(string $year = null, string $month = null)
+    {
+        $data = new \App\Data($year, $month);
+
+        $month = sprintf('%s-%s', $year, $month);
+        $month = new \DateTime($month);
+        $month = $month->getTimestamp() / (24 * 60 * 60) + 25569;
+
+        foreach ($data->loadFromFile(\App\Presence::DATAFILE) as $date => $val) {
+            foreach ($val as $name => $presence) {
+                $salary = \App\Salary::where('name', $name)
+                    ->where('month', $month)->first();
+
+                \App\Presence::updateOrCreate([
+                    'salary_id' => $salary->id,
+                    'date'      => $date,
+                ], [
+                    'salary_id' => $salary->id,
+                    'date'      => $date,
+                    'presence'  => $presence,
+                ]);
+            }
+        }
     }
 }

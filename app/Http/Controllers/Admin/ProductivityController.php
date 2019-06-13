@@ -6,7 +6,6 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Productivity;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller as Controller;
 
@@ -40,10 +39,9 @@ class ProductivityController extends Controller
      */
     public function store(Request $request, string $year = null, string $month = null)
     {
-        $productivity = (new Productivity())->setYear($year)->setMonth($month);
-        $productivity->importFromFile();
+        $this->__importFromFile($year, $month);
 
-        return redirect()->route('salary', [
+        return redirect()->route('admin.salary', [
             'year'  => $year,
             'month' => $month,
         ]);
@@ -92,5 +90,41 @@ class ProductivityController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    /**
+     * Import Data from file to database.
+     *
+     * @param string $year
+     * @param string $month
+     * @return void
+     */
+    private function __importFromFile(string $year = null, string $month = null)
+    {
+        $data = new \App\Data($year, $month);
+
+        $month = sprintf('%s-%s', $year, $month);
+        $month = new \DateTime($month);
+        $month = $month->getTimestamp() / (24 * 60 * 60) + 25569;
+
+        $cars = \App\Car::all();
+
+        foreach ($data->loadFromFile(\App\Productivity::DATAFILE) as $date => $val) {
+            $val['date'] = $date;
+
+            foreach ($cars as $car) {
+                \App\Productivity::updateOrCreate([
+                    'date'   => $date,
+                    'car_id' => $car->id,
+                ], [
+                    'date'      => $date,
+                    'month'     => $month,
+                    'car_id'    => $car->id,
+                    'nang suat' => $val["ns $car->name"],
+                    'cho no'    => $val["no $car->name"],
+                    'thu no'    => $val["thu no $car->name"],
+                ]);
+            }
+        }
     }
 }

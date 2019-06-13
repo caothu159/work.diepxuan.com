@@ -6,7 +6,6 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Salary;
 use App\Http\Controllers\Controller as Controller;
 
 class HomeController extends Controller
@@ -29,11 +28,12 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $salary = new Salary;
-
         return view('admin', [
-            'salary' => $salary,
-            'data'   => $salary,
+            'time' => [
+                'year'  => null,
+                'month' => null,
+            ],
+            'data' => [],
         ]);
     }
 }

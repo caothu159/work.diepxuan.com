@@ -6,7 +6,6 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Employee;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller as Controller;
 
@@ -42,10 +41,9 @@ class EmployeeController extends Controller
      */
     public function store(Request $request, string $year = null, string $month = null)
     {
-        $employee = (new Employee())->setYear($year)->setMonth($month);
-        $employee->importFromFile();
+        $this->__importFromFile($year, $month);
 
-        return redirect()->route('salary', [
+        return redirect()->route('admin.salary', [
             'year'  => $year,
             'month' => $month,
         ]);
@@ -94,5 +92,49 @@ class EmployeeController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    /**
+     * Import Data from file to database.
+     *
+     * @param string $year
+     * @param string $month
+     * @return void
+     */
+    private function __importFromFile(string $year = null, string $month = null)
+    {
+        $time = sprintf('%s-%s', $year, $month);
+        $time = new \DateTime($time);
+        $time = $time->getTimestamp() / (24 * 60 * 60) + 25569;
+
+        $data = new \App\Data($year, $month);
+        foreach ($data->loadFromFile(\App\Employee::DATAFILE) as $name => $val) {
+            // $val['salary_id'] = $salary_id;
+
+            $salary = \App\Salary::updateOrCreate([
+                'name'  => $name,
+                'month' => $time,
+            ], [
+                'name'  => $name,
+                'month' => $time,
+            ]);
+            \App\Employee::updateOrCreate([
+                'salary_id' => $salary->id,
+            ], [
+                'salary_id' => $salary->id,
+                'default'   => $val['Luong co ban'],
+                '_0'        => $val['0'],
+                '_13'       => $val['12.5'],
+                '_20'       => $val['20'],
+                '_30'       => $val['30'],
+                '_40'       => $val['40'],
+                '_50'       => $val['50'],
+                '_60'       => $val['60'],
+                '_70'       => $val['70'],
+                '_80'       => $val['80'],
+                'percent'   => $val['Ti le'],
+                'with'      => $val['Bat cap'],
+            ]);
+        }
     }
 }
