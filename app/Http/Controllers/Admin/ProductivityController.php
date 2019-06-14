@@ -6,8 +6,8 @@
 
 namespace App\Http\Controllers\Admin;
 
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller as Controller;
+use Illuminate\Http\Request;
 
 class ProductivityController extends Controller
 {
@@ -113,16 +113,13 @@ class ProductivityController extends Controller
             $val['date'] = $date;
 
             foreach ($cars as $car) {
-                \App\Productivity::updateOrCreate([
+                $productivity = \App\Productivity::updateOrCreate([
                     'date'   => $date,
                     'car_id' => $car->id,
                 ], [
-                    'date'      => $date,
-                    'month'     => $month,
-                    'car_id'    => $car->id,
-                    'nang suat' => $val["ns $car->name"],
-                    'cho no'    => $val["no $car->name"],
-                    'thu no'    => $val["thu no $car->name"],
+                    'productivity' => $val["ns $car->name"],
+                    'in_debt'      => $val["no $car->name"],
+                    'take_debt'    => $val["thu no $car->name"],
                 ]);
             }
         }

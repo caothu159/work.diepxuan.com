@@ -6,8 +6,8 @@
 
 namespace App\Http\Controllers\Admin;
 
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller as Controller;
+use Illuminate\Http\Request;
 
 class DivisionController extends Controller
 {
@@ -118,7 +118,7 @@ class DivisionController extends Controller
                 }
 
                 $car_id = str_replace('x', '', $car_id);
-                $car = \App\Car::where('name', $car_id)->first();
+                $car    = \App\Car::where('name', $car_id)->first();
 
                 if (null == $car) {
                     continue;
@@ -134,16 +134,21 @@ class DivisionController extends Controller
                         continue;
                     }
 
-                    \App\Division::updateOrCreate([
+                    $productivity = \App\Productivity::firstOrCreate([
+                        'date'   => $date,
+                        'car_id' => $car->id,
+                    ], []);
+
+                    $division = \App\Division::updateOrCreate([
                         'salary_id' => $salary->id,
                         'car_id'    => $car->id,
                         'date'      => $date,
                     ], [
-                        'salary_id'    => $salary->id,
-                        'car_id'       => $car->id,
-                        'date'         => $date,
                         'salary_count' => \count($salary_ids),
                     ]);
+
+                    $division->productivity()->associate($productivity);
+                    $division->save();
                 }
             }
         }

@@ -6,10 +6,9 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Salary;
-use App\Employee;
-use Illuminate\Database\Eloquent\Collection;
 use App\Http\Controllers\Controller as Controller;
+use App\Salary;
+use Illuminate\Database\Eloquent\Collection;
 
 class SalaryController extends Controller
 {
@@ -105,10 +104,10 @@ class SalaryController extends Controller
      */
     public static function link(string $year = null, string $month = null)
     {
-        if (! $year) {
+        if (!$year) {
             return route('admin.salary');
         }
-        if (! $month) {
+        if (!$month) {
             return route('admin.salary', ['year' => $year]);
         }
 
@@ -129,107 +128,7 @@ class SalaryController extends Controller
         $time = new \DateTime($dt);
         $time = $time->getTimestamp() / (24 * 60 * 60) + 25569;
 
-        // $first = date('Y-m-01', strtotime($dt));
-        // $first = new \DateTime($first);
-        // $first = $first->getTimestamp() / (24 * 60 * 60) + 25569;
-
-        // $last = date('Y-m-t', strtotime($dt));
-        // $last = new \DateTime($last);
-        // $last = $last->getTimestamp() / (24 * 60 * 60) + 25569;
-
         $collection = Salary::where('month', $time)->orderBy('name', 'asc')->get();
-        // $collection = $this->__loadEmployees($collection, $time);
-        // $collection = $this->__loadPresences($collection, $time);
-        // $collection = $this->__loadDivisions($collection, $first, $last);
-        // $collection = $this->__loadProductivities($collection, $time);
-
-        // foreach ($collection as $salary) {
-        //     echo get_class($salary->employee);die;
-        // }
-        // $collection->dump();
-
-        return $collection;
-    }
-
-    /**
-     * Load employees.
-     *
-     * @param Collection $collection
-     * @param int $month
-     * @return Collection $collection
-     */
-    private function __loadEmployees(Collection $collection, int $month)
-    {
-        $employees = \App\Employee::where('month', $month)->get()->sortBy('salary_id');
-        foreach ($employees as $employee) {
-            $salary = new Salary;
-            $salary->name = $employee->salary_id;
-            $salary->employee = $employee;
-
-            $collection->put($salary->name, $salary);
-        }
-
-        return $collection;
-    }
-
-    /**
-     * Load Presences.
-     *
-     * @param Collection $collection
-     * @param int $month
-     * @return Collection $collection
-     */
-    private function __loadPresences(Collection $collection, int $month)
-    {
-        foreach ($collection as $salary) {
-            $presences = \App\Presence::where('month', $month)
-                ->where('salary_id', $salary->name)
-                ->get();
-            $salary->presences = $presences;
-
-            $salary->presence = $presences->sum('presence');
-            // $salary->salary = array(
-            //     'presence' = $salary->presence
-            // );
-        }
-
-        return $collection;
-    }
-
-    /**
-     * Load Divisions.
-     *
-     * @param Collection $collection
-     * @param int $first
-     * @param int $last
-     * @return Collection $collection
-     */
-    private function __loadDivisions(Collection $collection, int $first, int $last)
-    {
-        foreach ($collection as $salary) {
-            $divisions = \App\Division::whereBetween('time', [$first, $last])
-                ->where('salary_id', $salary->salary_id)
-                ->get();
-            $salary->divisions = $divisions;
-        }
-
-        return $collection;
-    }
-
-    /**
-     * Load Productivities.
-     *
-     * @param Collection $collection
-     * @param int $first
-     * @param int $last
-     * @return Collection $collection
-     */
-    private function __loadProductivities(Collection $collection, int $month)
-    {
-        foreach ($collection as $salary) {
-            $productivities = \App\Productivity::where('month', $month)->get();
-            $salary->productivities = $productivities;
-        }
 
         return $collection;
     }

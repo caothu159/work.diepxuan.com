@@ -6,8 +6,8 @@
 
 namespace App\Http\Controllers\Admin;
 
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller as Controller;
+use Illuminate\Http\Request;
 
 class EmployeeController extends Controller
 {
@@ -103,37 +103,33 @@ class EmployeeController extends Controller
      */
     private function __importFromFile(string $year = null, string $month = null)
     {
-        $time = sprintf('%s-%s', $year, $month);
-        $time = new \DateTime($time);
-        $time = $time->getTimestamp() / (24 * 60 * 60) + 25569;
-
         $data = new \App\Data($year, $month);
-        foreach ($data->loadFromFile(\App\Employee::DATAFILE) as $name => $val) {
-            // $val['salary_id'] = $salary_id;
 
-            $salary = \App\Salary::updateOrCreate([
+        $month = sprintf('%s-%s', $year, $month);
+        $month = new \DateTime($month);
+        $month = $month->getTimestamp() / (24 * 60 * 60) + 25569;
+
+        foreach ($data->loadFromFile(\App\Employee::DATAFILE) as $name => $val) {
+            $salary = \App\Salary::firstOrCreate([
                 'name'  => $name,
-                'month' => $time,
-            ], [
-                'name'  => $name,
-                'month' => $time,
-            ]);
+                'month' => $month,
+            ], []);
+
             \App\Employee::updateOrCreate([
                 'salary_id' => $salary->id,
             ], [
-                'salary_id' => $salary->id,
-                'default'   => $val['Luong co ban'],
-                '_0'        => $val['0'],
-                '_13'       => $val['12.5'],
-                '_20'       => $val['20'],
-                '_30'       => $val['30'],
-                '_40'       => $val['40'],
-                '_50'       => $val['50'],
-                '_60'       => $val['60'],
-                '_70'       => $val['70'],
-                '_80'       => $val['80'],
-                'percent'   => $val['Ti le'],
-                'with'      => $val['Bat cap'],
+                'default' => $val['Luong co ban'],
+                '_0'      => $val['0'],
+                '_13'     => $val['12.5'],
+                '_20'     => $val['20'],
+                '_30'     => $val['30'],
+                '_40'     => $val['40'],
+                '_50'     => $val['50'],
+                '_60'     => $val['60'],
+                '_70'     => $val['70'],
+                '_80'     => $val['80'],
+                'percent' => $val['Ti le'],
+                'with'    => $val['Bat cap'],
             ]);
         }
     }

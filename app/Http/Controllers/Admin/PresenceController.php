@@ -6,8 +6,8 @@
 
 namespace App\Http\Controllers\Admin;
 
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller as Controller;
+use Illuminate\Http\Request;
 
 class PresenceController extends Controller
 {
@@ -120,9 +120,7 @@ class PresenceController extends Controller
                     'salary_id' => $salary->id,
                     'date'      => $date,
                 ], [
-                    'salary_id' => $salary->id,
-                    'date'      => $date,
-                    'presence'  => $presence,
+                    'presence' => $presence,
                 ]);
             }
         }

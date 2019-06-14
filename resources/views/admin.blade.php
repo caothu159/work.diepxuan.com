@@ -26,7 +26,7 @@
                 {{ session('status') }}
             </div>
             @endif
-            <div class="row">
+            <div class="row" id="accordionSalary">
                 @include('salary/salary')
             </div>
         </div>

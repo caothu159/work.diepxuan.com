@@ -4,9 +4,9 @@
  * Copyright © 2019 Dxvn, Inc. All rights reserved.
  */
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class CreateCarsTable extends Migration
 {
@@ -29,7 +29,7 @@ class CreateCarsTable extends Migration
         });
 
         Schema::table('productivities', function (Blueprint $table) {
-            $table->unsignedBigInteger('car_id')->after('month');
+            $table->unsignedBigInteger('car_id')->after('date');
             $table->foreign('car_id')->references('id')->on('cars');
         });
     }

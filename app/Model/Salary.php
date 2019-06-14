@@ -61,4 +61,9 @@ class Salary extends Model
 
         return $return;
     }
+
+    public function getProductivityAttribute()
+    {
+        return $this->divisions->sum('salary_value');
+    }
 }
