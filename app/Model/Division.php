@@ -69,6 +69,7 @@ class Division extends Model
         if (is_null($this->productivity)) {
             return 0;
         }
+
         return $this->productivity->productivity;
     }
 
@@ -77,6 +78,7 @@ class Division extends Model
         if (is_null($this->productivity)) {
             return 0;
         }
+
         return $this->productivity->in_debt;
     }
 
@@ -85,6 +87,7 @@ class Division extends Model
         if (is_null($this->productivity)) {
             return 0;
         }
+
         return $this->productivity->take_debt;
     }
 
@@ -94,6 +97,7 @@ class Division extends Model
         $return += $this->in_debt_value * .7;
         $return -= $this->take_debt_value * .7;
         $return *= $this->employee->percent;
+
         return $return;
     }
 
@@ -102,13 +106,14 @@ class Division extends Model
         $return = 0;
         foreach ($this->employee->toArray() as $productivity => $ratio) {
             $productivity = trim($productivity, '_');
-            if (!is_numeric($productivity)) {
+            if (! is_numeric($productivity)) {
                 continue;
             }
             if ($this->productivity_by_salary > intval($productivity) * 1000) {
                 $return = max($return, $ratio);
             }
         }
+
         return $return;
     }
 
