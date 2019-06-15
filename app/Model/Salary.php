@@ -38,6 +38,13 @@ class Salary extends Model
         //
     ];
 
+    /**
+     * Indicates if the model should be timestamped.
+     *
+     * @var bool
+     */
+    public $timestamps = true;
+
     public function employee()
     {
         return $this->hasOne(\App\Employee::class);

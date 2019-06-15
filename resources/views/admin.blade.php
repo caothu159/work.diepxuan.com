@@ -1,21 +1,12 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
+<div class="container-fluid">
     <div class="row justify-content-between">
         <div class="col-md-3 pr-4">
             <div class="card border-primary">
-                <div class="card-header border-primary text-primary">System Management</div>
-
                 <div class="card-body border-primary">
                     @include('salary/sidebar')
-                </div>
-
-                <div class="card-footer bg-transparent border-primary">
-                    @include('salary/type', [ 'type' => 'employee' ])
-                    @include('salary/type', [ 'type' => 'presence' ])
-                    @include('salary/type', [ 'type' => 'division' ])
-                    @include('salary/type', [ 'type' => 'productivity' ])
                 </div>
             </div>
         </div>
@@ -32,4 +23,11 @@
         </div>
     </div>
 </div>
+@endsection
+
+@section('sidebar.salary')
+@include('salary/type', [ 'type' => 'employee' ])
+@include('salary/type', [ 'type' => 'presence' ])
+@include('salary/type', [ 'type' => 'division' ])
+@include('salary/type', [ 'type' => 'productivity' ])
 @endsection

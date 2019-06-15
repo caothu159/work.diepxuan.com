@@ -123,12 +123,12 @@ class SalaryController extends Controller
      */
     private function __loadSalary(string $year = null, string $month = null)
     {
-        $dt = sprintf('%s-%s', $year, $month);
+        $dt = sprintf('%s-%s', $year ?: date('Y'), $month ?: date('m'));
 
-        $time = new \DateTime($dt);
-        $time = $time->getTimestamp() / (24 * 60 * 60) + 25569;
+        $month = new \DateTime($dt);
+        $month = $month->getTimestamp() / (24 * 60 * 60) + 25569;
 
-        $collection = Salary::where('month', $time)->orderBy('name', 'asc')->get();
+        $collection = Salary::where('month', $month)->orderBy('name', 'asc')->get();
 
         return $collection;
     }
