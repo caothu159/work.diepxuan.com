@@ -120,9 +120,7 @@ class PresenceController extends Controller
                     'salary_id' => $salary->id,
                     'date'      => $date,
                 ], [
-                    'salary_id' => $salary->id,
-                    'date'      => $date,
-                    'presence'  => $presence,
+                    'presence' => $presence,
                 ]);
             }
         }

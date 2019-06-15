@@ -29,7 +29,7 @@ class CreateCarsTable extends Migration
         });
 
         Schema::table('productivities', function (Blueprint $table) {
-            $table->unsignedBigInteger('car_id')->after('month');
+            $table->unsignedBigInteger('car_id')->after('date');
             $table->foreign('car_id')->references('id')->on('cars');
         });
     }

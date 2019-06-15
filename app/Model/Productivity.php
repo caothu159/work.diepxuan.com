@@ -18,24 +18,16 @@ class Productivity extends Model
     const DATAFILE = 'nangsuat.xlsx';
 
     /**
-     * The primary key associated with the table.
-     *
-     * @var string
-     */
-    protected $primaryKey = 'time';
-
-    /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
         'date',
-        'month',
         'car_id',
-        'nang suat',
-        'cho no',
-        'thu no',
+        'productivity',
+        'in_debt',
+        'take_debt',
     ];
 
     /**
@@ -69,10 +61,15 @@ class Productivity extends Model
      *
      * @var bool
      */
-    public $timestamps = false;
+    public $timestamps = true;
 
     public function car()
     {
-        return $this->hasOne(App\Car::class, 'id', 'car_id');
+        return $this->belongsTo(\App\Car::class);
+    }
+
+    public function divisions()
+    {
+        return $this->hasMany(\App\Division::class);
     }
 }

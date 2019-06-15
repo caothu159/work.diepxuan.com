@@ -38,6 +38,13 @@ class Salary extends Model
         //
     ];
 
+    /**
+     * Indicates if the model should be timestamped.
+     *
+     * @var bool
+     */
+    public $timestamps = true;
+
     public function employee()
     {
         return $this->hasOne(\App\Employee::class);
@@ -60,5 +67,10 @@ class Salary extends Model
         $return = number_format($return, 0);
 
         return $return;
+    }
+
+    public function getProductivityAttribute()
+    {
+        return $this->divisions->sum('salary_value');
     }
 }

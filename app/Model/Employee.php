@@ -80,4 +80,9 @@ class Employee extends Model
     {
         return $this->belongsTo(\App\Salary::class);
     }
+
+    public function division()
+    {
+        return $this->hasOne(\App\Division::class, 'salary_id', 'salary_id');
+    }
 }

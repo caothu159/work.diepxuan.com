@@ -20,10 +20,9 @@ class CreateProductivitiesTable extends Migration
         Schema::create('productivities', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('date');
-            $table->unsignedBigInteger('month');
-            $table->decimal('nang suat', 9, 0);
-            $table->decimal('cho no', 9, 0);
-            $table->decimal('thu no', 9, 0);
+            $table->decimal('productivity', 9, 0)->default(0);
+            $table->decimal('in_debt', 9, 0)->default(0);
+            $table->decimal('take_debt', 9, 0)->default(0);
             $table->timestamps();
         });
     }

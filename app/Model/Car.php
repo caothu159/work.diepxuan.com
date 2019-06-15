@@ -60,6 +60,6 @@ class Car extends Model
 
     public function productivity()
     {
-        return $this->belongsTo(App\Productivity::class, 'car_id', 'id');
+        return $this->hasMany(App\Productivity::class);
     }
 }

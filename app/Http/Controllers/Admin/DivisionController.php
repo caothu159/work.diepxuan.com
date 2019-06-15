@@ -134,16 +134,21 @@ class DivisionController extends Controller
                         continue;
                     }
 
-                    \App\Division::updateOrCreate([
+                    $productivity = \App\Productivity::firstOrCreate([
+                        'date'   => $date,
+                        'car_id' => $car->id,
+                    ], []);
+
+                    $division = \App\Division::updateOrCreate([
                         'salary_id' => $salary->id,
                         'car_id'    => $car->id,
                         'date'      => $date,
                     ], [
-                        'salary_id'    => $salary->id,
-                        'car_id'       => $car->id,
-                        'date'         => $date,
                         'salary_count' => \count($salary_ids),
                     ]);
+
+                    $division->productivity()->associate($productivity);
+                    $division->save();
                 }
             }
         }
