@@ -7,6 +7,7 @@
 namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
+use App\Services\DatafileService;
 use App\Http\Controllers\Controller as Controller;
 
 class ProductivityController extends Controller
@@ -37,9 +38,22 @@ class ProductivityController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, string $year = null, string $month = null)
+    public function store(Request $request)
     {
-        $this->__importFromFile($year, $month);
+        //
+    }
+
+    /**
+     * Import Data from file to database.
+     *
+     * @param DatafileService $datafileService
+     * @param string $year
+     * @param string $month
+     * @return \Illuminate\Http\Response
+     */
+    public function import(DatafileService $datafileService, string $year = null, string $month = null)
+    {
+        $datafileService->productivityImport($year, $month);
 
         return redirect()->route('admin.salary', [
             'year'  => $year,
@@ -90,38 +104,5 @@ class ProductivityController extends Controller
     public function destroy($id)
     {
         //
-    }
-
-    /**
-     * Import Data from file to database.
-     *
-     * @param string $year
-     * @param string $month
-     * @return void
-     */
-    private function __importFromFile(string $year = null, string $month = null)
-    {
-        $data = new \App\Data($year, $month);
-
-        $month = sprintf('%s-%s', $year, $month);
-        $month = new \DateTime($month);
-        $month = $month->getTimestamp() / (24 * 60 * 60) + 25569;
-
-        $cars = \App\Car::all();
-
-        foreach ($data->loadFromFile(\App\Productivity::DATAFILE) as $date => $val) {
-            $val['date'] = $date;
-
-            foreach ($cars as $car) {
-                $productivity = \App\Productivity::updateOrCreate([
-                    'date'   => $date,
-                    'car_id' => $car->id,
-                ], [
-                    'productivity' => $val["ns $car->name"],
-                    'in_debt'      => $val["no $car->name"],
-                    'take_debt'    => $val["thu no $car->name"],
-                ]);
-            }
-        }
     }
 }

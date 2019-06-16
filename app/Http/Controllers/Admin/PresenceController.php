@@ -7,6 +7,7 @@
 namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
+use App\Services\DatafileService;
 use App\Http\Controllers\Controller as Controller;
 
 class PresenceController extends Controller
@@ -36,14 +37,25 @@ class PresenceController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param string $year
-     * @param string $month
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, string $year = null, string $month = null)
+    public function store(Request $request)
     {
-        $this->__importFromFile($year, $month);
+        //
+    }
+
+    /**
+     * Import Data from file to database.
+     *
+     * @param DatafileService $datafileService
+     * @param string $year
+     * @param string $month
+     * @return \Illuminate\Http\Response
+     */
+    public function import(DatafileService $datafileService, string $year = null, string $month = null)
+    {
+        $datafileService->presenceImport($year, $month);
 
         return redirect()->route('admin.salary', [
             'year'  => $year,
@@ -94,35 +106,5 @@ class PresenceController extends Controller
     public function destroy($id)
     {
         //
-    }
-
-    /**
-     * Import Data from file to database.
-     *
-     * @param string $year
-     * @param string $month
-     * @return void
-     */
-    private function __importFromFile(string $year = null, string $month = null)
-    {
-        $data = new \App\Data($year, $month);
-
-        $month = sprintf('%s-%s', $year, $month);
-        $month = new \DateTime($month);
-        $month = $month->getTimestamp() / (24 * 60 * 60) + 25569;
-
-        foreach ($data->loadFromFile(\App\Presence::DATAFILE) as $date => $val) {
-            foreach ($val as $name => $presence) {
-                $salary = \App\Salary::where('name', $name)
-                    ->where('month', $month)->first();
-
-                \App\Presence::updateOrCreate([
-                    'salary_id' => $salary->id,
-                    'date'      => $date,
-                ], [
-                    'presence' => $presence,
-                ]);
-            }
-        }
     }
 }

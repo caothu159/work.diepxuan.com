@@ -7,6 +7,7 @@
 namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
+use App\Services\DatafileService;
 use App\Http\Controllers\Controller as Controller;
 
 class DivisionController extends Controller
@@ -34,14 +35,25 @@ class DivisionController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param string $year
-     * @param string $month
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, string $year = null, string $month = null)
+    public function store(Request $request)
     {
-        $this->__importFromFile($year, $month);
+        //
+    }
+
+    /**
+     * Import Data from file to database.
+     *
+     * @param DatafileService $datafileService
+     * @param string $year
+     * @param string $month
+     * @return \Illuminate\Http\Response
+     */
+    public function import(DatafileService $datafileService, string $year = null, string $month = null)
+    {
+        $datafileService->divisionImport($year, $month);
 
         return redirect()->route('admin.salary', [
             'year'  => $year,
@@ -92,65 +104,5 @@ class DivisionController extends Controller
     public function destroy($id)
     {
         //
-    }
-
-    /**
-     * Import Data from file to database.
-     *
-     * @return void
-     */
-    private function __importFromFile(string $year, string $month)
-    {
-        $data = new \App\Data($year, $month);
-
-        $month = sprintf('%s-%s', $year, $month);
-        $month = new \DateTime($month);
-        $month = $month->getTimestamp() / (24 * 60 * 60) + 25569;
-
-        foreach ($data->loadFromFile(\App\Division::DATAFILE) as $date => $val) {
-            if (0 == $date) {
-                continue;
-            }
-
-            foreach ($val as $car_id => $salary_ids) {
-                if (0 === $salary_ids) {
-                    continue;
-                }
-
-                $car_id = str_replace('x', '', $car_id);
-                $car = \App\Car::where('name', $car_id)->first();
-
-                if (null == $car) {
-                    continue;
-                }
-
-                $salary_ids = explode('-', $salary_ids);
-
-                foreach ($salary_ids as $salary_id) {
-                    $salary = \App\Salary::where('name', $salary_id)
-                        ->where('month', $month)->first();
-
-                    if (null == $salary) {
-                        continue;
-                    }
-
-                    $productivity = \App\Productivity::firstOrCreate([
-                        'date'   => $date,
-                        'car_id' => $car->id,
-                    ], []);
-
-                    $division = \App\Division::updateOrCreate([
-                        'salary_id' => $salary->id,
-                        'car_id'    => $car->id,
-                        'date'      => $date,
-                    ], [
-                        'salary_count' => \count($salary_ids),
-                    ]);
-
-                    $division->productivity()->associate($productivity);
-                    $division->save();
-                }
-            }
-        }
     }
 }

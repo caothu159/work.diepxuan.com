@@ -60,17 +60,36 @@ class Salary extends Model
         return $this->hasMany(\App\Division::class);
     }
 
-    public function getDefaultAttribute()
+    public function getSalaryDefaultAttribute()
     {
         $return = $this->employee->default / 30;
-        $return *= $this->presences->sum('presence');
-        $return = number_format($return, 0);
+        $return *= $this->presence;
+        $return = intval($return);
 
         return $return;
+    }
+
+    public function getPresenceAttribute()
+    {
+        return $this->presences->sum('presence');
     }
 
     public function getProductivityAttribute()
     {
         return $this->divisions->sum('salary_value');
+    }
+
+    public function getSalaryAttribute()
+    {
+        return $this->productivity + $this->salary_default;
+    }
+
+    public function getTurnoverAttribute()
+    {
+        if (null == $this->divisions) {
+            return 0;
+        }
+
+        return $this->divisions->sum('productivity_by_salary');
     }
 }
