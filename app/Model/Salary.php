@@ -89,6 +89,7 @@ class Salary extends Model
         if (null == $this->divisions) {
             return 0;
         }
+
         return $this->divisions->sum('productivity_by_salary');
     }
 }
