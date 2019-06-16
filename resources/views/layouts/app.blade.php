@@ -95,10 +95,11 @@
                     <!-- sidebar-menu  -->
                     <ul class="sidebar-menu nav flex-column border-top w-100">
                         <li class="nav-item">
-                            <a class="nav-link text-muted d-flex justify-content-between" data-toggle="collapse"
-                                data-target="#dashboardCollapse" aria-expanded="false" href="javascript:void(0)">
+                            <a class="nav-link text-muted d-flex justify-content-between align-items-center"
+                                data-toggle="collapse" data-target="#dashboardCollapse" aria-expanded="false"
+                                href="javascript:void(0)">
                                 <span>{{ __('Dashboard') }}</span>
-                                <i class="fa fa-envelope"></i>
+                                <i class="fa fa-chevron-right"></i>
                             </a>
                             <div class="collapse" id="dashboardCollapse">
                                 <ul>

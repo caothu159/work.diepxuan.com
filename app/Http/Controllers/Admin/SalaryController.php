@@ -6,9 +6,10 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Salary;
-use Illuminate\Database\Eloquent\Collection;
 use App\Http\Controllers\Controller as Controller;
+use App\Salary;
+use App\Services\DatafileService;
+use Illuminate\Database\Eloquent\Collection;
 
 class SalaryController extends Controller
 {
@@ -27,6 +28,23 @@ class SalaryController extends Controller
                 'month' => $month,
             ],
             'data' => $this->__loadSalary($year, $month),
+        ]);
+    }
+
+    /**
+     * Import Data from file to database.
+     *
+     * @param string $year
+     * @param string $month
+     * @return \Illuminate\Http\Response
+     */
+    public function import(DatafileService $datafileService, string $year = null, string $month = null)
+    {
+        $datafileService->salaryImport($year, $month);
+
+        return redirect()->route('admin.salary', [
+            'year'  => $year,
+            'month' => $month,
         ]);
     }
 
@@ -104,10 +122,10 @@ class SalaryController extends Controller
      */
     public static function link(string $year = null, string $month = null)
     {
-        if (! $year) {
+        if (!$year) {
             return route('admin.salary');
         }
-        if (! $month) {
+        if (!$month) {
             return route('admin.salary', ['year' => $year]);
         }
 
