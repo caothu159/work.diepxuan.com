@@ -6,9 +6,9 @@
 
 namespace App\Http\Controllers\Admin;
 
-use Illuminate\Http\Request;
-use App\Services\DatafileService;
 use App\Http\Controllers\Controller as Controller;
+use App\Services\DatafileService;
+use Illuminate\Http\Request;
 
 class PresenceController extends Controller
 {

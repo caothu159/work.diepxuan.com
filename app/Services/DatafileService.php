@@ -1,9 +1,5 @@
 <?php
 
-/*
- * Copyright © 2019 Dxvn, Inc. All rights reserved.
- */
-
 namespace App\Services;
 
 class DatafileService implements DatafileServiceInterface
@@ -117,7 +113,7 @@ class DatafileService implements DatafileServiceInterface
                 }
 
                 $car_id = str_replace('x', '', $car_id);
-                $car = \App\Car::where('name', $car_id)->first();
+                $car    = \App\Car::where('name', $car_id)->first();
 
                 if (null == $car) {
                     continue;
