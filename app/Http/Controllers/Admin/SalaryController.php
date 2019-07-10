@@ -6,10 +6,10 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller as Controller;
 use App\Salary;
 use App\Services\DatafileService;
 use Illuminate\Database\Eloquent\Collection;
-use App\Http\Controllers\Controller as Controller;
 
 class SalaryController extends Controller
 {
@@ -122,10 +122,10 @@ class SalaryController extends Controller
      */
     public static function link(string $year = null, string $month = null)
     {
-        if (! $year) {
+        if (!$year) {
             return route('admin.salary');
         }
-        if (! $month) {
+        if (!$month) {
             return route('admin.salary', ['year' => $year]);
         }
 
