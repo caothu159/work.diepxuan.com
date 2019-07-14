@@ -14,7 +14,7 @@ use Illuminate\Routing\Controller as BaseController;
 class Controller extends BaseController {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
-    protected static function isAdmin() {
+    public function isAdmin() {
         return auth()->user()->isAdmin();
     }
 }

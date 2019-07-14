@@ -7,6 +7,7 @@
 namespace App\Http\Controllers;
 
 use App\Salary;
+use App\Services\DatafileService;
 use Illuminate\Http\Request;
 
 class SalaryController extends Controller {
@@ -21,11 +22,12 @@ class SalaryController extends Controller {
      */
     public function index( string $year = null, string $month = null ) {
         return view( 'home', [
-            'time' => [
+            'controller' => $this,
+            'time'       => [
                 'year'  => $year,
                 'month' => $month,
             ],
-            'data' => $this->_loadSalary( $year, $month ),
+            'data'       => $this->_loadSalary( $year, $month ),
         ] );
     }
 
@@ -36,6 +38,23 @@ class SalaryController extends Controller {
      */
     public function create() {
         //
+    }
+
+    /**
+     * Import Data from file to database.
+     *
+     * @param string $year
+     * @param string $month
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function import( DatafileService $datafileService, string $year = null, string $month = null ) {
+        $datafileService->salaryImport( $year, $month );
+
+        return redirect()->route( 'salary', [
+            'year'  => $year,
+            'month' => $month,
+        ] );
     }
 
     /**
@@ -101,7 +120,7 @@ class SalaryController extends Controller {
      *
      * @return void
      */
-    public static function months( string $year = null ) {
+    public function months( string $year = null ) {
         return array_diff( scandir( ( new \App\Data )->datadir( $year ) ), [ '.', '..' ] );
     }
 
@@ -110,7 +129,7 @@ class SalaryController extends Controller {
      *
      * @return void
      */
-    public static function years() {
+    public function years() {
         return array_diff( scandir( ( new \App\Data )->datadir() ), [ '.', '..' ] );
     }
 
@@ -122,16 +141,22 @@ class SalaryController extends Controller {
      *
      * @return string
      */
-    public static function link( string $year = null, string $month = null ) {
-        $router = self::isAdmin() ? 'admin.' : '';
+    public function link( string $year = null, string $month = null ) {
         if ( ! $year ) {
-            return route( $router . 'salary' );
+            return route( 'salary' );
         }
         if ( ! $month ) {
-            return route( $router . 'salary', [ 'year' => $year ] );
+            return route( 'salary', [ 'year' => $year ] );
         }
 
-        return route( $router . 'salary', [ 'year' => $year, 'month' => sprintf( "%02d", $month ) ] );
+        return route( 'salary', [ 'year' => $year, 'month' => sprintf( "%02d", $month ) ] );
+    }
+
+    /**
+     * @return main layout
+     */
+    public function getLayout() {
+        return 'layouts.default';
     }
 
     /**

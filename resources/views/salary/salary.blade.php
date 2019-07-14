@@ -1,5 +1,5 @@
 @foreach ($data as $salary)
-    <div class="col-sm-3 p-1">
+    <div class="col-sm-3 pl-1 pr-1 pt-0 pb-2">
         <a class="card text-decoration-none collapsed h-100" id="heading{{ $salary->id }}" data-toggle="collapse"
            href="#collapse{{ $salary->id }}" aria-expanded="false" aria-controls="collapse{{ $salary->id }}">
             <div class="card-header p-2">
