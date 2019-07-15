@@ -1,22 +1,32 @@
-@extends('layouts.user')
+@extends('layouts.app')
 
 @section('content')
-    <div class="container-fluid">
-        <div class="row justify-content-between">
-            {{-- <div class="col-md-2 pr-4"> --}}
-            @include('layouts/sidebar/user')
-            {{-- </div> --}}
+    @if (session('status'))
+        <div class="alert alert-success" role="alert">
+            {{ session('status') }}
+        </div>
+    @endif
 
-            {{-- <div class="col-md-12"> --}}
-            @if (session('status'))
-                <div class="alert alert-success" role="alert">
-                    {{ session('status') }}
-                </div>
-            @endif
-            <div class="row align-items-stretch" id="accordionSalary">
-                @include('salary/salary')
-            </div>
-            {{-- </div> --}}
+    <div class="col-12">
+        <div class="row align-items-stretch" id="accordionSalary">
+            @include('components/timepicker')
+            @include('salary/salary')
         </div>
     </div>
+
+@endsection
+
+@section('sidebar.salary')
+    <ul>
+        <li>
+            <form method="post" class="mb-1" action="{{ route('salary.import', $time) }}">
+                @method('POST')
+                @csrf
+                <button class="btn btn-link text-left p-0 m-0 border-0 text-decoration-none text-capitalize"
+                        type="submit" name="import" value="import">
+                    {{ __('salary.import') }}
+                </button>
+            </form>
+        </li>
+    </ul>
 @endsection

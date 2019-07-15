@@ -7,9 +7,19 @@
 namespace App\Http\Controllers;
 
 use App\Salary;
+use App\Services\DatafileService;
 use Illuminate\Http\Request;
 
 class SalaryController extends Controller {
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct() {
+        $this->middleware( 'auth' );
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -21,11 +31,12 @@ class SalaryController extends Controller {
      */
     public function index( string $year = null, string $month = null ) {
         return view( 'home', [
-            'time' => [
+            'controller' => $this,
+            'time'       => [
                 'year'  => $year,
                 'month' => $month,
             ],
-            'data' => $this->_loadSalary( $year, $month ),
+            'data'       => $this->_loadSalary( $year, $month ),
         ] );
     }
 
@@ -36,6 +47,23 @@ class SalaryController extends Controller {
      */
     public function create() {
         //
+    }
+
+    /**
+     * Import Data from file to database.
+     *
+     * @param string $year
+     * @param string $month
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function import( DatafileService $datafileService, string $year = null, string $month = null ) {
+        $datafileService->salaryImport( $year, $month );
+
+        return redirect()->route( 'salary.index', [
+            'year'  => $year,
+            'month' => $month,
+        ] );
     }
 
     /**
@@ -92,46 +120,6 @@ class SalaryController extends Controller {
      */
     public function destroy( $id ) {
         //
-    }
-
-    /**
-     * List all month in year.
-     *
-     * @param string $year
-     *
-     * @return void
-     */
-    public static function months( string $year = null ) {
-        return array_diff( scandir( ( new \App\Data )->datadir( $year ) ), [ '.', '..' ] );
-    }
-
-    /**
-     * List all years .
-     *
-     * @return void
-     */
-    public static function years() {
-        return array_diff( scandir( ( new \App\Data )->datadir() ), [ '.', '..' ] );
-    }
-
-    /**
-     * Get Link go to view salary.
-     *
-     * @param string $year
-     * @param string $month
-     *
-     * @return string
-     */
-    public static function link( string $year = null, string $month = null ) {
-        $router = self::isAdmin() ? 'admin.' : '';
-        if ( ! $year ) {
-            return route( $router . 'salary' );
-        }
-        if ( ! $month ) {
-            return route( $router . 'salary', [ 'year' => $year ] );
-        }
-
-        return route( $router . 'salary', [ 'year' => $year, 'month' => sprintf( "%02d", $month ) ] );
     }
 
     /**
