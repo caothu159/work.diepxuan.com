@@ -12,6 +12,15 @@ use Illuminate\Http\Request;
 
 class SalaryController extends Controller {
     /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct() {
+        $this->middleware( 'auth' );
+    }
+
+    /**
      * Display a listing of the resource.
      *
      * @param string|null $year
@@ -51,7 +60,7 @@ class SalaryController extends Controller {
     public function import( DatafileService $datafileService, string $year = null, string $month = null ) {
         $datafileService->salaryImport( $year, $month );
 
-        return redirect()->route( 'salary', [
+        return redirect()->route( 'salary.index', [
             'year'  => $year,
             'month' => $month,
         ] );
@@ -111,52 +120,6 @@ class SalaryController extends Controller {
      */
     public function destroy( $id ) {
         //
-    }
-
-    /**
-     * List all month in year.
-     *
-     * @param string $year
-     *
-     * @return void
-     */
-    public function months( string $year = null ) {
-        return array_diff( scandir( ( new \App\Data )->datadir( $year ) ), [ '.', '..' ] );
-    }
-
-    /**
-     * List all years .
-     *
-     * @return void
-     */
-    public function years() {
-        return array_diff( scandir( ( new \App\Data )->datadir() ), [ '.', '..' ] );
-    }
-
-    /**
-     * Get Link go to view salary.
-     *
-     * @param string $year
-     * @param string $month
-     *
-     * @return string
-     */
-    public function link( string $year = null, string $month = null ) {
-        if ( ! $year ) {
-            return route( 'salary' );
-        }
-        if ( ! $month ) {
-            return route( 'salary', [ 'year' => $year ] );
-        }
-
-        return route( 'salary', [ 'year' => $year, 'month' => sprintf( "%02d", $month ) ] );
-    }
-
-    /**
-     * @return main layout
-     */
-    public function getLayout() {
-        return 'layouts.default';
     }
 
     /**

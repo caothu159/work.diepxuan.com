@@ -79,24 +79,25 @@
         </div>
     </nav>
 
-    @guest
-        <main class="container-fluid py-4">
-            @yield('content')
-        </main>
 
-    @endguest
-
-    @if($controller->isAdmin())
+    @if(isset($controller) && $controller->isAdmin())
 
         <div class="container-fluid">
             <div class="row">
                 <ul id="sidebar" class="sidebar col-md-2">
                     <li>
                         <a class="text-decoration-none"
-                           href="{{ route('salary') }}">
+                           href="{{ route('salary.index') }}">
                             {{ __('salary.salary') }}
                         </a>
                         @yield('sidebar.salary')
+                    </li>
+                    <li>
+                        <a class="text-decoration-none"
+                           href="{{ route('users.index') }}">
+                            {{ __('user.manager') }}
+                        </a>
+                        @yield('sidebar.user')
                     </li>
                 </ul>
 
@@ -113,7 +114,6 @@
         </main>
 
     @endif
-
 </div>
 </body>
 

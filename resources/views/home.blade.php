@@ -1,4 +1,4 @@
-@extends($controller->getLayout())
+@extends('layouts.app')
 
 @section('content')
     @if (session('status'))
@@ -9,7 +9,7 @@
 
     <div class="col-12">
         <div class="row align-items-stretch" id="accordionSalary">
-            @include('components/sidebar')
+            @include('components/timepicker')
             @include('salary/salary')
         </div>
     </div>
@@ -19,7 +19,7 @@
 @section('sidebar.salary')
     <ul>
         <li>
-            <form method="post" class="mb-1" action="{{ route('salary', $time) }}">
+            <form method="post" class="mb-1" action="{{ route('salary.import', $time) }}">
                 @method('POST')
                 @csrf
                 <button class="btn btn-link text-left p-0 m-0 border-0 text-decoration-none text-capitalize"

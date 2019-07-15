@@ -6,16 +6,14 @@
 
 namespace App\Http\Controllers;
 
-class HomeController extends Controller
-{
+class HomeController extends Controller {
     /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct()
-    {
-        $this->middleware('auth');
+    public function __construct() {
+        $this->middleware( 'auth' );
     }
 
     /**
@@ -23,14 +21,14 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function index()
-    {
-        return view('home', [
-            'time' => [
+    public function index() {
+        return view( 'home', [
+            'controller' => $this,
+            'time'       => [
                 'year'  => null,
                 'month' => null,
             ],
-            'data' => [],
-        ]);
+            'data'       => [],
+        ] );
     }
 }
