@@ -96,4 +96,8 @@ class Salary extends Model {
 
         return $this->user->name;
     }
+
+    public function getWeekstartAttribute() {
+        return date( 'w', ( $this->month - 25569 ) * 86400 );
+    }
 }

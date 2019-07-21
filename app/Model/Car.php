@@ -4,12 +4,11 @@
  * Copyright © 2019 Dxvn, Inc. All rights reserved.
  */
 
-namespace App\model;
+namespace App\Model;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Car extends Model
-{
+class Car extends Model {
     /**
      * The attributes that are mass assignable.
      *
@@ -53,13 +52,11 @@ class Car extends Model
      */
     public $timestamps = true;
 
-    public function divisions()
-    {
-        return $this->hasMany(\App\Division::class);
+    public function divisions() {
+        return $this->hasMany( \App\Division::class );
     }
 
-    public function productivity()
-    {
-        return $this->hasMany(App\Productivity::class);
+    public function productivity() {
+        return $this->hasMany( App\Productivity::class );
     }
 }

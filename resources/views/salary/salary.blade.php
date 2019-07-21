@@ -1,7 +1,6 @@
 @foreach ($data as $salary)
     <div class="col-sm-3 pl-1 pr-1 pt-0 pb-2">
-        <a class="card text-decoration-none collapsed h-100" id="heading{{ $salary->id }}" data-toggle="collapse"
-           href="#collapse{{ $salary->id }}" aria-expanded="false" aria-controls="collapse{{ $salary->id }}">
+        <div class="card text-decoration-none collapsed h-100" id="heading{{ $salary->id }}">
             <div class="card-header p-2">
             <span class="card-title text-success font-weight-bold">
                 {{ $salary->name }}
@@ -16,12 +15,21 @@
                     </div>
 
                     <div class="d-flex justify-content-between">
-                        Công: <span class="font-weight-bold">{{ $salary->presence }}</span>
+                        Công:
+                        <a class="font-weight-bold" data-toggle="collapse" aria-expanded="false"
+                           href="#collapse{{ $salary->id }}presence"
+                           aria-controls="collapse{{ $salary->id }}presence">
+                            {{ $salary->presence }}
+                        </a>
                     </div>
 
                     @if ($salary->turnover!=0)
                         <div class="d-flex justify-content-between">
-                            Doanh số: <span class="font-weight-bold">{{ $salary->turnover }}</span>
+                            Doanh số:
+                            <a class="font-weight-bold" data-toggle="collapse" aria-expanded="false"
+                               href="#collapse{{ $salary->id }}" aria-controls="collapse{{ $salary->id }}">
+                                {{ $salary->turnover }}
+                            </a>
                         </div>
                     @endif
 
@@ -34,17 +42,22 @@
                             Lương năng suất: <span class="text-primary">{{ $salary->productivity }}</span>
                         </div>
                     @endif
+
+                    <div class="collapse" id="collapse{{ $salary->id }}presence"
+                         aria-labelledby="heading{{ $salary->id }}" data-parent="#accordionSalary">
+                        @include('salary.calendar')
+                    </div>
                 </div>
                 <!-- <a <a href="#" class="card-link">Card link</a> -->
                 <!-- <a href="#" class="card-link">Another link</a> -->
             </div>
-        </a>
+        </div>
     </div>
 
     @if ($salary->turnover!=0)
         <div class="col-sm-12 collapse" id="collapse{{ $salary->id }}" aria-labelledby="heading{{ $salary->id }}"
              data-parent="#accordionSalary">
-            @include('salary/salaryDetail')
+            @include('salary.detail')
         </div>
     @endif
 @endforeach

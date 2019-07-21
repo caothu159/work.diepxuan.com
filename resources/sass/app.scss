@@ -1,28 +1,33 @@
+//vendors
 @import 'vendors/bootstrap';
 @import 'vendors/font-awesome';
-
+//abstracts
 @import 'abstracts/variables';
 @import 'abstracts/functions';
 @import 'abstracts/mixins';
-
+//base
 @import 'base/reset';
 @import 'base/typography';
-
+//layout
 @import 'layout/navigation';
 @import 'layout/grid';
 @import 'layout/header';
 @import 'layout/footer';
 @import 'layout/sidebar';
 @import 'layout/forms';
-
+//content
+@import 'content/table';
+//components
 @import 'components/buttons';
 @import 'components/card';
 @import 'components/carousel';
 @import 'components/slider';
-
+//utility
+@import 'utility/text';
+//pages
 @import 'pages/home';
 @import 'pages/about';
 @import 'pages/contact';
-
+//themes
 @import 'themes/theme';
 @import 'themes/admin';
