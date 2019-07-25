@@ -24,4 +24,8 @@ Route::group( [
     } );
 
     Route::resource( 'users', 'UsersController' );
+    Route::resource( 'cars', 'CarController' );
+    Route::get( 'cars/{year?}/{month?}', 'CarController@index' )
+         ->name( 'cars.index' )
+         ->where( [ 'year' => '[0-9]+', 'month' => '[0-9]+' ] );
 } );

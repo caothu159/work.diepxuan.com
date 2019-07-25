@@ -56,7 +56,7 @@ class Car extends Model {
         return $this->hasMany( \App\Division::class );
     }
 
-    public function productivity() {
-        return $this->hasMany( App\Productivity::class );
+    public function productivities( $timefrom = null, $timeto = null ) {
+        return $this->hasMany( \App\Productivity::class );
     }
 }

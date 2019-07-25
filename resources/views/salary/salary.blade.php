@@ -39,7 +39,8 @@
                         </div>
 
                         <div class="d-flex justify-content-between">
-                            Lương năng suất: <span class="text-primary">{{ $salary->productivity }}</span>
+                            Lương năng suất: <span
+                                class="text-primary">{{ number_format($salary->productivity,2) }}</span>
                         </div>
                     @endif
 

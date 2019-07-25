@@ -23,7 +23,7 @@
                 <td>{{ $salary->employee->percent }}</td>
                 <td>{{ $division->productivity_by_salary }}</td>
                 <td>{{ $division->ratio_by_salary }}</td>
-                <td>{{ $division->salary_value }}</td>
+                <td>{{ number_format($division->salary_by_productivity,2) }}</td>
             @endif
         </tr>
     @endforeach

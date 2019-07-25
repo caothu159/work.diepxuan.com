@@ -8,7 +8,11 @@ namespace App;
 
 use App\Model\Productivity as Model;
 
-class Productivity extends Model
-{
+/**
+ * Class Productivity năng suất xe
+ *
+ * @package App
+ */
+class Productivity extends Model {
     //
 }

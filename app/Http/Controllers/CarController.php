@@ -6,11 +6,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Salary;
-use App\Services\DatafileService;
+use App\Car;
 use Illuminate\Http\Request;
 
-class SalaryController extends Controller {
+
+class CarController extends Controller {
     /**
      * Create a new controller instance.
      *
@@ -18,6 +18,7 @@ class SalaryController extends Controller {
      */
     public function __construct() {
         $this->middleware( 'auth' );
+        $this->middleware( 'admin' );
     }
 
     /**
@@ -30,13 +31,25 @@ class SalaryController extends Controller {
      * @throws \Exception
      */
     public function index( string $year = null, string $month = null ) {
-        return view( 'home', [
+        $dt = sprintf( '%s-%s', $year ?: date( 'Y' ), $month ?: ( date( 'm' ) . ' -1 month' ) );
+
+        $timefrom = date( "Y-m-01", strtotime( $dt ) );
+        $timefrom = new \DateTime( $timefrom );
+        $timefrom = $timefrom->getTimestamp() / ( 24 * 60 * 60 ) + 25569;
+
+        $timeto = date( "Y-m-t", strtotime( $dt ) );
+        $timeto = new \DateTime( $timeto );
+        $timeto = $timeto->getTimestamp() / ( 24 * 60 * 60 ) + 25569;
+
+        return view( 'car', [
             'controller' => $this,
+            'cars'       => Car::all(),
             'time'       => [
                 'year'  => $year,
                 'month' => $month,
+                'from'  => $timefrom,
+                'to'    => $timeto,
             ],
-            'data'       => $this->_loadSalary( $year, $month ),
         ] );
     }
 
@@ -50,28 +63,12 @@ class SalaryController extends Controller {
     }
 
     /**
-     * Import Data from file to database.
-     *
-     * @param string $year
-     * @param string $month
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function import( DatafileService $datafileService, string $year = null, string $month = null ) {
-        $datafileService->salaryImport( $year, $month );
-
-        return redirect()->route( 'salary.index', [
-            'year'  => $year,
-            'month' => $month,
-        ] );
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param Request $request
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
+     * @throws \Illuminate\Validation\ValidationException
      */
     public function store( Request $request ) {
         //
@@ -102,10 +99,11 @@ class SalaryController extends Controller {
     /**
      * Update the specified resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
-     * @param int $id
+     * @param Request $request
+     * @param $id
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Http\Response
+     * @throws \Illuminate\Validation\ValidationException
      */
     public function update( Request $request, $id ) {
         //
@@ -123,22 +121,21 @@ class SalaryController extends Controller {
     }
 
     /**
-     * Get salaries to show.
+     * Get Link go to view cars.
      *
-     * @param string|null $year
-     * @param string|null $month
+     * @param string $year
+     * @param string $month
      *
-     * @return Collection $collection
-     * @throws \Exception
+     * @return string
      */
-    protected function _loadSalary( string $year = null, string $month = null ) {
-        $dt = sprintf( '%s-%s', $year ?: date( 'Y' ), $month ?: ( date( 'm' ) . ' -1 month' ) );
+    public function link( string $year = null, string $month = null ) {
+        if ( ! $year ) {
+            return route( 'cars.index' );
+        }
+        if ( ! $month ) {
+            return route( 'cars.index', [ 'year' => $year ] );
+        }
 
-        $month = new \DateTime( $dt );
-        $month = $month->getTimestamp() / ( 24 * 60 * 60 ) + 25569;
-
-        $collection = Salary::where( 'month', $month )->orderBy( 'name', 'asc' )->get();
-
-        return $collection;
+        return route( 'cars.index', [ 'year' => $year, 'month' => sprintf( "%02d", $month ) ] );
     }
 }

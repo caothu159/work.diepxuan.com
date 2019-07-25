@@ -8,7 +8,10 @@ namespace App;
 
 use App\Model\Salary as Model;
 
-class Salary extends Model
-{
+/**
+ * Class Salary công tháng
+ * @package App
+ */
+class Salary extends Model {
     //
 }

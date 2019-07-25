@@ -17,9 +17,8 @@ return [
     |
     */
 
-    'manager' => 'Quản lý tài khoản',
-    'map'     => 'Liên kết',
+    'manager' => 'Thông tin vận tải',
     'list'    => 'Danh sách',
-    'new'     => 'Thêm mới',
+    'new'     => 'Thêm xe mới',
 
 ];

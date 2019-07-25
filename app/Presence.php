@@ -8,7 +8,10 @@ namespace App;
 
 use App\Model\Presence as Model;
 
-class Presence extends Model
-{
+/**
+ * Class Presence chấm công
+ * @package App
+ */
+class Presence extends Model {
     //
 }

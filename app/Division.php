@@ -8,7 +8,10 @@ namespace App;
 
 use App\Model\Division as Model;
 
-class Division extends Model
-{
+/**
+ * Class Division nhân công từng xe
+ * @package App
+ */
+class Division extends Model {
     //
 }
