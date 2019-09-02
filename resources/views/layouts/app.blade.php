@@ -21,7 +21,7 @@
     <link href="{{ asset('css/app.css') .'?v='. uniqid() }}" rel="stylesheet">
 </head>
 
-<body>
+<body style="display: none">
 <div id="app">
 
     <nav class="navbar navbar-expand-md">

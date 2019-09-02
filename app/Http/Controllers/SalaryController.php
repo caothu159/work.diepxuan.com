@@ -58,7 +58,7 @@ class SalaryController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function import( DatafileService $datafileService, string $year = null, string $month = null ) {
-        $datafileService->salaryImport( $year, $month );
+        $datafileService->salaryImport( $year ?: date( 'Y' ), $month ?: date( 'm' ) );
 
         return redirect()->route( 'salary.index', [
             'year'  => $year,

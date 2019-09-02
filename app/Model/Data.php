@@ -117,7 +117,11 @@ class Data extends Model {
      * @return string
      */
     protected function _fileContent( $path ) {
-        $spreadsheet = IOFactory::load( $path );
+        try {
+            $spreadsheet = IOFactory::load( $path );
+        } catch ( \Exception $e ) {
+            return array();
+        }
 
         $sheet      = $spreadsheet->getActiveSheet();
         $highestRow = $sheet->getHighestRow();

@@ -29,3 +29,7 @@ Route::group( [
          ->name( 'cars.index' )
          ->where( [ 'year' => '[0-9]+', 'month' => '[0-9]+' ] );
 } );
+
+Route::get( '/debug-sentry', function () {
+    throw new Exception( 'debug Sentry error!' );
+} );

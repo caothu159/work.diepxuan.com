@@ -13718,3 +13718,7 @@ a.card:hover {
   border-color: #3490dc;
 }
 
+body {
+  display: block !important;
+}
+

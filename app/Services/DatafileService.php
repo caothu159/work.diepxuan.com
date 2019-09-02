@@ -54,8 +54,8 @@ class DatafileService implements DatafileServiceInterface {
                 '_40'     => $val['40'],
                 '_50'     => $val['50'],
                 '_60'     => $val['60'],
-                '_70'     => $val['70'],
-                '_80'     => $val['80'],
+                '_70'     => isset( $val['70'] ) ? $val['70'] : 0,
+                '_80'     => isset( $val['80'] ) ? $val['80'] : 0,
                 'percent' => $val['Ti le'],
                 'with'    => $val['Bat cap'],
             ] );
