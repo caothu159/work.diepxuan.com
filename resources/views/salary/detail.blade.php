@@ -1,29 +1,31 @@
-<table class="table table-hover table-condensed table-sm">
+<table class="table table-hover table-condensed table-sm text-center">
     <tr>
         <th></th>
-        <th>Xe</th>
-        <th>Năng suất xe</th>
+        <th>công</th>
+        <th></th>
+        <th>Doanh số</th>
         <th>Cho nợ</th>
         <th>Thu nợ</th>
         @if ($salary->productivity!=0)
-            <th>Tỉ lệ chia</th>
+            <th>Tỉ lệ</th>
             <th>Năng suất</th>
             <th>Hệ số</th>
             <th>Lương</th>
         @endif
     </tr>
-    @foreach ($salary->divisions as $division)
-        <tr>
-            <td>{{ $division->datetime }}</td>
-            <td>{{ $division->car->name }}</td>
-            <td>{{ $division->productivity_value }}</td>
-            <td>{{ $division->in_debt_value }}</td>
-            <td>{{ $division->take_debt_value }}</td>
+    @foreach ($salary->presences as $presence)
+        <tr class="{{ $presence->presence?'':'text-danger' }}">
+            <td class="{{ $presence->presence?'':'table-danger' }}">{{ $presence->datetime }}</td>
+            <td>{{ $presence->presence?:'-' }}</td>
+            <td>{{ $presence->presence?($presence->car?$presence->car->name:'-'):'-' }}</td>
+            <td>{{ $presence->turnover?:'-' }}</td>
+            <td>{{ $presence->in_debt?:'-' }}</td>
+            <td>{{ $presence->take_debt?:'-' }}</td>
             @if ($salary->productivity!=0)
-                <td>{{ $salary->employee->percent }}</td>
-                <td>{{ $division->productivity_by_salary }}</td>
-                <td>{{ $division->ratio_by_salary }}</td>
-                <td>{{ number_format($division->salary_by_productivity,2) }}</td>
+                <td>{{ $presence->percent?:'-' }}</td>
+                <td>{{ $presence->productivity?:'-' }}</td>
+                <td>{{ $presence->ratio?:'-' }}</td>
+                <td>{{ $presence->productivity_salary ? number_format($presence->productivity_salary, 2) : '-' }}</td>
             @endif
         </tr>
     @endforeach

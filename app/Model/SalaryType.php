@@ -1,30 +1,19 @@
 <?php
 
-/*
- * Copyright © 2019 Dxvn, Inc. All rights reserved.
- */
-
 namespace App\Model;
 
 use Jenssegers\Mongodb\Eloquent\Model as Eloquent;
 
-class Car extends Eloquent {
+class SalaryType extends Eloquent {
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
+        'salary_id',
         'name',
-    ];
-
-    /**
-     * The model's default values for attributes.
-     *
-     * @var array
-     */
-    protected $attributes = [
-        //
+        'value',
     ];
 
     /**
@@ -37,11 +26,11 @@ class Car extends Eloquent {
     ];
 
     /**
-     * The attributes that should be hidden for arrays.
+     * The model's default values for attributes.
      *
      * @var array
      */
-    protected $hidden = [
+    protected $attributes = [
         //
     ];
 
@@ -52,11 +41,11 @@ class Car extends Eloquent {
      */
     public $timestamps = true;
 
-    /**
-     * @return mixed
-     */
-    public function presences() {
-        return $this->hasMany( \App\Presence::class );
+    public function salary() {
+        return $this->belongsTo( \App\Salary::class );
     }
 
+    public function employee() {
+        return $this->belongsTo( \App\Employee::class );
+    }
 }

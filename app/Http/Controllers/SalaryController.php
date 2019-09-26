@@ -52,10 +52,12 @@ class SalaryController extends Controller {
     /**
      * Import Data from file to database.
      *
-     * @param string $year
-     * @param string $month
+     * @param DatafileService $datafileService
+     * @param string|null $year
+     * @param string|null $month
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
+     * @throws \Exception
      */
     public function import( DatafileService $datafileService, string $year = null, string $month = null ) {
         $datafileService->salaryImport( $year ?: date( 'Y' ), $month ?: date( 'm' ) );
@@ -69,7 +71,7 @@ class SalaryController extends Controller {
     /**
      * Store a newly created resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param Request $request
      *
      * @return \Illuminate\Http\Response
      */

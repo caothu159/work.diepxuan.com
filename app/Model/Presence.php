@@ -6,11 +6,9 @@
 
 namespace App\Model;
 
-use Illuminate\Database\Eloquent\Model;
+use Jenssegers\Mongodb\Eloquent\Model as Eloquent;
 
-class Presence extends Model {
-    const DATAFILE = 'chamcong.xlsx';
-
+class Presence extends Eloquent {
     /**
      * The attributes that are mass assignable.
      *
@@ -18,9 +16,21 @@ class Presence extends Model {
      */
     protected $fillable = [
         'salary_id',
+        'car_id',
         'date',
-        'month',
+
         'presence',
+        'presence_salary',
+
+        'salary_count',
+        'turnover',
+        'in_debt',
+        'take_debt',
+
+        'percent',
+        'productivity',
+        'ratio',
+        'productivity_salary',
     ];
 
     /**
@@ -61,8 +71,31 @@ class Presence extends Model {
         return $this->belongsTo( \App\Salary::class );
     }
 
+    public function car() {
+        return $this->belongsTo( \App\Car::class );
+    }
+
     public function getDatetimeAttribute() {
-        return date( 'd', ( $this->date - 25569 ) * 86400 );
+        return date( 'd/m', ( $this->date - 25569 ) * 86400 );
+    }
+
+    /**
+     * @return float|mixed
+     */
+    public function ratioInitial() {
+        $ratio = 0;
+        $types = $this->salary->types;
+        foreach ( $types as $type ) {
+            if ( ! is_numeric( $type->name ) ) {
+                continue;
+            }
+            if ( $this->productivity <= doubleval( $type->name ) * 1000 ) {
+                continue;
+            }
+            $ratio = max( $ratio, $type->value );
+        }
+
+        return doubleval( $ratio );
     }
 
     public function getWeekAttribute() {

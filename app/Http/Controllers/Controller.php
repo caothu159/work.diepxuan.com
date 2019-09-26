@@ -29,7 +29,11 @@ class Controller extends BaseController {
      * @return void
      */
     public function months( string $year = null ) {
-        return array_diff( scandir( ( new \App\Data )->datadir( $year ) ), [ '.', '..' ] );
+        if ( is_dir( ( new \App\Data )->datadir( $year ) ) ) {
+            return array_diff( scandir( ( new \App\Data )->datadir( $year ) ), [ '.', '..' ] );
+        }
+
+        return array();
     }
 
     /**
@@ -38,7 +42,18 @@ class Controller extends BaseController {
      * @return void
      */
     public function years() {
-        return array_diff( scandir( ( new \App\Data )->datadir() ), [ '.', '..' ] );
+        $years = array();
+        if ( is_dir( ( new \App\Data )->datadir() ) ) {
+            $years = array_diff( scandir( ( new \App\Data )->datadir() ), [ '.', '..' ] );
+        }
+
+        foreach ( $years as $key => $year ) {
+            if ( ! is_dir( ( new \App\Data )->datadir( $year ) ) ) {
+                unset( $years[ $key ] );
+            }
+        }
+
+        return $years;
     }
 
     /**

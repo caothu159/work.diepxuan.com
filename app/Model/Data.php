@@ -6,10 +6,10 @@
 
 namespace App\Model;
 
-use Illuminate\Database\Eloquent\Model;
+use Jenssegers\Mongodb\Eloquent\Model as Eloquent;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 
-class Data extends Model {
+class Data extends Eloquent {
     /**
      * Current year.
      *
@@ -42,7 +42,8 @@ class Data extends Model {
      *
      * @param string $datafile
      *
-     * @return array data
+     * @return array|string
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
     public function loadFromFile( $datafile ) {
         return $this->_fileContent( $this->datapath( $datafile ) );
@@ -106,15 +107,17 @@ class Data extends Model {
      * @return string
      */
     private function __datadir() {
-        return dirname( base_path() ) . config( 'salary.datadir' );
+//        return dirname( base_path() ) . config( 'salary.datadir' );
+        return config( 'salary.datadir' );
     }
 
     /**
      * Read data from file.
      *
-     * @param [type] $path
+     * @param $path
      *
-     * @return string
+     * @return array|string
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
     protected function _fileContent( $path ) {
         try {
