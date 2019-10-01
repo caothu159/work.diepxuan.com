@@ -183,8 +183,8 @@ return [
          * Custom Provider
          */
         App\Providers\DatafileServiceProvider::class,
-        Jenssegers\Mongodb\MongodbServiceProvider::class,
-        Jenssegers\Mongodb\Auth\PasswordResetServiceProvider::class,
+//        Jenssegers\Mongodb\MongodbServiceProvider::class,
+//        Jenssegers\Mongodb\Auth\PasswordResetServiceProvider::class,
 
     ],
 

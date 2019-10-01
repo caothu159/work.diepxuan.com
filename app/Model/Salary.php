@@ -6,7 +6,8 @@
 
 namespace App\Model;
 
-use Jenssegers\Mongodb\Eloquent\Model as Eloquent;
+//use Jenssegers\Mongodb\Eloquent\Model as Eloquent;
+use Illuminate\Database\Eloquent\Model as Eloquent;
 
 class Salary extends Eloquent {
     /**

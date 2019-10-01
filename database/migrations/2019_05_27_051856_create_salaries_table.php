@@ -21,15 +21,15 @@ class CreateSalariesTable extends Migration {
             $table->unsignedBigInteger( 'month' );
 
             /** cham cong */
-            $table->double( 'presence' );
+            $table->double( 'presence' )->nullable();
             /** luong cung */
-            $table->double( 'salary_default' );
+            $table->double( 'salary_default' )->nullable();
             /** doanh so */
-            $table->double( 'turnover' );
+            $table->double( 'turnover' )->nullable();
             /** luong san pham */
-            $table->double( 'productivity' );
+            $table->double( 'productivity' )->nullable();
             /** luong */
-            $table->double( 'salary' );
+            $table->double( 'salary' )->nullable();
 
             $table->timestamps();
         } );

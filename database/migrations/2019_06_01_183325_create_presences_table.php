@@ -18,29 +18,29 @@ class CreatePresencesTable extends Migration {
         Schema::create( 'presences', function ( Blueprint $table ) {
             $table->bigIncrements( 'id' );
             $table->unsignedBigInteger( 'salary_id' );
-            $table->unsignedBigInteger( 'car_id' )->after( 'salary_id' );
+            $table->unsignedBigInteger( 'car_id' )->nullable();
             $table->unsignedBigInteger( 'date' );
 
             /** cham cong */
-            $table->double( 'presence' );
+            $table->double( 'presence' )->nullable();
             /** luong cong nhat */
-            $table->double( 'presence_salary' )->after( 'presence' );
+            $table->double( 'presence_salary' )->nullable();
             /** bao nhieu nguoi tren xe */
-            $table->tinyInteger( 'salary_count' );
+            $table->tinyInteger( 'salary_count' )->nullable();
             /** doanh so */
-            $table->double( 'turnover' );
+            $table->double( 'turnover' )->nullable();
             /** cho no */
-            $table->double( 'in_debt' );
+            $table->double( 'in_debt' )->nullable();
             /** thu no */
-            $table->double( 'take_debt' );
+            $table->double( 'take_debt' )->nullable();
             /** chia ti le */
-            $table->float( 'percent', 6, 4 );
+            $table->float( 'percent', 6, 4 )->nullable();
             /** nang suat */
-            $table->double( 'productivity' );
+            $table->double( 'productivity' )->nullable();
             /** he so */
-            $table->double( 'ratio' );
+            $table->double( 'ratio' )->nullable();
             /** luong san pham */
-            $table->double( 'productivity_salary' );
+            $table->double( 'productivity_salary' )->nullable();
 
             $table->timestamps();
         } );
