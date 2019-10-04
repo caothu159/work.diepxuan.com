@@ -52,10 +52,10 @@ class DatafileService implements DatafileServiceInterface {
                 'month' => $month,
             ], [] );
 
-            foreach ( $val as $name => $value ) {
+            foreach ( $val as $type => $value ) {
                 \App\SalaryType::updateOrCreate( [
                     'salary_id' => $salary->id,
-                    'name'      => $name,
+                    'name'      => "$type",
                 ], [
                     'value' => floatval( $value ),
                 ] );
@@ -89,6 +89,7 @@ class DatafileService implements DatafileServiceInterface {
 
                 $presenceSalary = $salary->types->where( 'name', 'Luong co ban' )->first();
                 $presenceSalary = $presenceSalary ? $presenceSalary->value : 0;
+                $presenceSalary = $presenceSalary;
                 $presenceSalary /= 30;
                 $presenceSalary *= $presence;
 
