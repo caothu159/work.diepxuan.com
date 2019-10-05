@@ -11,6 +11,12 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Auth::routes( [
+    'register' => false,
+] );
+
+Route::get( '/', 'BanhangController@index' );
+
+//Route::get('/', function () {
+//    return view('welcome');
+//});
