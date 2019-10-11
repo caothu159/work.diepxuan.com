@@ -5,8 +5,17 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 
 class Ctubanhang extends Model {
+
     const CREATED_AT = 'cdate';
     const UPDATED_AT = 'ldate';
+
+    /**
+     * The connection name for the model.
+     *
+     * @var string
+     */
+    protected $connection = 'sqlsrv';
+
     /**
      * The table associated with the model.
      *
