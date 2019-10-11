@@ -1,5 +1,9 @@
 <?php
 
+/*
+ * Copyright © 2019 Dxvn, Inc. All rights reserved.
+ */
+
 namespace App\Http\Middleware;
 
 use Illuminate\Http\Request;

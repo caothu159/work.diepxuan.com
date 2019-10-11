@@ -1,5 +1,9 @@
 <?php
 
+/*
+ * Copyright © 2019 Dxvn, Inc. All rights reserved.
+ */
+
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
@@ -16,7 +20,7 @@ class LoginController extends Controller
     | redirecting them to your home screen. The controller uses a trait
     | to conveniently provide its functionality to your applications.
     |
-    */
+     */
 
     use AuthenticatesUsers;
 
@@ -35,5 +39,39 @@ class LoginController extends Controller
     public function __construct()
     {
         $this->middleware('guest')->except('logout');
+    }
+
+    /**
+     * Check either username or email.
+     *
+     * @return string
+     */
+    public function username()
+    {
+        return $this->identity();
+    }
+
+    /**
+     * Check either username or email.
+     *
+     * @return string
+     */
+    public function email()
+    {
+        return $this->identity();
+    }
+
+    /**
+     * Check either username or email.
+     *
+     * @return string
+     */
+    protected function identity()
+    {
+        $identity = request()->get('identity');
+        $fieldName = filter_var($identity, FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
+        request()->merge([$fieldName => $identity]);
+
+        return $fieldName;
     }
 }

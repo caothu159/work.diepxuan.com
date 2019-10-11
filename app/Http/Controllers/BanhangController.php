@@ -16,7 +16,7 @@ class BanhangController extends Controller {
                                       ->whereIn( 'thang', [ 9, 10 ] )
                                       ->get();
 
-        return view( 'banhang', [
+        return view( 'work.banhang', [
             'ctubanhangs' => $ctubanhangs,
         ] );
     }
