@@ -47,8 +47,3 @@
 	# RewriteRule ^(.*)$ index.php/$1 [L,QSA]
 
 </IfModule>
-
-AuthType Basic
-AuthName "Restricted Content"
-AuthUserFile /home/work/public_html/.htpasswd
-Require valid-user
