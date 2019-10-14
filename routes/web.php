@@ -10,7 +10,10 @@ Auth::routes( [
 
 Route::domain( 'luong.diepxuan.com' )->group( function () {
     Route::group( [
-        'middleware' => [ 'auth', 'clearcache' ]
+        'middleware' => [
+            'auth',
+//            'clearcache'
+        ]
     ], function () {
         Route::get( '/', 'HomeController@index' )->name( 'home' );
         Route::get( 'home', 'HomeController@index' );
@@ -29,5 +32,12 @@ Route::domain( 'luong.diepxuan.com' )->group( function () {
 } );
 
 Route::domain( 'work.diepxuan.com' )->group( function () {
-    Route::get( '/', 'BanhangController@index' );
+    Route::group( [
+        'middleware' => [
+            'auth',
+//            'clearcache'
+        ]
+    ], function () {
+        Route::get( '/', 'BanhangController@index' );
+    } );
 } );
