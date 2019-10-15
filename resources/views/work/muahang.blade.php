@@ -1,9 +1,7 @@
 @extends('layouts.app')
 
 @section('menu.left')
-    <li class="nav-item">
-        <a class="nav-link" href="{{ route('banhang') }}">{{ __('Bán Hàng') }}</a>
-    </li>
+    @include('work.components.menu')
 @endsection
 
 @section('content')
@@ -13,8 +11,8 @@
         </div>
     @endif
 
-    @if ($ctubanhangs)
-        @include('work.banhang.chungtu')
+    @if ($ctumuahangs)
+        @include('work.muahang.chungtu')
     @endif
 
 @endsection

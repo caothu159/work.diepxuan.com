@@ -32,6 +32,7 @@ Route::domain( 'luong.diepxuan.com' )->group( function () {
 } );
 
 Route::domain( 'work.diepxuan.com' )->group( function () {
-    Route::get( '/', 'BanhangController@index' );
-    Route::get( 'banhang', 'BanhangController@index' )->name( 'banhang' );
+    Route::get( '/', 'Work\BanhangController@index' );
+    Route::get( 'banhang', 'Work\BanhangController@index' )->name( 'banhang' );
+    Route::get( 'muahang', 'Work\MuahangController@index' )->name( 'muahang' );
 } );
