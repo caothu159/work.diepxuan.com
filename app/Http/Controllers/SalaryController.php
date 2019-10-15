@@ -11,13 +11,17 @@ use App\Services\DatafileService;
 use Illuminate\Http\Request;
 
 class SalaryController extends Controller {
+
     /**
      * Create a new controller instance.
      *
      * @return void
      */
     public function __construct() {
-        $this->middleware( 'auth' );
+        $this->middleware( [
+            'auth',
+//            'clearcache',
+        ] );
     }
 
     /**

@@ -32,12 +32,6 @@ Route::domain( 'luong.diepxuan.com' )->group( function () {
 } );
 
 Route::domain( 'work.diepxuan.com' )->group( function () {
-    Route::group( [
-        'middleware' => [
-            'auth',
-//            'clearcache'
-        ]
-    ], function () {
-        Route::get( '/', 'BanhangController@index' );
-    } );
+    Route::get( '/', 'BanhangController@index' );
+    Route::get( 'banhang', 'BanhangController@index' )->name( 'banhang' );
 } );

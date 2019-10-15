@@ -6,6 +6,21 @@ use App\Ctubanhang;
 use Illuminate\Http\Request;
 
 class BanhangController extends Controller {
+
+    /**
+     * Instantiate a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct() {
+        $this->middleware( [
+            'auth',
+            'clearcache'
+        ] );
+//        $this->middleware('log')->only('index');
+//        $this->middleware('subscribed')->except('store');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -13,7 +28,7 @@ class BanhangController extends Controller {
      */
     public function index() {
         $ctubanhangs = \App\Ctubanhang::where( 'nam', 2019 )
-                                      ->whereIn( 'thang', [ 9, 10 ] )
+                                      ->whereIn( 'thang', [ 10 ] )
                                       ->get();
 
         return view( 'work.banhang', [
