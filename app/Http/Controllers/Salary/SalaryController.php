@@ -4,7 +4,7 @@
  * Copyright © 2019 Dxvn, Inc. All rights reserved.
  */
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Salary;
 
 use App\Salary;
 use App\Services\DatafileService;
@@ -20,7 +20,7 @@ class SalaryController extends Controller {
     public function __construct() {
         $this->middleware( [
             'auth',
-//            'clearcache',
+            'clearcache',
         ] );
     }
 
@@ -62,6 +62,7 @@ class SalaryController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function import( DatafileService $datafileService, string $year = null, string $month = null ) {
+        dd( $year, $month );
         $datafileService->salaryImport( $year, $month );
 
         return redirect()->route( 'salary.index', [

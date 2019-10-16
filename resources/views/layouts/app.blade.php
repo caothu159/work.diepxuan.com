@@ -24,7 +24,7 @@
 <body>
 <div id="app">
 
-    <nav class="navbar fixed-top navbar-expand-md">
+    <nav class="navbar navbar-expand-md">
         <div class="container-fluid">
             <a class="navbar-brand" href="{{ url('/') }}">
                 {{ config('app.name', 'DiepXuan Company') }}

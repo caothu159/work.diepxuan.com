@@ -16,6 +16,7 @@ class DatafileService implements DatafileServiceInterface {
      * @return void
      */
     public function salaryImport( string $year, string $month ) {
+        die( 'import' );
         $this->employeeImport( $year, $month );
         $this->presenceImport( $year, $month );
         $this->divisionImport( $year, $month );
