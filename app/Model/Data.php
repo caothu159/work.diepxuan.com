@@ -6,6 +6,7 @@
 
 namespace App\Model;
 
+use Illuminate\Database\Eloquent\Model as Eloquent;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 
 class Data extends Eloquent {
