@@ -9,29 +9,29 @@ Auth::routes( [
 ] );
 
 Route::domain( 'luong.diepxuan.com' )->group( function () {
-    Route::group( [
-        'middleware' => [
-            'auth',
-//            'clearcache'
-        ]
-    ], function () {
-        Route::get( '/', 'HomeController@index' )->name( 'home' );
-        Route::get( 'home', 'HomeController@index' );
+    Route::get( '/', 'HomeController@index' )->name( 'home' );
+    Route::get( 'home', 'HomeController@index' );
 
-        Route::group( [ 'prefix' => 'salary' ], function () {
-            Route::get( '{year?}/{month?}', 'SalaryController@index' )
-                 ->name( 'salary.index' )
-                 ->where( [ 'year' => '[0-9]+', 'month' => '[0-9]+' ] );
-            Route::post( '{year?}/{month?}', 'SalaryController@import' )
-                 ->name( 'salary.import' )
-                 ->where( [ 'year' => '[0-9]+', 'month' => '[0-9]+' ] );
-        } );
+    Route::post( 'salary/{year?}/{month?}', 'Salary\SalaryController@import' )
+         ->name( 'salary.import' )
+         ->where( [ 'year' => '[0-9]+', 'month' => '[0-9]+' ] );
+    Route::get( 'salary/{year?}/{month?}', 'Salary\SalaryController@index' )
+         ->name( 'salary.index' )
+         ->where( [ 'year' => '[0-9]+', 'month' => '[0-9]+' ] );
 
-        Route::resource( 'users', 'UsersController' );
-    } );
+    Route::resource( 'users', 'UsersController' );
+    Route::resource( 'cars', 'CarController' );
+    Route::get( 'cars/{year?}/{month?}', 'CarController@index' )
+         ->name( 'cars.index' )
+         ->where( [ 'year' => '[0-9]+', 'month' => '[0-9]+' ] );
+} );
+
+Route::get( '/debug-sentry', function () {
+    throw new Exception( 'debug Sentry error!' );
 } );
 
 Route::domain( 'work.diepxuan.com' )->group( function () {
-    Route::get( '/', 'BanhangController@index' );
-    Route::get( 'banhang', 'BanhangController@index' )->name( 'banhang' );
+    Route::get( '/', 'Work\BanhangController@index' );
+    Route::get( 'banhang', 'Work\BanhangController@index' )->name( 'banhang' );
+    Route::get( 'muahang', 'Work\MuahangController@index' )->name( 'muahang' );
 } );

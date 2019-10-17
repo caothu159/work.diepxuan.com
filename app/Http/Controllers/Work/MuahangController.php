@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Work;
 
-use App\Ctubanhang;
+use App\Model\Work\Ctumuahang;
 use Illuminate\Http\Request;
 
-class BanhangController extends Controller {
+class MuahangController extends Controller {
 
     /**
      * Instantiate a new controller instance.
@@ -15,6 +15,7 @@ class BanhangController extends Controller {
     public function __construct() {
         $this->middleware( [
             'auth',
+            'admin',
             'clearcache'
         ] );
 //        $this->middleware('log')->only('index');
@@ -27,12 +28,12 @@ class BanhangController extends Controller {
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index() {
-        $ctubanhangs = \App\Ctubanhang::where( 'nam', 2019 )
-                                      ->whereIn( 'thang', [ 10 ] )
-                                      ->get();
+        $ctumuahangs = Ctumuahang::where( 'nam', 2019 )
+                                 ->whereIn( 'thang', [ 10 ] )
+                                 ->get();
 
-        return view( 'work.banhang', [
-            'ctubanhangs' => $ctubanhangs,
+        return view( 'work.muahang', [
+            'ctumuahangs' => $ctumuahangs,
         ] );
     }
 
@@ -59,45 +60,45 @@ class BanhangController extends Controller {
     /**
      * Display the specified resource.
      *
-     * @param \App\Ctubanhang $ctubanhang
+     * @param Ctumuahang $ctubanhang
      *
      * @return \Illuminate\Http\Response
      */
-    public function show( Ctubanhang $ctubanhang ) {
+    public function show( Ctumuahang $ctubanhang ) {
         //
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param \App\Ctubanhang $ctubanhang
+     * @param Ctumuahang $ctubanhang
      *
      * @return \Illuminate\Http\Response
      */
-    public function edit( Ctubanhang $ctubanhang ) {
+    public function edit( Ctumuahang $ctubanhang ) {
         //
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
-     * @param \App\Ctubanhang $ctubanhang
+     * @param Request $request
+     * @param Ctumuahang $ctubanhang
      *
      * @return \Illuminate\Http\Response
      */
-    public function update( Request $request, Ctubanhang $ctubanhang ) {
+    public function update( Request $request, Ctumuahang $ctubanhang ) {
         //
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param \App\Ctubanhang $ctubanhang
+     * @param Ctumuahang $ctubanhang
      *
      * @return \Illuminate\Http\Response
      */
-    public function destroy( Ctubanhang $ctubanhang ) {
+    public function destroy( Ctumuahang $ctubanhang ) {
         //
     }
 }

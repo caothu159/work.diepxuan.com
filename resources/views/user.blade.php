@@ -1,3 +1,4 @@
+<?php ?>
 @extends('layouts.app')
 
 @section('content')
@@ -17,12 +18,12 @@
 @endsection
 
 @section('sidebar.user')
-    {{--    <ul>--}}
-    {{--        <li>--}}
-    {{--            <a class="text-decoration-none text-capitalize"--}}
-    {{--               href="{{ route('users.index') }}">--}}
-    {{--                {{ __('user.map') }}--}}
-    {{--            </a>--}}
-    {{--        </li>--}}
-    {{--    </ul>--}}
+    <ul>
+        <li>
+            <a class="text-decoration-none text-capitalize"
+               href="{{ route('users.create') }}">
+                {{ __('user.new') }}
+            </a>
+        </li>
+    </ul>
 @endsection

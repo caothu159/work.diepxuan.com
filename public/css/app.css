@@ -13708,8 +13708,17 @@ a.text-dark:focus {
   padding: 0;
 }
 
+.table-sm .badge {
+  font-weight: bolder;
+  line-height: 1.5;
+}
+
 a.card:not(.collapsed),
 a.card:hover {
   border-color: #3490dc;
+}
+
+body {
+  display: block !important;
 }
 

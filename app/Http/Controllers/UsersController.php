@@ -8,6 +8,7 @@ namespace App\Http\Controllers;
 
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 
 class UsersController extends Controller {
@@ -47,6 +48,17 @@ class UsersController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function create() {
+        try {
+            return view( 'user' )->with( [
+                'controller' => $this,
+                'template'   => 'user.new',
+                'user'       => new User,
+            ] );
+        } catch ( ModelNotFoundException $ex ) {
+            if ( $ex instanceof ModelNotFoundException ) {
+                return response()->view( 'errors.' . '404' );
+            }
+        }
         //
     }
 
@@ -66,11 +78,12 @@ class UsersController extends Controller {
             'password' => 'required',
         ] );
         $user = User::create( [
-            'name'     => $request->input( 'name' ),
-            'username' => $request->input( 'username' ),
-            'email'    => $request->input( 'email' ),
-            'password' => Hash::make( $request->input( 'password' ) ),
-            'role'     => 0,
+            'name'        => $request->input( 'name' ),
+            'username'    => $request->input( 'username' ),
+            'email'       => $request->input( 'email' ),
+            'password'    => Hash::make( $request->input( 'password' ) ),
+            'salary_name' => $request->input( 'salary_name' ),
+            'role'        => 0,
         ] );
 
         return redirect()->route( 'users.index' )->with( 'success',

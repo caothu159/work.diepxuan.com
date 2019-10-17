@@ -11,8 +11,8 @@
         </div>
     @endif
 
-    @if ($ctubanhangs)
-        @include('work.banhang.chungtu')
+    @if ($ctumuahangs)
+        @include('work.muahang.chungtu')
     @endif
 
 @endsection

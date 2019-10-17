@@ -21,10 +21,10 @@
     <link href="{{ asset('css/app.css') .'?v='. uniqid() }}" rel="stylesheet">
 </head>
 
-<body>
+<body style="display: none">
 <div id="app">
 
-    <nav class="navbar fixed-top navbar-expand-md">
+    <nav class="navbar navbar-expand-md">
         <div class="container-fluid">
             <a class="navbar-brand" href="{{ url('/') }}">
                 {{ config('app.name', 'DiepXuan Company') }}
@@ -79,25 +79,31 @@
         </div>
     </nav>
 
-
     @if(isset($controller) && $controller->isAdmin())
 
         <div class="container-fluid">
             <div class="row">
                 <ul id="sidebar" class="sidebar col-md-2">
                     <li>
-                        <a class="text-decoration-none"
+                        <a class="text-decoration-none{{ Request()->is('salary*')?' font-weight-bold':'' }}"
                            href="{{ route('salary.index') }}">
                             {{ __('salary.salary') }}
                         </a>
                         @yield('sidebar.salary')
                     </li>
                     <li>
-                        <a class="text-decoration-none"
+                        <a class="text-decoration-none{{ Request()->is('users*')?' font-weight-bold':'' }}"
                            href="{{ route('users.index') }}">
                             {{ __('user.manager') }}
                         </a>
                         @yield('sidebar.user')
+                    </li>
+                    <li>
+                        <a class="text-decoration-none{{ Request()->is('cars*')?' font-weight-bold':'' }}"
+                           href="{{ route('cars.index') }}">
+                            {{ __('car.manager') }}
+                        </a>
+                        @yield('sidebar.car')
                     </li>
                 </ul>
 

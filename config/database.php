@@ -65,6 +65,12 @@ return [
             'options'        => extension_loaded( 'pdo_mysql' ) ? array_filter( [
                 PDO::MYSQL_ATTR_SSL_CA => env( 'MYSQL_ATTR_SSL_CA' ),
             ] ) : [],
+            'read'           => [
+                'host' => env( 'DB_HOST_READ', env( 'DB_HOST', '127.0.0.1' ) ),
+            ],
+            'write'          => [
+                'host' => env( 'DB_HOST_WRITE', env( 'DB_HOST', '127.0.0.1' ) )
+            ],
         ],
 
         'pgsql' => [
@@ -93,6 +99,18 @@ return [
             'charset'        => 'utf8',
             'prefix'         => '',
             'prefix_indexes' => true,
+        ],
+
+        'mongodb' => [
+            'driver'   => 'mongodb',
+            'host'     => env( 'MONGO_DB_HOST', 'localhost' ),
+            'port'     => env( 'MONGO_DB_PORT', 27017 ),
+            'database' => env( 'MONGO_DB_DATABASE' ),
+            'username' => env( 'MONGO_DB_USERNAME' ),
+            'password' => env( 'MONGO_DB_PASSWORD' ),
+            'options'  => [
+                'database' => 'admin' // sets the authentication database required by mongo 3
+            ]
         ],
 
     ],
