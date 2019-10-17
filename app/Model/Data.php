@@ -43,7 +43,6 @@ class Data extends Eloquent {
      * @param string $datafile
      *
      * @return array|string
-     * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
     public function loadFromFile( $datafile ) {
         return $this->_fileContent( $this->datapath( $datafile ) );

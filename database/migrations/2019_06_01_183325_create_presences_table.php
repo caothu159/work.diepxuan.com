@@ -39,7 +39,7 @@ class CreatePresencesTable extends Migration {
             $table->double( 'productivity' )->nullable();
             /** he so */
             $table->double( 'ratio' )->nullable();
-            /** luong san pham */
+            /** luong doanh so */
             $table->double( 'productivity_salary' )->nullable();
 
             $table->timestamps();

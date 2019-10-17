@@ -19,7 +19,6 @@ class DatafileService implements DatafileServiceInterface {
      * @throws \Exception
      */
     public function salaryImport( string $year, string $month ) {
-        die( 'import' );
         $this->employeeImport( $year, $month );
         $this->presenceImport( $year, $month );
         $this->divisionImport( $year, $month );
@@ -90,7 +89,6 @@ class DatafileService implements DatafileServiceInterface {
 
                 $presenceSalary = $salary->types->where( 'name', 'Luong co ban' )->first();
                 $presenceSalary = $presenceSalary ? $presenceSalary->value : 0;
-                $presenceSalary = $presenceSalary;
                 $presenceSalary /= 30;
                 $presenceSalary *= $presence;
 
@@ -235,6 +233,7 @@ class DatafileService implements DatafileServiceInterface {
         $timeto = new \DateTime( $timeto );
         $timeto = \PhpOffice\PhpSpreadsheet\Shared\Date::PHPToExcel( $timeto );
 
+        /** @var \App\Model\Presence $presence */
         foreach ( \App\Presence::whereBetween( 'date', [ $timefrom, $timeto ] )->get() as $presence ) {
             $presence->percent             = null;
             $presence->productivity        = null;
@@ -263,7 +262,10 @@ class DatafileService implements DatafileServiceInterface {
                 $presence->save();
                 continue;
             }
+        }
 
+        /** @var \App\Model\Presence $presence */
+        foreach ( \App\Presence::whereBetween( 'date', [ $timefrom, $timeto ] )->get() as $presence ) {
             /**
              * Ti le chia luong voi lai xe khac
              */
@@ -272,27 +274,85 @@ class DatafileService implements DatafileServiceInterface {
             }
             $percent = $presence->salary->types
                 ->reject( function ( $type ) {
-                    return ( ! Str::contains( $type->name, 'Ti le' ) )
-                           || $type->value == 0;
+                    return ( ! Str::contains( $type->name, 'Ti le' ) ) || $type->value == 0;
                 } )->first();
             if ( $percent ) {
                 $presence->percent = $percent->value;
             }
+        }
+
+        /** @var \App\Model\Presence $presence */
+        foreach ( \App\Presence::whereBetween( 'date', [ $timefrom, $timeto ] )->get() as $presence ) {
+            if ( $presence->salary_count != 2 ) {
+                continue;
+            }
+            /**
+             * Chia lai ti le khi bat cap
+             */
+            $_batCap = $presence->salary->types
+                ->reject( function ( $type ) {
+                    return ( ! Str::contains( $type->name, 'Bat cap' ) ) || $type->value == 0;
+                } )->first();
+            if ( ! $_batCap ) {
+                continue;
+            }
+
+            $_batCap = $_batCap->value;
+            $_batCap = explode( '|', $_batCap );
+            $batCaps = array();
+            foreach ( $_batCap as $_bc ) {
+                $_bc = explode( ':', $_bc );
+                if ( ! is_array( $_bc ) || sizeof( $_bc ) != 2 ) {
+                    continue;
+                }
+                $batCaps[ $_bc[0] ] = $_bc[1];
+            }
+
+            foreach ( $batCaps as $sName => $sPercent ) {
+                $_salary = \App\Salary::where( [
+                    'name'  => $sName,
+                    'month' => $presence->salary->month,
+                ] )->firstOrFail();
+
+                if ( ! $_salary ) {
+                    continue;
+                }
+
+                $_presence = \App\Presence::where( [
+                    'date'         => $presence->date,
+                    'car_id'       => $presence->car->id,
+                    'salary_count' => 2,
+                    'salary_id'    => $_salary->id,
+                ] )->firstOrFail();
+
+                $_presence->percent = 1 - $sPercent;
+                $_presence->save();
+                $presence->percent = $sPercent;
+                $presence->save();
+            }
+        }
+
+        /** @var \App\Model\Presence $presence */
+        foreach ( \App\Presence::whereBetween( 'date', [ $timefrom, $timeto ] )->get() as $presence ) {
 
             /**
              * Nang suat lai xe
              */
             $presence->productivity = floatval( $presence->turnover ) * floatval( $presence->percent );
 
-            /**
-             * He so luong
-             */
-            $presence->ratio = $presence->ratioInitial();
+            /** Khong ap chi tieu */
+            if ( $presence->salary->chitieu == 0 ) {
 
-            /**
-             * Luong
-             */
-            $presence->productivity_salary = $presence->productivity * $presence->ratio;
+                /**
+                 * He so luong
+                 */
+                $presence->ratio = $presence->ratioInitial();
+
+                /**
+                 * Luong
+                 */
+                $presence->productivity_salary = $presence->productivity * $presence->ratio;
+            }
 
             $presence->save();
         }
@@ -308,24 +368,51 @@ class DatafileService implements DatafileServiceInterface {
             $salary->presence = $salary->presences->sum( 'presence' );
 
             /**
-             * Luong cong nhat
+             * Tong doanh so trong thang
              */
-            $salary->salary_default = $salary->presences->sum( 'presence_salary' );
+            $salary->turnover = $salary->presences->sum( 'productivity' );
 
-            /**
-             * Tong nang suat trong thang
-             */
-            $salary->turnover = $salary->presences->sum( 'turnover' );
+            /** Khong ap chi tieu */
+            if ( $salary->chitieu == 0 ) {
 
-            /**
-             * Luong nang suat
-             */
-            $salary->productivity = $salary->presences->sum( 'productivity_salary' );
+                /**
+                 * Luong cong nhat
+                 */
+                $salary->salary_default = $salary->presences->sum( 'presence_salary' );
 
-            /**
-             * Luong
-             */
-            $salary->salary = $salary->salary_default + $salary->productivity;
+                /**
+                 * Luong nang suat
+                 */
+                $salary->productivity = $salary->presences->sum( 'productivity_salary' );
+
+                /**
+                 * Luong
+                 */
+                $salary->salary = $salary->salary_default + $salary->productivity;
+            } else /** Ap chi tieu */ {
+
+                /**
+                 * Luong cong nhat
+                 */
+                $salary->salary_default = $salary->chitieu / 30 * $salary->presence;
+
+                /**
+                 * Luong nang suat
+                 */
+                $luongCoBan = $salary->types->where( 'name', 'Luong co ban' )->first();
+                $luongCoBan = $luongCoBan ? $luongCoBan->value : 0;
+                $luongCoBan /= 30;
+                $luongCoBan *= $salary->presence;
+
+                $chiTieu              = $salary->chitieu / 30 * $salary->presence;
+                $tongDoanhSo          = $salary->presences->sum( 'productivity' );
+                $salary->productivity = ( $tongDoanhSo - $chiTieu ) * $salary->ratioInitial();
+
+                /**
+                 * Luong
+                 */
+                $salary->salary = $luongCoBan + $salary->productivity;
+            }
 
             $salary->save();
         }

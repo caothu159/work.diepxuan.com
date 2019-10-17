@@ -24,23 +24,28 @@
 
                     @if ($salary->turnover!=0)
                         <div class="d-flex justify-content-between">
-                            Doanh số:
+                            {{ 'Năng suất:' }}
                             <a class="font-weight-normal font-weight-bold" data-toggle="collapse" aria-expanded="false"
                                href="#collapse{{ $salary->id }}" aria-controls="collapse{{ $salary->id }}">
                                 {{ number_format($salary->turnover, 2) }}
+                                @if ($salary->productivity!=0)
+                                    <span class="font-weight-lighter">
+                                    /{{ number_format($salary->salary_default, 2) }}
+                                </span>
+                                @endif
                             </a>
                         </div>
                     @endif
 
-                    @if ($salary->productivity!=0)
+                    @if ($salary->productivity!=0 && $salary->chitieu==0)
                         <div class="d-flex justify-content-between">
-                            Lương cứng: <span
-                                class="text-primary">{{ number_format($salary->salary_default, 2) }}</span>
+                            {{ 'Lương cứng:' }}
+                            <span class="text-primary">{{ number_format($salary->salary_default, 2) }}</span>
                         </div>
 
                         <div class="d-flex justify-content-between">
-                            Lương năng suất: <span
-                                class="text-primary">{{ number_format($salary->productivity, 2) }}</span>
+                            {{ 'Lương năng suất:' }}
+                            <span class="text-primary">{{ number_format($salary->productivity, 2) }}</span>
                         </div>
                     @endif
 

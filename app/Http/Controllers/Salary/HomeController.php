@@ -4,7 +4,7 @@
  * Copyright © 2019 Dxvn, Inc. All rights reserved.
  */
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Salary;
 
 class HomeController extends Controller {
     /**

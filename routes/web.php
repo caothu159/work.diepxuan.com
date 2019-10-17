@@ -9,8 +9,8 @@ Auth::routes( [
 ] );
 
 Route::domain( 'luong.diepxuan.com' )->group( function () {
-    Route::get( '/', 'HomeController@index' )->name( 'home' );
-    Route::get( 'home', 'HomeController@index' );
+    Route::get( '/', 'Salary\HomeController@index' )->name( 'home' );
+    Route::get( 'home', 'Salary\HomeController@index' );
 
     Route::post( 'salary/{year?}/{month?}', 'Salary\SalaryController@import' )
          ->name( 'salary.import' )
