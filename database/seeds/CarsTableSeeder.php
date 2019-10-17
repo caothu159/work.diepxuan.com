@@ -16,10 +16,6 @@ class CarsTableSeeder extends Seeder
      */
     public function run()
     {
-        echo "\e[32mSeeding:\e[0m CarsTableSeeder\r\n";
-
-        Car::create(['name' => '05605']);
-        Car::create(['name' => '01593']);
-        Car::create(['name' => '03166']);
+        //
     }
 }

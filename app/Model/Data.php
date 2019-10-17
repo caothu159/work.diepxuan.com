@@ -6,8 +6,6 @@
 
 namespace App\Model;
 
-//use Jenssegers\Mongodb\Eloquent\Model as Eloquent;
-use Illuminate\Database\Eloquent\Model as Eloquent;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 
 class Data extends Eloquent {
@@ -108,24 +106,18 @@ class Data extends Eloquent {
      * @return string
      */
     private function __datadir() {
-//        return dirname( base_path() ) . config( 'salary.datadir' );
         return config( 'salary.datadir' );
     }
 
     /**
      * Read data from file.
      *
-     * @param $path
+     * @param [type] $path
      *
-     * @return array|string
-     * @throws \PhpOffice\PhpSpreadsheet\Exception
+     * @return string
      */
     protected function _fileContent( $path ) {
-        try {
-            $spreadsheet = IOFactory::load( $path );
-        } catch ( \Exception $e ) {
-            return array();
-        }
+        $spreadsheet = IOFactory::load( $path );
 
         $sheet      = $spreadsheet->getActiveSheet();
         $highestRow = $sheet->getHighestRow();

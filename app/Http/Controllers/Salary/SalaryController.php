@@ -4,20 +4,24 @@
  * Copyright © 2019 Dxvn, Inc. All rights reserved.
  */
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Salary;
 
 use App\Salary;
 use App\Services\DatafileService;
 use Illuminate\Http\Request;
 
 class SalaryController extends Controller {
+
     /**
      * Create a new controller instance.
      *
      * @return void
      */
     public function __construct() {
-        $this->middleware( 'auth' );
+        $this->middleware( [
+            'auth',
+            'clearcache',
+        ] );
     }
 
     /**
