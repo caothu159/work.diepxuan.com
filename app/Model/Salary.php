@@ -6,9 +6,10 @@
 
 namespace App\Model;
 
-use Illuminate\Database\Eloquent\Model;
+//use Jenssegers\Mongodb\Eloquent\Model as Eloquent;
+use Illuminate\Database\Eloquent\Model as Eloquent;
 
-class Salary extends Model {
+class Salary extends Eloquent {
     /**
      * The attributes that are mass assignable.
      *
@@ -17,6 +18,16 @@ class Salary extends Model {
     protected $fillable = [
         'name',
         'month',
+
+        'default',
+
+        'presence',
+        'salary_default',
+
+        'turnover',
+        'productivity',
+
+        'salary',
     ];
 
     /**
@@ -44,48 +55,25 @@ class Salary extends Model {
      */
     public $timestamps = true;
 
-    public function employee() {
-        return $this->hasOne( \App\Employee::class );
-    }
-
+    /**
+     * @return mixed
+     */
     public function presences() {
         return $this->hasMany( \App\Presence::class );
     }
 
-    public function divisions() {
-        return $this->hasMany( \App\Division::class );
+    /**
+     * @return mixed
+     */
+    public function types() {
+        return $this->hasMany( \App\SalaryType::class );
     }
 
-//    public function user() {
-//        return $this->belongsTo( \App\User::class, 'salary_name', 'name' );
-//    }
-
-    public function getSalaryDefaultAttribute() {
-        $return = $this->employee->default / 30;
-        $return *= $this->presence;
-        $return = intval( $return );
-
-        return $return;
-    }
-
-    public function getPresenceAttribute() {
-        return $this->presences->sum( 'presence' );
-    }
-
-    public function getProductivityAttribute() {
-        return $this->divisions->sum( 'salary_value' );
-    }
-
-    public function getSalaryAttribute() {
-        return $this->productivity + $this->salary_default;
-    }
-
-    public function getTurnoverAttribute() {
-        if ( null == $this->divisions ) {
-            return 0;
-        }
-
-        return $this->divisions->sum( 'productivity_value' );
+    /**
+     * @return mixed
+     */
+    public function user() {
+        return $this->belongsTo( \App\User::class, 'salary_name', 'name' );
     }
 
     public function getNameAttribute() {
@@ -95,5 +83,9 @@ class Salary extends Model {
         }
 
         return $this->user->name;
+    }
+
+    public function getWeekstartAttribute() {
+        return date( 'w', ( $this->month - 25569 ) * 86400 );
     }
 }

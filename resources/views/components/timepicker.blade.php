@@ -1,4 +1,4 @@
-<table class="table col-sm-3 m-0 table-sm table-responsive-sm">
+<table class="table col-sm-3 m-0 table-sm table-responsive-sm text-center">
     @foreach ($controller->years() as $year)
         <?php $months = $controller->months( $year ); ?>
         <tr>
@@ -7,12 +7,12 @@
                 <td>
 
                     @if ($time['month']==$month && $time['year']==$year)
-                        <span class="font-weight-lighter badge badge-success">{{ "$month" }}</span>
+                        <span class="font-weight-lighter badge badge-success d-block">{{ "$month" }}</span>
                     @elseif (in_array($month, $months))
-                        <a class="text-success font-weight-bold"
+                        <a class="text-success font-weight-bold d-block"
                            href="{{ $controller->link($year, $month) }}">{{ "$month" }}</a>
                     @else
-                        <span class="font-weight-lighter">{{ "$month" }}</span>
+                        <span class="font-weight-lighter d-block">{{ "$month" }}</span>
                     @endif
 
                 </td>

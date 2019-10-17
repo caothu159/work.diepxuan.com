@@ -8,7 +8,10 @@ namespace App;
 
 use App\Model\Car as Model;
 
-class Car extends Model
-{
+/**
+ * Class Car xe
+ * @package App
+ */
+class Car extends Model {
     //
 }

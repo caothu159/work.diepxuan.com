@@ -4,12 +4,11 @@
  * Copyright © 2019 Dxvn, Inc. All rights reserved.
  */
 
-namespace App\model;
+namespace App\Model;
 
-use Illuminate\Database\Eloquent\Model;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 
-class Data extends Model {
+class Data extends Eloquent {
     /**
      * Current year.
      *
@@ -42,7 +41,8 @@ class Data extends Model {
      *
      * @param string $datafile
      *
-     * @return array data
+     * @return array|string
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
     public function loadFromFile( $datafile ) {
         return $this->_fileContent( $this->datapath( $datafile ) );

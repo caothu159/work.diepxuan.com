@@ -20,6 +20,14 @@ Route::domain( 'luong.diepxuan.com' )->group( function () {
          ->where( [ 'year' => '[0-9]+', 'month' => '[0-9]+' ] );
 
     Route::resource( 'users', 'UsersController' );
+    Route::resource( 'cars', 'CarController' );
+    Route::get( 'cars/{year?}/{month?}', 'CarController@index' )
+         ->name( 'cars.index' )
+         ->where( [ 'year' => '[0-9]+', 'month' => '[0-9]+' ] );
+} );
+
+Route::get( '/debug-sentry', function () {
+    throw new Exception( 'debug Sentry error!' );
 } );
 
 Route::domain( 'work.diepxuan.com' )->group( function () {
