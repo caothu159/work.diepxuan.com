@@ -19,6 +19,7 @@ class DatafileService implements DatafileServiceInterface {
      * @throws \Exception
      */
     public function salaryImport( string $year, string $month ) {
+//        ini_set( 'max_execution_time', 0 );
         $this->employeeImport( $year, $month );
         $this->presenceImport( $year, $month );
         $this->divisionImport( $year, $month );
@@ -57,7 +58,7 @@ class DatafileService implements DatafileServiceInterface {
                     'salary_id' => $salary->id,
                     'name'      => "$type",
                 ], [
-                    'value' => floatval( $value ),
+                    'value' => $value,
                 ] );
             }
         }
@@ -164,8 +165,8 @@ class DatafileService implements DatafileServiceInterface {
                     $presence = \App\Presence::updateOrCreate( [
                         'salary_id' => $salary->id,
                         'date'      => $date,
+                        'car_id'    => $car->id,
                     ], [
-                        'car_id'       => $car->id,
                         'salary_count' => count( $salary_ids ),
                     ] );
                 }
@@ -234,7 +235,7 @@ class DatafileService implements DatafileServiceInterface {
         $timeto = \PhpOffice\PhpSpreadsheet\Shared\Date::PHPToExcel( $timeto );
 
         /** @var \App\Model\Presence $presence */
-        foreach ( \App\Presence::whereBetween( 'date', [ $timefrom, $timeto ] )->get() as $presence ) {
+        foreach ( $presences = \App\Presence::whereBetween( 'date', [ $timefrom, $timeto ] )->get() as $presence ) {
             $presence->percent             = null;
             $presence->productivity        = null;
             $presence->ratio               = null;
@@ -257,88 +258,20 @@ class DatafileService implements DatafileServiceInterface {
                 }
             }
 
+            /** Chia lai ti le khi bat cap */
+            $presence->percent = $presence->percentInitial();
+
+            /** Nang suat lai xe */
+            $presence->productivity = $presence->turnover;
+            $presence->productivity += $presence->in_debt * 0.7;
+            $presence->productivity -= $presence->take_debt * 0.7;
+            $presence->productivity *= $presence->percent;
+
             /** khong phat sinh doanh so */
-            if ( $presence->turnover <= 0 ) {
+            if ( $presence->productivity == 0 ) {
                 $presence->save();
                 continue;
             }
-        }
-
-        /** @var \App\Model\Presence $presence */
-        foreach ( \App\Presence::whereBetween( 'date', [ $timefrom, $timeto ] )->get() as $presence ) {
-            /**
-             * Ti le chia luong voi lai xe khac
-             */
-            if ( $presence->salary_count > 0 ) {
-                $presence->percent = 1 / $presence->salary_count;
-            }
-            $percent = $presence->salary->types
-                ->reject( function ( $type ) {
-                    return ( ! Str::contains( $type->name, 'Ti le' ) ) || $type->value == 0;
-                } )->first();
-            if ( $percent ) {
-                $presence->percent = $percent->value;
-            }
-        }
-
-        /** @var \App\Model\Presence $presence */
-        foreach ( \App\Presence::whereBetween( 'date', [ $timefrom, $timeto ] )->get() as $presence ) {
-            if ( $presence->salary_count != 2 ) {
-                continue;
-            }
-            /**
-             * Chia lai ti le khi bat cap
-             */
-            $_batCap = $presence->salary->types
-                ->reject( function ( $type ) {
-                    return ( ! Str::contains( $type->name, 'Bat cap' ) ) || $type->value == 0;
-                } )->first();
-            if ( ! $_batCap ) {
-                continue;
-            }
-
-            $_batCap = $_batCap->value;
-            $_batCap = explode( '|', $_batCap );
-            $batCaps = array();
-            foreach ( $_batCap as $_bc ) {
-                $_bc = explode( ':', $_bc );
-                if ( ! is_array( $_bc ) || sizeof( $_bc ) != 2 ) {
-                    continue;
-                }
-                $batCaps[ $_bc[0] ] = $_bc[1];
-            }
-
-            foreach ( $batCaps as $sName => $sPercent ) {
-                $_salary = \App\Salary::where( [
-                    'name'  => $sName,
-                    'month' => $presence->salary->month,
-                ] )->firstOrFail();
-
-                if ( ! $_salary ) {
-                    continue;
-                }
-
-                $_presence = \App\Presence::where( [
-                    'date'         => $presence->date,
-                    'car_id'       => $presence->car->id,
-                    'salary_count' => 2,
-                    'salary_id'    => $_salary->id,
-                ] )->firstOrFail();
-
-                $_presence->percent = 1 - $sPercent;
-                $_presence->save();
-                $presence->percent = $sPercent;
-                $presence->save();
-            }
-        }
-
-        /** @var \App\Model\Presence $presence */
-        foreach ( \App\Presence::whereBetween( 'date', [ $timefrom, $timeto ] )->get() as $presence ) {
-
-            /**
-             * Nang suat lai xe
-             */
-            $presence->productivity = floatval( $presence->turnover ) * floatval( $presence->percent );
 
             /** Khong ap chi tieu */
             if ( $presence->salary->chitieu == 0 ) {
@@ -417,9 +350,7 @@ class DatafileService implements DatafileServiceInterface {
             $salary->save();
         }
 
-        /**
-         * clean all presence where date not in month
-         */
+        /** clean all presence where date not in month */
         foreach ( \App\Presence::get() as $presence ) {
             $month = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToTimestamp( $presence->date );
             $month = date( "Y-m", $month );

@@ -99,6 +99,77 @@ class Presence extends Eloquent {
         return doubleval( $ratio );
     }
 
+    /**
+     * @return float|int
+     */
+    public function percentInitial() {
+        /** Ti le chia luong mac dinh voi lai xe khac */
+        $_percent = 1 / $this->salary_count;
+
+        if ( $tile = $this->salary->types->where( 'name', 'Ti le' )->first() ) {
+            $_percent = $tile->value ?: $_percent;
+        }
+
+        $_batCap = $this->salary->types->where( 'name', 'Bat cap' )->first();
+
+        /** khong co bat cap */
+        if ( ! $_batCap ) {
+            return $_percent;
+        }
+
+//        if ( $this->salary->name == 'Hong' ) {
+//            dd( $_percent, $this );
+//        }
+
+//        $_batCap = $_batCap->value;
+//        $_batCap = explode( '|', $_batCap );
+//        $_batCap = is_array( $_batCap ) ? $_batCap : array();
+//        $_batCap = array_filter( $_batCap );
+//        foreach ( $_batCap as $_bc ) {
+//            $bc = explode( ':', $_bc );
+//            $bc = is_array( $bc ) ? $bc : array();
+//            $bc = array_filter( $bc );
+//
+//            /**
+//             * khong co bat cap
+//             */
+//            if ( sizeof( $bc ) != 2 ) {
+//                continue;
+//            }
+//
+//            $sName    = $bc[0];
+//            $sPercent = $bc[1];
+//
+//            $_salary = \App\Salary::where( [
+//                'name'  => $sName,
+//                'month' => $this->salary->month,
+//            ] )->firstOrFail();
+//
+//            /** khong co bat cap */
+//            if ( ! $_salary ) {
+//                continue;
+//            }
+//
+//            $_presence = \App\Presence::where( [
+//                'date'         => $this->date,
+//                'car_id'       => $this->car->id,
+//                'salary_count' => 2,
+//                'salary_id'    => $_salary->id,
+//            ] )->firstOrFail();
+//
+//            /** bat cap sai nguoi */
+//            if ( ! $_presence ) {
+//                continue;
+//            }
+//
+//            $_presence->percent = 1 - $sPercent;
+//            $_presence->save();
+//            $this->percent = $sPercent;
+//        }
+
+        return $_percent;
+    }
+
     public function getWeekAttribute() {
         return date( 'w', ( $this->date - 25569 ) * 86400 );
     }

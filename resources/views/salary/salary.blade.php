@@ -28,10 +28,10 @@
                             <a class="font-weight-normal font-weight-bold" data-toggle="collapse" aria-expanded="false"
                                href="#collapse{{ $salary->id }}" aria-controls="collapse{{ $salary->id }}">
                                 {{ number_format($salary->turnover, 2) }}
-                                @if ($salary->productivity!=0)
+                                @if ($salary->productivity!=0 && isset($controller) && $controller->isAdmin())
                                     <span class="font-weight-lighter">
-                                    /{{ number_format($salary->salary_default, 2) }}
-                                </span>
+                                        /{{ number_format($salary->salary_default, 2) }}
+                                    </span>
                                 @endif
                             </a>
                         </div>

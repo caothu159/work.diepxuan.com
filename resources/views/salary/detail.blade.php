@@ -15,11 +15,11 @@
             @endif
         @endif
     </tr>
-    @foreach ($salary->presences as $presence)
+    @foreach ($salary->presences()->orderBy( 'date', 'ASC' )->get() as $presence)
         <tr class="{{ $presence->presence?'':'text-danger' }}">
             <td class="{{ $presence->presence?'':'table-danger' }}">{{ $presence->datetime }}</td>
             <td>{{ $presence->presence?:'-' }}</td>
-            <td>{{ $presence->presence?($presence->car?$presence->car->name:'-'):'-' }}</td>
+            <td>{{ $presence->car?$presence->car->name:'-' }}</td>
             <td>{{ $presence->turnover?:'-' }}</td>
             <td>{{ $presence->in_debt?:'-' }}</td>
             <td>{{ $presence->take_debt?:'-' }}</td>
