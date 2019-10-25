@@ -8,7 +8,10 @@ namespace App\Http\Controllers\Salary;
 
 use App\Salary;
 use App\Services\DatafileService;
+use Exception;
+use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class SalaryController extends Controller {
 
@@ -30,8 +33,8 @@ class SalaryController extends Controller {
      * @param string|null $year
      * @param string|null $month
      *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     * @throws \Exception
+     * @return Factory|\Illuminate\View\View
+     * @throws Exception
      */
     public function index( string $year = null, string $month = null ) {
         return view( 'home', [
@@ -47,7 +50,7 @@ class SalaryController extends Controller {
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function create() {
         //
@@ -61,7 +64,7 @@ class SalaryController extends Controller {
      * @param string|null $month
      *
      * @return \Illuminate\Http\RedirectResponse
-     * @throws \Exception
+     * @throws Exception
      */
     public function import( DatafileService $datafileService, string $year = null, string $month = null ) {
         $datafileService->salaryImport( $year ?: date( 'Y' ), $month ?: date( 'm' ) );
@@ -77,7 +80,7 @@ class SalaryController extends Controller {
      *
      * @param Request $request
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function store( Request $request ) {
         //
@@ -88,7 +91,7 @@ class SalaryController extends Controller {
      *
      * @param int $id
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function show( $id ) {
         //
@@ -99,7 +102,7 @@ class SalaryController extends Controller {
      *
      * @param int $id
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function edit( $id ) {
         //
@@ -111,7 +114,7 @@ class SalaryController extends Controller {
      * @param \Illuminate\Http\Request $request
      * @param int $id
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function update( Request $request, $id ) {
         //
@@ -122,7 +125,7 @@ class SalaryController extends Controller {
      *
      * @param int $id
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function destroy( $id ) {
         //
@@ -135,7 +138,7 @@ class SalaryController extends Controller {
      * @param string|null $month
      *
      * @return Collection $collection
-     * @throws \Exception
+     * @throws Exception
      */
     protected function _loadSalary( string $year = null, string $month = null ) {
         $dt = sprintf( '%s-%s', $year ?: date( 'Y' ), $month ?: ( date( 'm' ) . ' -1 month' ) );
@@ -143,8 +146,6 @@ class SalaryController extends Controller {
         $month = new \DateTime( $dt );
         $month = $month->getTimestamp() / ( 24 * 60 * 60 ) + 25569;
 
-        $collection = Salary::where( 'month', $month )->orderBy( 'name', 'asc' )->get();
-
-        return $collection;
+        return Salary::where( 'month', $month )->orderBy( 'name', 'asc' )->get();
     }
 }
