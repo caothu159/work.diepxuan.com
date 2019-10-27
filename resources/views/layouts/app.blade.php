@@ -41,6 +41,8 @@
                     @yield('menu.left')
                 </ul>
 
+            @yield('menu.center')<!-- Middle Side Of Navbar -->
+
                 <!-- Right Side Of Navbar -->
                 <ul class="navbar-nav ml-auto">
                     <!-- Authentication Links -->

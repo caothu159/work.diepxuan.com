@@ -19,11 +19,11 @@ Route::domain( 'luong.diepxuan.com' )->group( function () {
          ->name( 'salary.index' )
          ->where( [ 'year' => '[0-9]+', 'month' => '[0-9]+' ] );
 
-    Route::resource( 'users', 'UsersController' );
-    Route::resource( 'cars', 'CarController' );
     Route::get( 'cars/{year?}/{month?}', 'CarController@index' )
          ->name( 'cars.index' )
          ->where( [ 'year' => '[0-9]+', 'month' => '[0-9]+' ] );
+    Route::resource( 'users', 'UsersController' );
+    Route::resource( 'cars', 'CarController' );
 } );
 
 Route::get( '/debug-sentry', function () {
@@ -32,6 +32,10 @@ Route::get( '/debug-sentry', function () {
 
 Route::domain( 'work.diepxuan.com' )->group( function () {
     Route::get( '/', 'Work\BanhangController@index' );
-    Route::get( 'banhang', 'Work\BanhangController@index' )->name( 'banhang' );
-    Route::get( 'muahang', 'Work\MuahangController@index' )->name( 'muahang' );
+
+    Route::get( 'banhang/{from?}/{to?}', 'Work\BanhangController@index' )->name( 'banhang' );
+    Route::resource( 'banhang', 'Work\BanhangController' );
+
+    Route::get( 'muahang/{from?}/{to?}', 'Work\MuahangController@index' )->name( 'muahang' );
+    Route::resource( 'muahang', 'Work\MuahangController' );
 } );

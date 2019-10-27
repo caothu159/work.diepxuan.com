@@ -29,25 +29,6 @@ class Ctubanhang extends Model {
      * @var array
      */
     protected $fillable = [
-        'ngay_ct',
-        'ngay_ck',
-        'ngay_tt',
-        'so_ct',
-        'ma_kh',
-        'dien_giai',
-        'ten_kh',
-        'ma_vt',
-        'ma_kho',
-        'ten_vt',
-        'dvt',
-        'so_luong',
-        'gia2',
-        'tien2',
-        'tt',
-        'ma_bp',
-        'ldate',
-        'luser',
-
 //        "ma_cty"       => "001",
 //        "stt_rec"      => "001wSO30000013854330",
 //        "stt_rec0"     => "001",

@@ -1,8 +1,4 @@
-@extends('layouts.app')
-
-@section('menu.left')
-    @include('work.components.menu')
-@endsection
+@extends('work.work')
 
 @section('content')
     @if (session('status'))
@@ -11,8 +7,6 @@
         </div>
     @endif
 
-    @if ($ctumuahangs)
-        @include('work.muahang.chungtu')
-    @endif
+    @yield('content')
 
 @endsection

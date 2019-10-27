@@ -8,32 +8,59 @@ use Illuminate\Http\Request;
 class BanhangController extends Controller {
 
     /**
-     * Instantiate a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct() {
-        $this->middleware( [
-            'auth',
-            'admin',
-            'clearcache'
-        ] );
-//        $this->middleware('log')->only('index');
-//        $this->middleware('subscribed')->except('store');
-    }
-
-    /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @param Request $request
+     * @param string|null $from
+     * @param string|null $to
+     *
+     * @return mixed
+     * @throws \Exception
      */
-    public function index() {
-        $ctubanhangs = Ctubanhang::where( 'nam', 2019 )
-                                 ->whereIn( 'thang', [ 10 ] )
-                                 ->get();
+    public function index( Request $request, string $from = null, string $to = null ) {
+        $inputFrom = $request->input( 'from' );
+        if ( $inputFrom == $from ) {
+            $inputFrom = false;
+        }
+        $inputTo = $request->input( 'to' );
+        if ( $inputTo == $to ) {
+            $inputTo = false;
+        }
 
-        return view( 'work.banhang', [
+        if ( $inputFrom ) {
+            if ( $inputTo ) {
+                return redirect()->route( 'banhang', [
+                    'from' => $inputFrom,
+                    'to'   => $inputTo,
+                ] );
+            }
+
+            return redirect()->route( 'banhang', [
+                'from' => $inputFrom,
+            ] );
+        }
+
+        $_from = \DateTime::createFromFormat( 'd-m-Y', $from );
+        if ( ! $_from ) {
+            $from  = date( '01-m-Y' );
+            $_from = \DateTime::createFromFormat( 'd-m-Y', $from );
+        }
+        $_from = $_from->format( 'Y-m-d' );
+
+        $_to = \DateTime::createFromFormat( 'd-m-Y', $to );
+        if ( ! $_to ) {
+            $to  = date( 'd-m-Y' );
+            $_to = \DateTime::createFromFormat( 'd-m-Y', $to );
+        }
+        $_to = $_to->format( 'Y-m-d' );
+
+        $ctubanhangs = Ctubanhang::whereBetween( 'ngay_ct', [ $_from, $_to ] )->get();
+
+        return view( 'work.banhang.chungtu', [
             'ctubanhangs' => $ctubanhangs,
+            'from'        => $from,
+            'to'          => $to,
+            'router'      => 'banhang',
         ] );
     }
 
