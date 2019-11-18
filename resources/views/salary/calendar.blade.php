@@ -6,12 +6,17 @@ $week = 0;
     <tr>
         <td colspan="{{$salary->weekstart - 1}}"></td>
         @while ($day <= $salary->presences->keys()->last())
-            <td class="table-{{ $salary->presences->get($day)->presence==1?'success':'danger' }} pb-0 pt-0">
-                <span>{{ $salary->presences->get($day)->presence }}</span>
-                {{--                <span>{{ $salary->presences->get($day)->datetime }}</span>--}}
+            <?php
+            $presence = $salary->presences->get( $day );
+            $presencePoint = $presence ? $presence->presence : 0;
+            $presenceCss = $presencePoint == 1 ? 'success' : 'danger';
+            $presenceWeek = $presence ? $presence->week : 0;
+            ?>
+            <td class="table-{{ $presenceCss }} pb-0 pt-0">
+                <span>{{ $presencePoint }}</span>
             </td>
 
-            @if ($salary->presences->get($day)->week==0)
+            @if ($presenceWeek==0)
                 {!! '</tr><tr>' !!}
             @endif
 
