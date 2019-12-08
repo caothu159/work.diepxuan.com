@@ -28,6 +28,14 @@ class DatafileService implements DatafileServiceInterface {
         $this->serializeImport( $year, $month );
     }
 
+    /**
+     * xoa du lieu cu
+     *
+     * @param string $year
+     * @param string $month
+     *
+     * @throws \Exception
+     */
     protected function salaryClean( string $year, string $month ) {
         $dt = sprintf( '%s-%s', $year, $month );
 
@@ -181,8 +189,9 @@ class DatafileService implements DatafileServiceInterface {
                     $presence = \App\Presence::updateOrCreate( [
                         'salary_id' => $salary->id,
                         'date'      => $date,
-                        'car_id'    => $car->id,
+                        'car_id'    => null,
                     ], [
+                        'car_id'       => $car->id,
                         'salary_count' => count( $salary_ids ),
                     ] );
                 }
