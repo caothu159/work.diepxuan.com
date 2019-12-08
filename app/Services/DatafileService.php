@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 /**
@@ -19,12 +20,27 @@ class DatafileService implements DatafileServiceInterface {
      * @throws \Exception
      */
     public function salaryImport( string $year, string $month ) {
-//        ini_set( 'max_execution_time', 0 );
+        $this->salaryClean( $year, $month );
         $this->employeeImport( $year, $month );
         $this->presenceImport( $year, $month );
         $this->divisionImport( $year, $month );
         $this->productivityImport( $year, $month );
         $this->serializeImport( $year, $month );
+    }
+
+    protected function salaryClean( string $year, string $month ) {
+        $dt = sprintf( '%s-%s', $year, $month );
+
+        $timefrom = date( "Y-m-01", strtotime( $dt ) );
+        $timefrom = new \DateTime( $timefrom );
+        $timefrom = \PhpOffice\PhpSpreadsheet\Shared\Date::PHPToExcel( $timefrom );
+
+        $timeto = date( "Y-m-t", strtotime( $dt ) );
+        $timeto = new \DateTime( $timeto );
+        $timeto = \PhpOffice\PhpSpreadsheet\Shared\Date::PHPToExcel( $timeto );
+
+        \App\Presence::whereBetween( 'date', [ $timefrom, $timeto ] )->delete();
+//        $users = DB::table( 'presences' )->where( 'date', '>', 100 )->delete();
     }
 
     /**
