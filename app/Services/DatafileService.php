@@ -9,7 +9,17 @@ use Illuminate\Support\Str;
  * Class DatafileService
  * @package App\Services
  */
-class DatafileService implements DatafileServiceInterface {
+class DatafileService {
+
+    private $year;
+    private $month;
+
+    private $timemonth;
+    private $timestart;
+    private $timeend;
+
+    private $nhanvien = [];
+
     /**
      * Import Data from cloud to database.
      *
@@ -20,61 +30,66 @@ class DatafileService implements DatafileServiceInterface {
      * @throws \Exception
      */
     public function salaryImport( string $year, string $month ) {
-        $this->salaryClean( $year, $month );
-        $this->employeeImport( $year, $month );
+        $this->_initialize( $year, $month );
+
+        $this->salaryClean();
+        $this->employeeImport();
         $this->presenceImport( $year, $month );
         $this->divisionImport( $year, $month );
         $this->productivityImport( $year, $month );
         $this->serializeImport( $year, $month );
     }
 
+    private function _initialize( string $year, string $month ) {
+        $this->year  = $year;
+        $this->month = $month;
+
+        $dt = sprintf( '%s-%s', $this->year, $this->month );
+
+        $this->timestart = date( "Y-m-01", strtotime( $dt ) );
+        $this->timestart = new \DateTime( $this->timestart );
+        $this->timestart = \PhpOffice\PhpSpreadsheet\Shared\Date::PHPToExcel( $this->timestart );
+
+        $this->timeend = date( "Y-m-t", strtotime( $dt ) );
+        $this->timeend = new \DateTime( $this->timeend );
+        $this->timeend = \PhpOffice\PhpSpreadsheet\Shared\Date::PHPToExcel( $this->timeend );
+
+        $this->timemonth = new \DateTime( $dt );
+        $this->timemonth = \PhpOffice\PhpSpreadsheet\Shared\Date::PHPToExcel( $this->timemonth );
+
+        $data           = new \App\Data( $year, $month );
+        $this->nhanvien = $data->loadFromFile( 'nhanvien.xlsx' );
+        $this->chamcong = $data->loadFromFile( 'chamcong.xlsx' );
+    }
+
     /**
      * xoa du lieu cu
      *
-     * @param string $year
-     * @param string $month
-     *
      * @throws \Exception
      */
-    protected function salaryClean( string $year, string $month ) {
-        $dt = sprintf( '%s-%s', $year, $month );
-
-        $timefrom = date( "Y-m-01", strtotime( $dt ) );
-        $timefrom = new \DateTime( $timefrom );
-        $timefrom = \PhpOffice\PhpSpreadsheet\Shared\Date::PHPToExcel( $timefrom );
-
-        $timeto = date( "Y-m-t", strtotime( $dt ) );
-        $timeto = new \DateTime( $timeto );
-        $timeto = \PhpOffice\PhpSpreadsheet\Shared\Date::PHPToExcel( $timeto );
-
-        \App\Presence::whereBetween( 'date', [ $timefrom, $timeto ] )->delete();
-//        $users = DB::table( 'presences' )->where( 'date', '>', 100 )->delete();
+    protected function salaryClean() {
+        \App\Presence::whereBetween( 'date', [ $this->timestart, $this->timeend ] )->delete();
+        \App\SalaryType::leftJoin( 'salaries', 'salary_types.salary_id', '=', 'salaries.id' )
+                       ->where( 'salaries.month', '=', $this->timemonth )
+                       ->delete();
+        \App\Salary::where( 'month', $this->timemonth )->delete();
     }
 
     /**
      * Import Data from nhanvien.xlsx to database.
      * quy dinh cach tinh luong tung nhan vien theo thang
      *
-     * @param string $year
-     * @param string $month
-     *
      * @return void
      * @throws \Exception
      */
-    public function employeeImport( string $year, string $month ) {
-        $data = new \App\Data( $year, $month );
-
-        $month = sprintf( '%s-%s', $year, $month );
-        $month = new \DateTime( $month );
-        $month = $month->getTimestamp() / ( 24 * 60 * 60 ) + 25569;
-
-        foreach ( $data->loadFromFile( 'nhanvien.xlsx' ) as $name => $val ) {
+    public function employeeImport() {
+        foreach ( $this->nhanvien as $name => $val ) {
             /**
              * Bang luong nhan vien hang thang
              */
             $salary = \App\Salary::firstOrCreate( [
                 'name'  => $name,
-                'month' => $month,
+                'month' => $this->timemonth,
             ], [] );
 
             foreach ( $val as $type => $value ) {
@@ -92,33 +107,36 @@ class DatafileService implements DatafileServiceInterface {
      * Import Data from chamcong.xlsx to database.
      * Bang cham cong tung nhan vien theo ngay
      *
-     * @param string $year
-     * @param string $month
-     *
      * @return void
      * @throws \Exception
      */
-    public function presenceImport( string $year, string $month ) {
-        $data = new \App\Data( $year, $month );
+    public function presenceImport() {
+        $salarys = \App\Salary::where( 'month', $this->timemonth )->get();
+        $salarys->each( function ( $salary ) {
+            $presenceSalary         = $salary->types->where( 'name', 'Luong co ban' )->first();
+            $presenceSalary         = $presenceSalary ? $presenceSalary->value : 0;
+            $presenceSalary         /= 30;
+            $salary->presenceSalary = $presenceSalary;
 
-        /* lap tung ngay */
-        foreach ( $data->loadFromFile( 'chamcong.xlsx' ) as $date => $val ) {
-            $month = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToTimestamp( $date );
-            $month = date( "Y-m", $month );
-            $month = new \DateTime( $month );
-            $month = \PhpOffice\PhpSpreadsheet\Shared\Date::PHPToExcel( $month );
-            $month = intval( $month );
+            return $salary;
+        } );
+
+        foreach ( $this->chamcong as $date => $val ) {
+            if ( $date < $this->timestart || $date > $this->timeend ) {
+                continue;
+            }
 
             foreach ( $val as $name => $presence ) {
-                $salary = \App\Salary::where( 'name', $name )->where( 'month', $month )->first();
+                $salary = $salarys->where( 'name', $name );
+                if ( $salary->count() == 0 ) {
+                    continue;
+                }
+                $salary = $salary->first();
 
-                $presenceSalary = $salary->types->where( 'name', 'Luong co ban' )->first();
-                $presenceSalary = $presenceSalary ? $presenceSalary->value : 0;
-                $presenceSalary /= 30;
-                $presenceSalary *= $presence;
+                $presenceSalary = $salary->presenceSalary * $presence;
 
                 /**
-                 * cham cong nhat tung nhan vien
+                 * cham luong cong nhat tung nhan vien
                  */
                 \App\Presence::updateOrCreate( [
                     'salary_id' => $salary->id,
