@@ -367,16 +367,11 @@ class DatafileService implements DatafileServiceInterface {
         }
 
         /** clean all presence where date not in month */
-        foreach ( \App\Presence::get() as $presence ) {
-            $month = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToTimestamp( $presence->date );
-            $month = date( "Y-m", $month );
-            $month = new \DateTime( $month );
-            $month = \PhpOffice\PhpSpreadsheet\Shared\Date::PHPToExcel( $month );
-            $month = intval( $month );
-            if ( $presence->salary->month !== $month ) {
-                $presence->delete();
-            }
-        }
+        DB::table( 'presences' )
+          ->join( 'salaries', 'presences.salary_id', '=', 'salaries.id' )
+          ->where( 'salaries.month', '=', $month )
+          ->whereNotBetween( 'presences.date', [ $timefrom, $timeto ] )
+          ->delete();
 
     }
 }
