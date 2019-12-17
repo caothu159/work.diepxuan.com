@@ -84,11 +84,11 @@ class DatafileService {
      * @throws Exception
      */
     protected function salaryClean() {
-        Presence::whereBetween( 'date', [ $this->timestart, $this->timeend ] )->forceDelete();
-        SalaryType::leftJoin( 'salaries', 'salary_types.salary_id', '=', 'salaries.id' )
-                  ->where( 'salaries.month', '=', $this->timemonth )
-                  ->delete();
-        Salary::where( 'month', $this->timemonth )->forceDelete();
+//        Presence::whereBetween( 'date', [ $this->timestart, $this->timeend ] )->forceDelete();
+//        SalaryType::leftJoin( 'salaries', 'salary_types.salary_id', '=', 'salaries.id' )
+//                  ->where( 'salaries.month', '=', $this->timemonth )
+//                  ->delete();
+        Salary::where( 'month', $this->timemonth )->delete();
     }
 
     /**
