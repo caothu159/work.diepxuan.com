@@ -273,6 +273,9 @@ class DatafileService {
             if ( ! $presence->car ) {
                 /** @var zero presence - Thuong 1 ngay chi tieu */
 //                $presence->presence = 0;
+//                $presence->save();
+
+                return;
             }
 
             /** lam o kho - chi tinh luong kho, huy cong nhat */
