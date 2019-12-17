@@ -186,6 +186,8 @@ class Presence extends Eloquent {
      * @return float Doanh so lai xe
      */
     public function getProductivityAttribute() {
+        $this->percent = $this->percentInitial();
+
         $productivity = $this->turnover;
         $productivity += $this->in_debt * 0.7;
         $productivity -= $this->take_debt * 0.7;
