@@ -19,6 +19,8 @@ class DatafileService {
     private $timeend;
 
     private $nhanvien = [];
+    private $chamcong = [];
+    private $phancong = [];
 
     /**
      * Import Data from cloud to database.
@@ -34,8 +36,8 @@ class DatafileService {
 
         $this->salaryClean();
         $this->employeeImport();
-        $this->presenceImport( $year, $month );
-        $this->divisionImport( $year, $month );
+        $this->presenceImport();
+        $this->divisionImport();
         $this->productivityImport( $year, $month );
         $this->serializeImport( $year, $month );
     }
@@ -60,6 +62,7 @@ class DatafileService {
         $data           = new \App\Data( $year, $month );
         $this->nhanvien = $data->loadFromFile( 'nhanvien.xlsx' );
         $this->chamcong = $data->loadFromFile( 'chamcong.xlsx' );
+        $this->phancong = $data->loadFromFile( 'phancong.xlsx' );
     }
 
     /**
@@ -72,7 +75,7 @@ class DatafileService {
         \App\SalaryType::leftJoin( 'salaries', 'salary_types.salary_id', '=', 'salaries.id' )
                        ->where( 'salaries.month', '=', $this->timemonth )
                        ->delete();
-        \App\Salary::where( 'month', $this->timemonth )->delete();
+        \App\Salary::where( 'month', $this->timemonth )->history()->forceDelete();
     }
 
     /**
@@ -111,8 +114,8 @@ class DatafileService {
      * @throws \Exception
      */
     public function presenceImport() {
-        $salarys = \App\Salary::where( 'month', $this->timemonth )->get();
-        $salarys->each( function ( $salary ) {
+        $salaries = \App\Salary::where( 'month', $this->timemonth )->get();
+        $salaries->each( function ( $salary ) {
             $presenceSalary         = $salary->types->where( 'name', 'Luong co ban' )->first();
             $presenceSalary         = $presenceSalary ? $presenceSalary->value : 0;
             $presenceSalary         /= 30;
@@ -122,16 +125,15 @@ class DatafileService {
         } );
 
         foreach ( $this->chamcong as $date => $val ) {
-            if ( $date < $this->timestart || $date > $this->timeend ) {
+            if ( 0 == $date || $date < $this->timestart || $date > $this->timeend ) {
                 continue;
             }
 
             foreach ( $val as $name => $presence ) {
-                $salary = $salarys->where( 'name', $name );
-                if ( $salary->count() == 0 ) {
+                $salary = $salaries->where( 'name', $name )->first();
+                if ( null == $salary ) {
                     continue;
                 }
-                $salary = $salary->first();
 
                 $presenceSalary = $salary->presenceSalary * $presence;
 
@@ -154,26 +156,14 @@ class DatafileService {
      * Import Data from phancong.xlsx to database.
      * Bang phan cong lai xe | ban hang | kho bai
      *
-     * @param string $year
-     * @param string $month
-     *
      * @return void
      * @throws \Exception
      */
-    public function divisionImport( string $year, string $month ) {
-        $data = new \App\Data( $year, $month );
-
-        /* lap tung ngay */
-        foreach ( $data->loadFromFile( 'phancong.xlsx' ) as $date => $division ) {
-            if ( 0 == $date ) {
+    public function divisionImport() {
+        foreach ( $this->chamcong as $date => $division ) {
+            if ( 0 == $date || $date < $this->timestart || $date > $this->timeend ) {
                 continue;
             }
-
-            $month = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToTimestamp( $date );
-            $month = date( "Y-m", $month );
-            $month = new \DateTime( $month );
-            $month = \PhpOffice\PhpSpreadsheet\Shared\Date::PHPToExcel( $month );
-            $month = intval( $month );
 
             /* lap tung xe */
             foreach ( $division as $car_id => $salary_ids ) {
@@ -184,7 +174,7 @@ class DatafileService {
                 $car_id = str_replace( 'x', '', $car_id );
                 $car    = \App\Car::firstOrCreate( [ 'name' => $car_id ] );
 
-                if ( 0 === $salary_ids ) {
+                if ( 0 === $salary_ids || empty( $salary_ids ) ) {
                     continue;
                 }
 
@@ -194,8 +184,9 @@ class DatafileService {
                  *  loop tung lai xe
                  */
                 foreach ( $salary_ids as $salary_id ) {
+
                     $salary = \App\Salary::where( 'name', $salary_id )
-                                         ->where( 'month', $month )->first();
+                                         ->where( 'month', $this->timemonth )->first();
 
                     if ( null == $salary ) {
                         continue;
