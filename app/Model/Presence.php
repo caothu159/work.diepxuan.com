@@ -103,6 +103,11 @@ class Presence extends Eloquent {
      * @return float|int - Chia ty le khi bat cap
      */
     public function percentInitial() {
+        /** nhan vien van phong */
+        if ( $this->salary_count ) {
+            return 0;
+        }
+
         /** @var float $percent - Ti le chia luong mac dinh voi lai xe khac */
         $percent = 1 / $this->salary_count;
 
