@@ -31,10 +31,22 @@ class Data extends Eloquent {
      * @param string $month
      */
     public function __construct( string $year = null, string $month = null ) {
+        $this->__initialize( $year, $month );
+
+        parent::__construct();
+    }
+
+    /**
+     * @param string|null $year
+     * @param string|null $month
+     *
+     * @return $this
+     */
+    public function initialize( string $year = null, string $month = null ) {
         $this->setYear( $year );
         $this->setMonth( $month );
 
-        parent::__construct();
+        return $this;
     }
 
     /**

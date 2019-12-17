@@ -103,7 +103,6 @@ class Salary extends Eloquent {
      * @return mixed
      */
     public function getNameAttribute() {
-        $this->user = \App\User::where( 'salary_name', $this->attributes['name'] )->first();
         if ( ! $this->user ) {
             return $this->attributes['name'];
         }
@@ -115,6 +114,8 @@ class Salary extends Eloquent {
      * @return float|mixed
      */
     public function ratioInitial() {
+        return 0.01;
+
         $ratio             = 0;
         $types             = $this->types;
         $productivityTotal = $this->presences->sum( 'productivity' );
@@ -129,11 +130,36 @@ class Salary extends Eloquent {
             $ratio = max( $ratio, $type->value );
         }
 
-        return 0.01;
-//        return doubleval( $ratio );
+        return doubleval( $ratio );
     }
 
     public function getWeekstartAttribute() {
         return date( 'w', ( $this->month - 25569 ) * 86400 );
+    }
+
+    /**
+     * Luong co ban chia trung binh theo ngay
+     *
+     * @return int
+     */
+    public function getPresenceSalaryAttribute() {
+        $presenceSalary = $this->types->where( 'name', 'Luong co ban' )->first();
+        $presenceSalary = $presenceSalary ? $presenceSalary->value : 0;
+        $presenceSalary /= 30;
+
+        return $presenceSalary;
+    }
+
+    /**
+     * Luong kho bai chia trung binh theo ngay
+     *
+     * @return int
+     */
+    public function getKhobaiAttribute() {
+        $presenceSalary = $this->types->where( 'name', 'Luong kho' )->first();
+        $presenceSalary = $presenceSalary ? $presenceSalary->value : 0;
+        $presenceSalary /= 30;
+
+        return $presenceSalary;
     }
 }

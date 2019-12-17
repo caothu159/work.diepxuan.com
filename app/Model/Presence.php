@@ -81,7 +81,7 @@ class Presence extends Eloquent {
     }
 
     /**
-     * @return float|mixed
+     * @return float|mixed - He so luong
      */
     public function ratioInitial() {
         $ratio = 0;
@@ -100,15 +100,19 @@ class Presence extends Eloquent {
     }
 
     /**
-     * @return float|int
+     * @return float|int - Chia ty le khi bat cap
      */
     public function percentInitial() {
-        /** Ti le chia luong mac dinh voi lai xe khac */
-        $_percent = 1 / $this->salary_count;
+        /** @var float $percent - Ti le chia luong mac dinh voi lai xe khac */
+        $percent = 1 / $this->salary_count;
 
-        if ( $tile = $this->salary->types->where( 'name', 'Ti le' )->first() ) {
-            $_percent = $tile->value ?: $_percent;
-        }
+        /** @var float $_percent - Ti le chia luong quy dinh tai cot ti le */
+        $_percent = $this->salary->types->where( 'name', 'Ti le' )->first();
+        $_percent = $_percent ? $_percent->value : 0;
+
+        $percent = $_percent ?: $percent;
+
+        return $percent;
 
         $_batCap = $this->salary->types->where( 'name', 'Bat cap' )->first();
 
@@ -167,11 +171,22 @@ class Presence extends Eloquent {
 //            $this->percent = $sPercent;
 //        }
 
-        return $_percent;
     }
 
     public function getWeekAttribute() {
         return date( 'w', ( $this->date - 25569 ) * 86400 );
+    }
+
+    /**
+     * @return float Doanh so lai xe
+     */
+    public function getProductivityAttribute() {
+        $productivity = $this->turnover;
+        $productivity += $this->in_debt * 0.7;
+        $productivity -= $this->take_debt * 0.7;
+        $productivity *= $this->percentInitial();
+
+        return $productivity;
     }
 
     public function getWeekdayAttribute() {
