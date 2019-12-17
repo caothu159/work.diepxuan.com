@@ -104,7 +104,7 @@ class Presence extends Eloquent {
      */
     public function percentInitial() {
         /** nhan vien van phong */
-        if ( $this->salary_count ) {
+        if ( 0 == $this->salary_count ) {
             return 0;
         }
 

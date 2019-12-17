@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Work;
 
 use App\Model\Work\Ctumuahang;
+use Exception;
+use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\Request;
 
 class MuahangController extends Controller {
@@ -14,8 +16,8 @@ class MuahangController extends Controller {
      * @param string|null $from
      * @param string|null $to
      *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     * @throws \Exception
+     * @return Factory|\Illuminate\View\View
+     * @throws Exception
      */
     public function index( Request $request, string $from = null, string $to = null ) {
         $inputFrom = $request->input( 'from' );
