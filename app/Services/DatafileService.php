@@ -10,6 +10,7 @@ use App\SalaryType;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use PhpOffice\PhpSpreadsheet\Shared\Date;
 
 /**
  * Class DatafileService
@@ -51,11 +52,8 @@ class DatafileService {
     public function salaryImport( string $year, string $month ) {
         $this->_initialize( $year, $month );
 
-        $this->salaryClean();
-        $this->employeeImport();
-        $this->presenceImport();
-        $this->divisionImport();
-        $this->productivityImport();
+        $this->beforeImport();
+        $this->startImport();
         $this->serializeImport();
     }
 
@@ -74,14 +72,14 @@ class DatafileService {
 
         $this->timestart = date( "Y-m-01", strtotime( $dt ) );
         $this->timestart = new \DateTime( $this->timestart );
-        $this->timestart = \PhpOffice\PhpSpreadsheet\Shared\Date::PHPToExcel( $this->timestart );
+        $this->timestart = Date::PHPToExcel( $this->timestart );
 
         $this->timeend = date( "Y-m-t", strtotime( $dt ) );
         $this->timeend = new \DateTime( $this->timeend );
-        $this->timeend = \PhpOffice\PhpSpreadsheet\Shared\Date::PHPToExcel( $this->timeend );
+        $this->timeend = Date::PHPToExcel( $this->timeend );
 
         $this->timemonth = new \DateTime( $dt );
-        $this->timemonth = \PhpOffice\PhpSpreadsheet\Shared\Date::PHPToExcel( $this->timemonth );
+        $this->timemonth = Date::PHPToExcel( $this->timemonth );
     }
 
     /**
@@ -89,11 +87,7 @@ class DatafileService {
      *
      * @throws Exception
      */
-    protected function salaryClean() {
-//        Salary::where( 'month', $this->timemonth )->each( function ( $salary ) {
-//            $salary->types()->delete();
-//            $salary->presences()->delete();
-//        } );
+    protected function beforeImport() {
         Presence::whereBetween( 'date', [ $this->timestart, $this->timeend ] )->forceDelete();
         SalaryType::leftJoin( 'salaries', 'salary_types.salary_id', '=', 'salaries.id' )
                   ->where( 'salaries.month', '=', $this->timemonth )
@@ -102,161 +96,15 @@ class DatafileService {
     }
 
     /**
-     * Import Data from nhanvien.xlsx to database.
-     * quy dinh cach tinh luong tung nhan vien theo thang
+     * Import du lieu tu stylesheet
      *
-     * @return void
      * @throws Exception
      */
-    public function employeeImport() {
-        foreach ( $this->data->loadFromFile( 'nhanvien.xlsx' ) as $name => $val ) {
-            /**
-             * Bang luong nhan vien hang thang
-             */
-            $salary = Salary::firstOrCreate( [
-                'name'  => $name,
-                'month' => $this->timemonth,
-            ], [] );
-
-            foreach ( $val as $type => $value ) {
-                SalaryType::updateOrCreate( [
-                    'salary_id' => $salary->id,
-                    'name'      => "$type",
-                ], [
-                    'value' => $value,
-                ] );
-            }
-        }
-    }
-
-    /**
-     * Import Data from chamcong.xlsx to database.
-     * Bang cham cong tung nhan vien theo ngay
-     *
-     * @return void
-     * @throws Exception
-     */
-    public function presenceImport() {
-        $salaries = Salary::where( 'month', $this->timemonth )->get();
-
-        foreach ( $this->data->loadFromFile( 'chamcong.xlsx' ) as $date => $val ) {
-            if ( 0 == $date || $date < $this->timestart || $date > $this->timeend ) {
-                continue;
-            }
-
-            foreach ( $val as $name => $presence ) {
-                $salary = $salaries->where( 'name', $name )->first();
-                if ( null == $salary ) {
-                    continue;
-                }
-
-                $presenceSalary = $salary->presenceSalary * $presence;
-
-                /**
-                 * cham luong cong nhat tung nhan vien
-                 */
-                Presence::updateOrCreate( [
-                    'salary_id' => $salary->id,
-                    'date'      => $date,
-                ], [
-                    'presence'        => floatval( $presence ),
-                    'presence_salary' => $presenceSalary,
-                ] );
-            }
-        }
-
-    }
-
-    /**
-     * Import Data from phancong.xlsx to database.
-     * Bang phan cong lai xe | ban hang | kho bai
-     *
-     * @return void
-     * @throws Exception
-     */
-    public function divisionImport() {
-        foreach ( $this->data->loadFromFile( 'phancong.xlsx' ) as $date => $division ) {
-            if ( 0 == $date || $date < $this->timestart || $date > $this->timeend ) {
-                continue;
-            }
-
-            /* lap tung xe */
-            foreach ( $division as $car_id => $salary_ids ) {
-                if ( $car_id === 0 ) {
-                    continue;
-                }
-
-                $car_id = str_replace( 'x', '', $car_id );
-                $car    = Car::firstOrCreate( [ 'name' => $car_id ] );
-
-                if ( 0 === $salary_ids || empty( $salary_ids ) ) {
-                    continue;
-                }
-
-                $salary_ids = explode( '-', $salary_ids );
-
-                /**
-                 *  loop tung lai xe
-                 */
-                foreach ( $salary_ids as $salary_id ) {
-
-                    $salary = Salary::where( 'name', $salary_id )
-                                    ->where( 'month', $this->timemonth )->first();
-
-                    if ( null == $salary ) {
-                        continue;
-                    }
-
-                    /**
-                     * phan cong tung nhan vien lai xe | ban hang | kho bai
-                     */
-                    Presence::updateOrCreate( [
-                        'salary_id' => $salary->id,
-                        'date'      => $date,
-                        'car_id'    => null,
-                    ], [
-                        'car_id'       => $car->id,
-                        'salary_count' => count( $salary_ids ),
-                    ] );
-                }
-            }
-        }
-
-    }
-
-    /**
-     * Import Data from nangsuat.xlsx to database.
-     * Bang cham nang suat tung lai xe
-     *
-     * @return void
-     * @throws Exception
-     */
-    public function productivityImport() {
-        $cars = Car::all();
-
-        foreach ( $this->data->loadFromFile( 'nangsuat.xlsx' ) as $date => $val ) {
-            $val['date'] = $date;
-
-            foreach ( $cars as $car ) {
-                if ( $car->name == "kho" ) {
-                    continue;
-                }
-
-                /**
-                 * Bang cham nang suat tung  xe
-                 */
-                Presence::where( [
-                    'date'   => $date,
-                    'car_id' => $car->id,
-                ] )->update( [
-                    'turnover'  => doubleval( $val["ns $car->name"] ),
-                    'in_debt'   => doubleval( $val["no $car->name"] ),
-                    'take_debt' => doubleval( $val["thu no $car->name"] ),
-                ] );
-
-            }
-        }
-
+    protected function startImport() {
+        $this->employeeImport();
+        $this->presenceImport();
+        $this->divisionImport();
+        $this->productivityImport();
     }
 
     /**
@@ -268,7 +116,6 @@ class DatafileService {
     public function serializeImport() {
         /** @var Presence $presence - tinh luong hang ngay */
         Presence::whereBetween( 'date', [ $this->timestart, $this->timeend ] )->get()->each( function ( $presence ) {
-
             /** khong di xe hoac khong lam kho */
             if ( ! $presence->car ) {
                 /** @var zero presence - Thuong 1 ngay chi tieu */
@@ -340,12 +187,189 @@ class DatafileService {
             $salary->save();
         } );
 
+    }
+
+    /**
+     * Import Data from nhanvien.xlsx to database.
+     * quy dinh cach tinh luong tung nhan vien theo thang
+     *
+     * @return void
+     * @throws Exception
+     */
+    protected function employeeImport() {
+        foreach ( $this->data->loadFromFile( 'nhanvien.xlsx' ) as $name => $val ) {
+            /**
+             * Bang luong nhan vien hang thang
+             */
+            $salary = Salary::firstOrCreate( [
+                'name'  => $name,
+                'month' => $this->timemonth,
+            ], [] );
+
+            foreach ( $val as $type => $value ) {
+                SalaryType::updateOrCreate( [
+                    'salary_id' => $salary->id,
+                    'name'      => "$type",
+                ], [
+                    'value' => $value,
+                ] );
+            }
+        }
+    }
+
+    /**
+     * Import Data from chamcong.xlsx to database.
+     * Bang cham cong tung nhan vien theo ngay
+     *
+     * @return void
+     * @throws Exception
+     */
+    protected function presenceImport() {
+        $salaries = Salary::where( 'month', $this->timemonth )->get();
+
+        foreach ( $this->data->loadFromFile( 'chamcong.xlsx' ) as $date => $val ) {
+            if ( 0 == $date || $date < $this->timestart || $date > $this->timeend ) {
+                continue;
+            }
+
+            foreach ( $val as $name => $presence ) {
+                $salary = $salaries->where( 'name', $name )->first();
+                if ( null == $salary ) {
+                    continue;
+                }
+
+                $presenceSalary = $salary->presenceSalary * $presence;
+
+                /**
+                 * cham luong cong nhat tung nhan vien
+                 */
+                Presence::updateOrCreate( [
+                    'salary_id' => $salary->id,
+                    'date'      => $date,
+                ], [
+                    'presence'        => floatval( $presence ),
+                    'presence_salary' => $presenceSalary,
+                ] );
+            }
+        }
+
+    }
+
+    /**
+     * Import Data from phancong.xlsx to database.
+     * Bang phan cong lai xe | ban hang | kho bai
+     *
+     * @return void
+     * @throws Exception
+     */
+    protected function divisionImport() {
+        foreach ( $this->data->loadFromFile( 'phancong.xlsx' ) as $date => $division ) {
+            if ( 0 == $date || $date < $this->timestart || $date > $this->timeend ) {
+                continue;
+            }
+
+            /* lap tung xe */
+            foreach ( $division as $car_id => $salary_ids ) {
+                if ( $car_id === 0 ) {
+                    continue;
+                }
+
+                $car_id = str_replace( 'x', '', $car_id );
+                $car    = Car::firstOrCreate( [ 'name' => $car_id ] );
+
+                if ( 0 === $salary_ids || empty( $salary_ids ) ) {
+                    continue;
+                }
+
+                $salary_ids = explode( '-', $salary_ids );
+
+                /**
+                 *  loop tung lai xe
+                 */
+                foreach ( $salary_ids as $salary_id ) {
+
+                    $salary = Salary::where( 'name', $salary_id )
+                                    ->where( 'month', $this->timemonth )->first();
+
+                    if ( null == $salary ) {
+                        continue;
+                    }
+
+                    /**
+                     * phan cong tung nhan vien lai xe | ban hang | kho bai
+                     */
+                    Presence::updateOrCreate( [
+                        'salary_id' => $salary->id,
+                        'date'      => $date,
+                        'car_id'    => null,
+                    ], [
+                        'car_id'       => $car->id,
+                        'salary_count' => count( $salary_ids ),
+                    ] );
+                }
+            }
+        }
+
+    }
+
+    /**
+     * Import Data from nangsuat.xlsx to database.
+     * Bang cham nang suat tung lai xe
+     *
+     * @return void
+     * @throws Exception
+     */
+    protected function productivityImport() {
+        $cars = Car::all();
+
+        foreach ( $this->data->loadFromFile( 'nangsuat.xlsx' ) as $date => $val ) {
+            $val['date'] = $date;
+
+            foreach ( $cars as $car ) {
+                if ( $car->name == "kho" ) {
+                    continue;
+                }
+
+                /**
+                 * Bang cham nang suat tung  xe
+                 */
+                Presence::where( [
+                    'date'   => $date,
+                    'car_id' => $car->id,
+                ] )->update( [
+                    'turnover'  => doubleval( $val["ns $car->name"] ),
+                    'in_debt'   => doubleval( $val["no $car->name"] ),
+                    'take_debt' => doubleval( $val["thu no $car->name"] ),
+                ] );
+
+            }
+        }
+
+    }
+
+
+    /**
+     * xoa du lieu cu
+     *
+     * @throws Exception
+     * @deprecated from 17/12/2019
+     */
+    protected function salaryClean() {
+        Salary::where( 'month', $this->timemonth )->each( function ( $salary ) {
+            $salary->types()->delete();
+            $salary->presences()->delete();
+        } );
+    }
+
+    /**
+     * @deprecated from 17/12/2019
+     */
+    private function presenceClean() {
         /** clean all presence where date not in month */
         DB::table( 'presences' )
           ->join( 'salaries', 'presences.salary_id', '=', 'salaries.id' )
           ->where( 'salaries.month', '=', $this->timemonth )
           ->whereNotBetween( 'presences.date', [ $this->timestart, $this->timeend ] )
           ->delete();
-
     }
 }

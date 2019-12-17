@@ -30,7 +30,7 @@
                                 {{ number_format($salary->turnover, 2) }}
                                 @if ($salary->productivity!=0 && isset($controller) && $controller->isAdmin())
                                     <span class="font-weight-lighter">
-                                        /{{ number_format($salary->salary_default, 2) }}
+                                        /{{ number_format($salary->chitieu, 2) }}
                                     </span>
                                 @endif
                             </a>
