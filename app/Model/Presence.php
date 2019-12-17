@@ -103,7 +103,7 @@ class Presence extends Eloquent {
      * @return float|int - Chia ty le khi bat cap
      */
     public function percentInitial() {
-        /** nhan vien van phong */
+        /** khong tinh ti le cho nhan vien van phong */
         if ( 0 == $this->salary_count ) {
             return 0;
         }
@@ -119,11 +119,11 @@ class Presence extends Eloquent {
 
         return $percent;
 
-        $_batCap = $this->salary->types->where( 'name', 'Bat cap' )->first();
+        $batCap = $this->salary->types->where( 'name', 'Bat cap' )->first();
 
         /** khong co bat cap */
-        if ( ! $_batCap ) {
-            return $_percent;
+        if ( ! $batCap ) {
+            return $percent;
         }
 
 //        if ( $this->salary->name == 'Hong' ) {
@@ -192,6 +192,13 @@ class Presence extends Eloquent {
         $productivity *= $this->percentInitial();
 
         return $productivity;
+    }
+
+    /**
+     * @return float Chi tieu lai xe
+     */
+    public function getChitieuAttribute() {
+        return $this->salary->chitieu / 30;
     }
 
     public function getWeekdayAttribute() {

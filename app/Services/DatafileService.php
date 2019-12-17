@@ -55,10 +55,16 @@ class DatafileService {
         $this->employeeImport();
         $this->presenceImport();
         $this->divisionImport();
-        $this->productivityImport( $year, $month );
-        $this->serializeImport( $year, $month );
+        $this->productivityImport();
+        $this->serializeImport();
     }
 
+    /**
+     * @param string $year
+     * @param string $month
+     *
+     * @throws Exception
+     */
     private function _initialize( string $year, string $month ) {
         $this->year  = $year;
         $this->month = $month;
@@ -222,13 +228,10 @@ class DatafileService {
      * Import Data from nangsuat.xlsx to database.
      * Bang cham nang suat tung lai xe
      *
-     * @param string $year
-     * @param string $month
-     *
      * @return void
      * @throws Exception
      */
-    public function productivityImport( string $year, string $month ) {
+    public function productivityImport() {
         $cars = Car::all();
 
         foreach ( $this->data->loadFromFile( 'nangsuat.xlsx' ) as $date => $val ) {
@@ -260,43 +263,34 @@ class DatafileService {
      * Serialize Salary
      * Tinh luong
      *
-     * @param string $year
-     * @param string $month
-     *
      * @throws Exception
      */
-    public function serializeImport( string $year, string $month ) {
-        /** @var Presence $presence */
-        foreach ( Presence::whereBetween( 'date', [ $this->timestart, $this->timeend ] )->get() as $presence ) {
-            $presence->percent             = null;
-            $presence->productivity        = null;
-            $presence->ratio               = null;
-            $presence->productivity_salary = null;
+    public function serializeImport() {
+        /** @var Presence $presence - tinh luong hang ngay */
+        Presence::whereBetween( 'date', [ $this->timestart, $this->timeend ] )->get()->each( function ( $presence ) {
 
             /** khong di xe hoac khong lam kho */
             if ( ! $presence->car ) {
                 /** @var zero presence - Thuong 1 ngay chi tieu */
 //                $presence->presence = 0;
-                $presence->save();
-                continue;
             }
 
-            /** lam o kho */
-            if ( $presence->car->name == 'kho' ) {
+            /** lam o kho - chi tinh luong kho, huy cong nhat */
+            if ( 'kho' == $presence->car->name ) {
+
+                /** @var float ratio - He so luong */
+                $presence->ratio = 1;
+
                 /** @var float productivity_salary - luong kho bai hang ngay */
                 $presence->productivity_salary = $presence->presence * $presence->salary->khobai;
-                $presence->save();
-                continue;
-            }
 
-            /** khong phat sinh doanh so */
-            if ( 0 == $presence->productivity ) {
+                $presence->presence_salary = 0;
                 $presence->save();
-                continue;
-            }
 
-            /** Khong ap chi tieu */
-            if ( $presence->salary->chitieu == 0 ) {
+                return;
+
+            } /** Khong ap chi tieu */
+            elseif ( 0 == $presence->salary->chitieu ) {
 
                 /** @var float ratio - He so luong */
                 $presence->ratio = $presence->ratioInitial();
@@ -305,56 +299,48 @@ class DatafileService {
                 $presence->productivity_salary = $presence->productivity * $presence->ratio;
 
                 $presence->save();
-                continue;
+
+                return;
+
+            } /** Ap chi tieu */
+            else {
+
+                /** @var float ratio - He so luong */
+                $presence->ratio = $presence->ratioInitial();
+
+                /** @var float productivity_salary - luong bu tru chenh lech chi tieu hang ngay */
+                $presence->productivity_salary = $presence->productivity - $presence->chitieu;
+                $presence->productivity_salary *= $presence->ratio;
+
+                $presence->save();
+
+                return;
             }
+        } );
 
-            $presence->save();
-        }
-
-        foreach ( Salary::where( [ 'month' => $this->timemonth ] )->get() as $salary ) {
+        Salary::where( [ 'month' => $this->timemonth ] )->get()->each( function ( $salary ) {
             /** Cham cong */
             $salary->presence = $salary->presences->sum( 'presence' );
 
             /** Tong doanh so trong thang */
             $salary->turnover = $salary->presences->sum( 'productivity' );
 
-            /** ============== Khong ap chi tieu ============== */
-            if ( $salary->chitieu == 0 ) {
+            /** @var float salary_default - luong cong nhat */
+            $salary->salary_default = $salary->presences->sum( 'presence_salary' );
 
-                /** @var float salary_default - luong cong nhat */
-                $salary->salary_default = $salary->presences->sum( 'presence_salary' );
+            /** @var float productivity - Luong doanh so */
+            $salary->productivity = $salary->presences->sum( 'productivity_salary' );
 
-                /** @var float productivity - Luong doanh so */
-                $salary->productivity = $salary->presences->sum( 'productivity_salary' );
-
-                /** @var float salary - Luong */
-                $salary->salary = $salary->salary_default + $salary->productivity;
-
-            } else /** ============== Ap chi tieu ============== */ {
-
-                /** @var float salary_default - doanh so dat chi tieu */
-                $salary->salary_default = $salary->chitieu / 30 * min( 30, $salary->presence );
-
-                /** @var float $tongDoanhSo - doanh so dat duoc */
-                $tongDoanhSo = $salary->presences->sum( 'productivity' );
-
-                /** @var float salary_default - luong bu tru chenh lech chi tieu */
-                $salary->productivity = ( $tongDoanhSo - $salary->salary_default ) * $salary->ratioInitial();
-
-                /** @var float $luongCoBan - Luong dat chi tieu */
-                $luongCoBan = $salary->presenceSalary * $salary->presence;
-
-                /** @var float salary - Luong */
-                $salary->salary = $luongCoBan + $salary->productivity;
-            }
+            /** @var float salary - Luong */
+            $salary->salary = $salary->salary_default + $salary->productivity;
 
             $salary->save();
-        }
+        } );
 
         /** clean all presence where date not in month */
         DB::table( 'presences' )
           ->join( 'salaries', 'presences.salary_id', '=', 'salaries.id' )
-          ->where( 'salaries.month', '=', $month )
+          ->where( 'salaries.month', '=', $this->timemonth )
           ->whereNotBetween( 'presences.date', [ $this->timestart, $this->timeend ] )
           ->delete();
 
