@@ -131,10 +131,10 @@ class DatafileService {
                 /** @var float ratio - He so luong */
                 $presence->ratio = 1;
 
-                /** @var float productivity_salary - luong kho bai hang ngay */
-                $presence->productivity_salary = $presence->presence * $presence->salary->khobai;
+                /** @var float presence_salary - luong kho bai hang ngay */
+                $presence->presence_salary = $presence->presence * $presence->salary->khobai;
 
-                $presence->presence_salary = 0;
+                $presence->productivity_salary = 0;
                 $presence->save();
 
                 return;
