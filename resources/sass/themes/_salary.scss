@@ -1,0 +1,27 @@
+@media print {
+    body {
+        color: #000000;
+    }
+
+    nav.navbar {
+        display: none;
+    }
+
+    .sidebar {
+        display: none;
+    }
+
+    .main {
+        width: 100%;
+    }
+
+    #accordionSalary {
+        > .table {
+            display: none;
+        }
+
+        .col-sm-12.collapse.show ~ div {
+            display: none;
+        }
+    }
+}
