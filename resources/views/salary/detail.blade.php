@@ -9,10 +9,8 @@
         @if ($salary->productivity!=0)
             <th>Tỉ lệ</th>
             <th>Năng suất</th>
-            @if ($salary->chitieu==0)
-                <th>Hệ số</th>
-                <th>Lương</th>
-            @endif
+            <th>Hệ số</th>
+            <th>Lương</th>
         @endif
     </tr>
     @foreach ($salary->presences()->orderBy( 'date', 'ASC' )->get() as $presence)
@@ -26,10 +24,8 @@
             @if ($salary->productivity!=0)
                 <td>{{ $presence->percent?:'-' }}</td>
                 <td>{{ $presence->productivity?:'-' }}</td>
-                @if ($salary->chitieu==0)
-                    <td>{{ $presence->ratio?:'-' }}</td>
-                    <td>{{ $presence->productivity_salary ? number_format($presence->productivity_salary, 2) : '-' }}</td>
-                @endif
+                <td>{{ $presence->ratio?:'-' }}</td>
+                <td>{{ number_format($presence->presence_salary + $presence->productivity_salary, 3) }}</td>
             @endif
         </tr>
     @endforeach
