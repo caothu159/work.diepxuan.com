@@ -77,6 +77,8 @@ class Controller extends \App\Http\Controllers\Controller {
             date( $start ? '01-m-Y' : 'd-m-Y' )
         );
 
+        $date = $date->format( 'd-m-Y' );
+
         return $date;
     }
 
