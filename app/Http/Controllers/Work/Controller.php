@@ -64,7 +64,7 @@ class Controller extends \App\Http\Controllers\Controller {
     protected function _updateDateInput( Request $request, string $from = null, string $to = null ) {
         $inputFrom = $request->input( 'from' );
         if ( $inputFrom != $from ) {
-            return redirect()->to( $this->getRedirectUrl() )
+            return redirect()->to( $this->redirectPath() )
                              ->withInput( [
                                  'from' => $inputFrom,
                              ] );
@@ -72,7 +72,7 @@ class Controller extends \App\Http\Controllers\Controller {
 
         $inputTo = $request->input( 'to' );
         if ( $inputTo != $to ) {
-            return redirect()->to( $this->getRedirectUrl() )
+            return redirect()->to( $this->redirectPath() )
                              ->withInput( [
                                  'from' => $inputFrom,
                                  'to'   => $inputTo,
