@@ -20,9 +20,7 @@ class TonghopController extends Controller {
      * @throws Exception
      */
     public function index( Request $request, string $from = null, string $to = null ) {
-        if ( $_response = $this->_updateDateInput( $request, $from, $to ) ) {
-            return $_response;
-        }
+        $this->_updateDateInput( $from, $to );
 
         $_from = \DateTime::createFromFormat( 'd-m-Y', $from );
         if ( ! $_from ) {

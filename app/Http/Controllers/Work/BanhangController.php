@@ -20,9 +20,7 @@ class BanhangController extends Controller {
      * @throws Exception
      */
     public function index( Request $request, string $from = null, string $to = null ) {
-        if ( $_response = $this->_updateDateInput( $request, $from, $to ) ) {
-            return $_response;
-        }
+        $this->_updateDateInput( $from, $to );
 
         $ctubanhangs = Ctubanhang::whereBetween( 'ngay_ct', [
             \DateTime::createFromFormat( 'd-m-Y', $from )->format( 'Y-m-d' ),
@@ -71,10 +69,9 @@ class BanhangController extends Controller {
     /**
      * Show the form for editing the specified resource.
      *
-     * @param \App\Ctubanhang $ctubanhang
      * @param Ctubanhang $ctubanhang
      *
-     * @return Response
+     * @return void
      */
     public function edit( Ctubanhang $ctubanhang ) {
         //

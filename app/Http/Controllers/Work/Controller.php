@@ -6,6 +6,7 @@
 
 namespace App\Http\Controllers\Work;
 
+use DateTime;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
@@ -40,46 +41,43 @@ class Controller extends \App\Http\Controllers\Controller {
      */
     protected function _updateRequestInput( Request $request ) {
         if ( '' != ( $inputFrom = $request->input( 'from' ) ) ) {
-            $inputFrom = \DateTime::createFromFormat( 'd-m-Y', $inputFrom );
-            $inputFrom = $inputFrom ?: \DateTime::createFromFormat( 'd-m-Y', date( '01-m-Y' ) );
+            $inputFrom = DateTime::createFromFormat( 'd-m-Y', $inputFrom );
+            $inputFrom = $inputFrom ?: DateTime::createFromFormat( 'd-m-Y', date( '01-m-Y' ) );
             $inputFrom = $inputFrom->format( 'Y-m-d' );
             $request->merge( [ 'from' => $inputFrom ] );
         }
 
         if ( '' != ( $inputTo = $request->input( 'to' ) ) ) {
-            $inputTo = \DateTime::createFromFormat( 'd-m-Y', $inputTo );
-            $inputTo = $inputTo ?: \DateTime::createFromFormat( 'd-m-Y', date( 'd-m-Y' ) );
+            $inputTo = DateTime::createFromFormat( 'd-m-Y', $inputTo );
+            $inputTo = $inputTo ?: DateTime::createFromFormat( 'd-m-Y', date( 'd-m-Y' ) );
             $inputTo = $inputTo->format( 'Y-m-d' );
             $request->merge( [ 'to' => $inputTo ] );
         }
     }
 
     /**
-     * @param Request $request
      * @param string|null $from
      * @param string|null $to
-     *
-     * @return Response|false
      */
-    protected function _updateDateInput( Request $request, string $from = null, string $to = null ) {
-        $inputFrom = $request->input( 'from' );
-        if ( $inputFrom != $from ) {
-            return redirect()->to( $this->redirectPath() )
-                             ->withInput( [
-                                 'from' => $inputFrom,
-                             ] );
-        }
+    protected function _updateDateInput( string &$from = null, string &$to = null ) {
+        $from = $this->__updateDateInput( $from );
+        $to   = $this->__updateDateInput( $to, false );
+    }
 
-        $inputTo = $request->input( 'to' );
-        if ( $inputTo != $to ) {
-            return redirect()->to( $this->redirectPath() )
-                             ->withInput( [
-                                 'from' => $inputFrom,
-                                 'to'   => $inputTo,
-                             ] );
-        }
+    /**
+     * @param string $date
+     * @param bool $start
+     *
+     * @return DateTime|false|string
+     */
+    private function __updateDateInput( string &$date, bool $start = true ) {
+        $date = DateTime::createFromFormat( 'd-m-Y', $date );
+        $date = $date ?: DateTime::createFromFormat(
+            'd-m-Y',
+            date( $start ? '01-m-Y' : 'd-m-Y' )
+        );
 
-        return false;
+        return $date;
     }
 
 }
