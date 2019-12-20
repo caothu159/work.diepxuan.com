@@ -70,7 +70,7 @@ class Controller extends \App\Http\Controllers\Controller {
      *
      * @return DateTime|false|string
      */
-    private function __updateDateInput( string &$date, bool $start = true ) {
+    private function __updateDateInput( string &$date = null, bool $start = true ) {
         $date = DateTime::createFromFormat( 'd-m-Y', $date );
         $date = $date ?: DateTime::createFromFormat(
             'd-m-Y',
