@@ -87,7 +87,7 @@ class Khachhang extends Model {
     /**
      * @return mixed
      */
-    public function Ctubanhangs() {
+    public function ctubanhangs() {
         return $this->belongsTo( \App\Model\Work\Ctubanhang::class, 'ma_kh', 'ma_kh' );
     }
 

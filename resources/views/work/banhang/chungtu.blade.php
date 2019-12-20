@@ -7,7 +7,7 @@
             @foreach($ctubanhangs as $ctubanhang)
                 <tr class="{{ $ctubanhang->similar < 0.6 ? 'text-danger ' : '' }}">
                     <td>{{ date('d/m/Y', strtotime($ctubanhang->ngay_ct)) }}</td>
-                    <td>{{ $ctubanhang->ten_kh }}</td>
+                    <td>{{ $ctubanhang->khachhang->ten_kh }}</td>
                     <td>{{ $ctubanhang->dien_giai }}</td>
                     <td>{{ $ctubanhang->ma_kho }}</td>
                     <td>{{ $ctubanhang->ten_vt }}</td>
