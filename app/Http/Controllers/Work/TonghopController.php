@@ -2,14 +2,12 @@
 
 namespace App\Http\Controllers\Work;
 
-use App\Model\Work\Ctumuahang;
+use App\Model\Work\Ctubanhang;
 use Exception;
-use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\View\View;
 
-class MuahangController extends Controller {
+class TonghopController extends Controller {
 
     /**
      * Display a listing of the resource.
@@ -18,7 +16,7 @@ class MuahangController extends Controller {
      * @param string|null $from
      * @param string|null $to
      *
-     * @return Factory|View
+     * @return mixed
      * @throws Exception
      */
     public function index( Request $request, string $from = null, string $to = null ) {
@@ -40,13 +38,13 @@ class MuahangController extends Controller {
         }
         $_to = $_to->format( 'Y-m-d' );
 
-        $ctumuahangs = Ctumuahang::whereBetween( 'ngay_ct', [ $_from, $_to ] )->get();
+        $ctubanhangs = Ctubanhang::whereBetween( 'ngay_ct', [ $_from, $_to ] )->get();
 
-        return view( 'work.muahang.chungtu', [
-            'ctumuahangs' => $ctumuahangs,
+        return view( 'work.banhang.chungtu', [
+            'ctubanhangs' => $ctubanhangs,
             'from'        => $from,
             'to'          => $to,
-            'router'      => 'muahang',
+            'router'      => 'banhang',
         ] );
     }
 
@@ -73,22 +71,23 @@ class MuahangController extends Controller {
     /**
      * Display the specified resource.
      *
-     * @param Ctumuahang $ctubanhang
+     * @param Ctubanhang $ctubanhang
      *
      * @return Response
      */
-    public function show( Ctumuahang $ctubanhang ) {
+    public function show( Ctubanhang $ctubanhang ) {
         //
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param Ctumuahang $ctubanhang
+     * @param \App\Ctubanhang $ctubanhang
+     * @param Ctubanhang $ctubanhang
      *
      * @return Response
      */
-    public function edit( Ctumuahang $ctubanhang ) {
+    public function edit( Ctubanhang $ctubanhang ) {
         //
     }
 
@@ -96,22 +95,22 @@ class MuahangController extends Controller {
      * Update the specified resource in storage.
      *
      * @param Request $request
-     * @param Ctumuahang $ctubanhang
+     * @param Ctubanhang $ctubanhang
      *
      * @return Response
      */
-    public function update( Request $request, Ctumuahang $ctubanhang ) {
+    public function update( Request $request, Ctubanhang $ctubanhang ) {
         //
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param Ctumuahang $ctubanhang
+     * @param Ctubanhang $ctubanhang
      *
      * @return Response
      */
-    public function destroy( Ctumuahang $ctubanhang ) {
+    public function destroy( Ctubanhang $ctubanhang ) {
         //
     }
 }

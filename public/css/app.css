@@ -14444,10 +14444,6 @@ body {
 }
 
 @media print {
-  body {
-    color: #000000;
-  }
-
   nav.navbar {
     display: none;
   }
