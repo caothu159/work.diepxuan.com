@@ -22,21 +22,10 @@ class TonghopController extends Controller {
     public function index( Request $request, string $from = null, string $to = null ) {
         $this->_updateDateInput( $from, $to );
 
-        $_from = \DateTime::createFromFormat( 'd-m-Y', $from );
-        if ( ! $_from ) {
-            $from  = date( '01-m-Y' );
-            $_from = \DateTime::createFromFormat( 'd-m-Y', $from );
-        }
-        $_from = $_from->format( 'Y-m-d' );
-
-        $_to = \DateTime::createFromFormat( 'd-m-Y', $to );
-        if ( ! $_to ) {
-            $to  = date( 'd-m-Y' );
-            $_to = \DateTime::createFromFormat( 'd-m-Y', $to );
-        }
-        $_to = $_to->format( 'Y-m-d' );
-
-        $ctubanhangs = Ctubanhang::whereBetween( 'ngay_ct', [ $_from, $_to ] )->get();
+        $ctubanhangs = Ctubanhang::whereBetween( 'ngay_ct', [
+            \DateTime::createFromFormat( 'd-m-Y', $from )->format( 'Y-m-d' ),
+            \DateTime::createFromFormat( 'd-m-Y', $to )->format( 'Y-m-d' )
+        ] )->get();
 
         return view( 'work.banhang.chungtu', [
             'ctubanhangs' => $ctubanhangs,

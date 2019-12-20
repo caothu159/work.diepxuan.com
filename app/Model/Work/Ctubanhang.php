@@ -129,6 +129,13 @@ class Ctubanhang extends Model {
      */
     public $timestamps = true;
 
+    /**
+     * @return mixed
+     */
+    public function Khachhang() {
+        return $this->belongsTo( \App\Model\Work\Khachhang::class, 'ma_kh', 'ma_kh' );
+    }
+
     public function getSimilarAttribute() {
         similar_text( $this->ma_kho, $this->ma_bp, $similar );
 
