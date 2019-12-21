@@ -7,7 +7,10 @@
 namespace App\Http\Controllers;
 
 use App\Car;
+use Exception;
+use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 
 class CarController extends Controller {
@@ -27,8 +30,8 @@ class CarController extends Controller {
      * @param string|null $year
      * @param string|null $month
      *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     * @throws \Exception
+     * @return Factory|View
+     * @throws Exception
      */
     public function index( string $year = null, string $month = null ) {
         $dt = sprintf( '%s-%s', $year ?: date( 'Y' ), $month ?: ( date( 'm' ) . ' -1 month' ) );

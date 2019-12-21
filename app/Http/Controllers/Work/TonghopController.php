@@ -21,12 +21,18 @@ class TonghopController extends Controller {
      * @throws Exception
      */
     public function index( Request $request, string $from = null, string $to = null ) {
-        $this->_updateDateInput( $from, $to );
+        if ( $this->isRedirect ) {
+            return redirect()->route( 'tonghop', [
+                'from' => $request->input( 'from' ),
+                'to'   => $request->input( 'to' )
+            ] );
+        }
 
+        $this->_updateDateInput( $from, $to );
         $ctubanhangs = Ctubanhang::whereBetween( 'ngay_ct', [
             \DateTime::createFromFormat( 'd-m-Y', $from )->format( 'Y-m-d' ),
             \DateTime::createFromFormat( 'd-m-Y', $to )->format( 'Y-m-d' )
-        ] )->addSelect( DB::raw( 'count(tien2) as tien2' ) )->groupBy( 'ma_kh' )->get();
+        ] )->nhomKH()->get();
 
         return view( 'work.tonghop.banhang', [
             'ctubanhangs' => $ctubanhangs,

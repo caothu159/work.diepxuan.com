@@ -15,6 +15,8 @@ use Illuminate\Http\Response;
 
 class Controller extends \App\Http\Controllers\Controller {
 
+    protected $isRedirect = false;
+
     /**
      * Instantiate a new controller instance.
      *
@@ -41,17 +43,12 @@ class Controller extends \App\Http\Controllers\Controller {
      */
     protected function _updateRequestInput( Request $request ) {
         if ( '' != ( $inputFrom = $request->input( 'from' ) ) ) {
-            $inputFrom = DateTime::createFromFormat( 'd-m-Y', $inputFrom );
-            $inputFrom = $inputFrom ?: DateTime::createFromFormat( 'd-m-Y', date( '01-m-Y' ) );
-            $inputFrom = $inputFrom->format( 'Y-m-d' );
-            $request->merge( [ 'from' => $inputFrom ] );
-        }
-
-        if ( '' != ( $inputTo = $request->input( 'to' ) ) ) {
-            $inputTo = DateTime::createFromFormat( 'd-m-Y', $inputTo );
-            $inputTo = $inputTo ?: DateTime::createFromFormat( 'd-m-Y', date( 'd-m-Y' ) );
-            $inputTo = $inputTo->format( 'Y-m-d' );
-            $request->merge( [ 'to' => $inputTo ] );
+            $request->merge( [ 'from' => $this->__updateDateInput( $inputFrom ) ] );
+            $this->isRedirect = true;
+            if ( '' != ( $inputTo = $request->input( 'to' ) ) ) {
+                $request->merge( [ 'to' => $this->__updateDateInput( $inputTo, false ) ] );
+                $this->isRedirect = true;
+            }
         }
     }
 

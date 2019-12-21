@@ -3,6 +3,7 @@
 namespace App\Model\Work;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Ctubanhang extends Model {
 
@@ -129,6 +130,19 @@ class Ctubanhang extends Model {
      */
     public $timestamps = true;
 
+    public static $groupKhachhang = [
+        'ngay_ct',
+        'ma_kh',
+        'ma_kho',
+        'ma_bp',
+        'ten_kh',
+        'dien_giai',
+        'ma_kho',
+        'luser',
+        'so_ct',
+        'ma_ct',
+    ];
+
     /**
      * @return mixed
      */
@@ -136,9 +150,31 @@ class Ctubanhang extends Model {
         return $this->belongsTo( \App\Model\Work\Khachhang::class, 'ma_kh', 'ma_kh' );
     }
 
+    /**
+     * @param $query
+     *
+     * @return mixed
+     */
+    public function scopeNhomKH( $query ) {
+        return $query->groupBy( Ctubanhang::$groupKhachhang )
+                     ->addSelect( DB::raw( 'sum(tien2) as tien2' ) )
+                     ->addSelect( Ctubanhang::$groupKhachhang )
+                     ->orderBy( 'ngay_ct', 'asc' );
+    }
+
+    /**
+     * @return mixed
+     */
     public function getSimilarAttribute() {
         similar_text( $this->ma_kho, $this->ma_bp, $similar );
 
         return $similar;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getIsMuaAttribute() {
+        return $this->ma_ct == 'SO3';
     }
 }
