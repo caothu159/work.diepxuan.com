@@ -25,13 +25,13 @@ class TonghopController extends Controller {
         $ctubanhangs = Ctubanhang::whereBetween( 'ngay_ct', [
             \DateTime::createFromFormat( 'd-m-Y', $from )->format( 'Y-m-d' ),
             \DateTime::createFromFormat( 'd-m-Y', $to )->format( 'Y-m-d' )
-        ] )->get();
+        ] )->addSelect( DB::raw( 'count(tien2) as tien2' ) )->groupBy( 'ma_kh' )->get();
 
-        return view( 'work.banhang.chungtu', [
+        return view( 'work.tonghop.banhang', [
             'ctubanhangs' => $ctubanhangs,
             'from'        => $from,
             'to'          => $to,
-            'router'      => 'banhang',
+            'router'      => 'tonghop',
         ] );
     }
 
