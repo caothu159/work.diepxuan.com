@@ -5,7 +5,7 @@
     </a>
     <div class="dropdown-menu" aria-labelledby="banhangDropdown">
         <a class="dropdown-item"
-           href="{{ route('tonghop', [ 'from' => $from, 'to' => $to ]) }}">{{ __('Tong hop') }}</a>
+           href="{{ route('tonghop', [ 'from' => $from, 'to' => $to ]) }}">{{ __('Ban Hang') }}</a>
         <div class="dropdown-divider"></div>
     </div>
 </li>

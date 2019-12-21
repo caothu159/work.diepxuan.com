@@ -6,6 +6,7 @@ use App\Model\Work\Ctubanhang;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\DB;
 
 class TonghopController extends Controller {
 
