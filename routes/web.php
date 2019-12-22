@@ -32,7 +32,13 @@ Route::get( '/debug-sentry', function () {
 
 Route::domain( 'work.diepxuan.com' )->group( function () {
     Route::get( '/', 'Work\TonghopController@index' );
+
     Route::get( 'tonghop', 'Work\TonghopController@index' )->name( 'tonghop.banhang' );
+    Route::resource( 'tonghop', 'TonghopController' );
+
     Route::get( 'banhang/{from?}/{to?}', 'Work\BanhangController@index' )->name( 'banhang' );
+    Route::resource( 'banhang', 'BanhangController' );
+
     Route::get( 'muahang/{from?}/{to?}', 'Work\MuahangController@index' )->name( 'muahang' );
+    Route::resource( 'muahang', 'MuahangController' );
 } );
