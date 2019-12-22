@@ -5,5 +5,5 @@
 @endsection
 
 @section('menu.center')
-    @include('work.components.timer')
+
 @endsection

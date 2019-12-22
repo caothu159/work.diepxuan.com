@@ -7,7 +7,7 @@
 
         <h4 class="dropdown-header">{{ __('Thống kê') }}</h4>
         <a class="dropdown-item"
-           href="{{ route('tonghop', [ 'from' => $from, 'to' => $to ]) }}">{{ __('bán hàng') }}</a>
+           href="{{ route('tonghop', [ 'from' => $from, 'to' => $to ]) }}">{{ __('Bán hàng') }}</a>
         <div class="dropdown-divider"></div>
     </div>
 </li>
