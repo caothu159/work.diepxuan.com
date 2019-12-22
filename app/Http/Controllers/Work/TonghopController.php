@@ -20,25 +20,18 @@ class TonghopController extends Controller {
      * @return mixed
      * @throws Exception
      */
-    public function index( Request $request, string $from = null, string $to = null ) {
-        if ( $this->isRedirect ) {
-            return redirect()->route( 'tonghop', [
-                'from' => $request->input( 'from' ),
-                'to'   => $request->input( 'to' )
-            ] );
-        }
-
-        $this->_updateDateInput( $from, $to );
+    public function index( Request $request ) {
+        $tuychon     = $request->input( 'tuychon' ) ?: 'donhang';
         $ctubanhangs = Ctubanhang::whereBetween( 'ngay_ct', [
-            \DateTime::createFromFormat( 'd-m-Y', $from )->format( 'Y-m-d' ),
-            \DateTime::createFromFormat( 'd-m-Y', $to )->format( 'Y-m-d' )
-        ] )->nhomKH()->get();
+            \DateTime::createFromFormat( 'd-m-Y', $request->input( 'from' ) )->format( 'Y-m-d' ),
+            \DateTime::createFromFormat( 'd-m-Y', $request->input( 'to' ) )->format( 'Y-m-d' )
+        ] )->{$tuychon}()->get();
 
         return view( 'work.tonghop.banhang', [
             'ctubanhangs' => $ctubanhangs,
-            'from'        => $from,
-            'to'          => $to,
-            'router'      => 'tonghop',
+            'from'        => $request->input( 'from' ),
+            'to'          => $request->input( 'to' ),
+            'router'      => 'tonghop.banhang',
         ] );
     }
 

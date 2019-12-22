@@ -151,18 +151,6 @@ class Ctubanhang extends Model {
     }
 
     /**
-     * @param $query
-     *
-     * @return mixed
-     */
-    public function scopeNhomKH( $query ) {
-        return $query->groupBy( Ctubanhang::$groupKhachhang )
-                     ->addSelect( DB::raw( 'sum(tien2) as tien2' ) )
-                     ->addSelect( Ctubanhang::$groupKhachhang )
-                     ->orderBy( 'ngay_ct', 'asc' );
-    }
-
-    /**
      * @return mixed
      */
     public function getSimilarAttribute() {
@@ -176,5 +164,29 @@ class Ctubanhang extends Model {
      */
     public function getIsMuaAttribute() {
         return $this->ma_ct == 'SO3';
+    }
+
+    /**
+     * @param $query
+     *
+     * @return mixed
+     */
+    public function scopeKhachhang( $query ) {
+        return $query->groupBy( Ctubanhang::$groupKhachhang )
+                     ->addSelect( DB::raw( 'sum(tien2) as tien2' ) )
+                     ->addSelect( Ctubanhang::$groupKhachhang )
+                     ->orderBy( 'ngay_ct', 'asc' );
+    }
+
+    /**
+     * @param $query
+     *
+     * @return mixed
+     */
+    public function scopeDonhang( $query ) {
+        return $query->groupBy( Ctubanhang::$groupKhachhang )
+                     ->addSelect( DB::raw( 'sum(tien2) as tien2' ) )
+                     ->addSelect( Ctubanhang::$groupKhachhang )
+                     ->orderBy( 'ngay_ct', 'asc' );
     }
 }

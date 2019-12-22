@@ -1,7 +1,7 @@
 @extends('work.tonghop')
 
 @section('content')
-    @include('work.components.timer')
+    @include('work.tonghop.timer')
     <table class="table table-hover table-condensed table-sm text-monospace small">
         <tbody>
         @foreach($ctubanhangs as $ctubanhang)
