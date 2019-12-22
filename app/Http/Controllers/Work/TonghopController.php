@@ -32,7 +32,7 @@ class TonghopController extends Controller {
             'ctubanhangs' => $ctubanhangs,
             'from'        => $request->input( 'from' ),
             'to'          => $request->input( 'to' ),
-            'router'      => 'tonghop.banhang',
+            'router'      => 'tonghop',
         ] );
     }
 
