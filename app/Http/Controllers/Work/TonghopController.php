@@ -21,7 +21,8 @@ class TonghopController extends Controller {
      * @throws Exception
      */
     public function index( Request $request ) {
-        $tuychon     = $request->input( 'tuychon' ) ?: 'donhang';
+        $tuychon = $request->input( 'tuychon' ) ?: 'donhang';
+        $this->_updateRequestInput( $request, true );
         $ctubanhangs = Ctubanhang::whereBetween( 'ngay_ct', [
             \DateTime::createFromFormat( 'd-m-Y', $request->input( 'from' ) )->format( 'Y-m-d' ),
             \DateTime::createFromFormat( 'd-m-Y', $request->input( 'to' ) )->format( 'Y-m-d' )

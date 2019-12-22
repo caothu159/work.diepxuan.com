@@ -41,11 +41,11 @@ class Controller extends \App\Http\Controllers\Controller {
      *
      * @param Request $request
      */
-    protected function _updateRequestInput( Request $request ) {
-        if ( '' != ( $inputFrom = $request->input( 'from' ) ) ) {
+    protected function _updateRequestInput( Request $request, bool $force = false ) {
+        if ( '' != ( $inputFrom = $request->input( 'from' ) ) || $force ) {
             $request->merge( [ 'from' => $this->__updateDateInput( $inputFrom ) ] );
             $this->isRedirect = true;
-            if ( '' != ( $inputTo = $request->input( 'to' ) ) ) {
+            if ( '' != ( $inputTo = $request->input( 'to' ) ) || $force ) {
                 $request->merge( [ 'to' => $this->__updateDateInput( $inputTo, false ) ] );
                 $this->isRedirect = true;
             }
