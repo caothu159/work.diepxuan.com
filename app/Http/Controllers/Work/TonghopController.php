@@ -26,7 +26,7 @@ class TonghopController extends Controller {
             \DateTime::createFromFormat( 'd-m-Y', $request->input( 'to' ) )->format( 'Y-m-d' )
         ] )->{"nhom$tuychon"}()->get();
 
-        return view( 'work.tonghop.banhang', [
+        return view( "work.tonghop.$tuychon", [
             'ctubanhangs' => $ctubanhangs,
             'from'        => $request->input( 'from' ),
             'to'          => $request->input( 'to' ),
