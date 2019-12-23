@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Work;
 
 use App\Model\Work\Ctubanhang;
+use App\Model\Work\Khohang;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -31,6 +32,7 @@ class TonghopController extends Controller {
             'from'        => $request->input( 'from' ),
             'to'          => $request->input( 'to' ),
             'tuychon'     => $tuychon,
+            'khohangs'    => Khohang::isEnable()->get()
         ] );
     }
 

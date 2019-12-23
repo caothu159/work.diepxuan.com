@@ -16,4 +16,13 @@
                value="bophan" {{ $tuychon=='bophan'?'checked':'' }} disabled>
         <label class="form-check-label" for="tuychon3">{{ 'Bộ phận (disabled)' }}</label>
     </div>
+
+    <div class="form-group">
+        <label for="selectKhohang">{{ 'Kho Hàng' }}</label>
+        <select class="form-control" id="selectKhohang">
+            @foreach($khohangs as $khohang)
+                <option value="{{ $khohang->ma_kho }}">{{ $khohang->ten_kho }}</option>
+            @endforeach
+        </select>
+    </div>
 @endsection
