@@ -133,7 +133,6 @@ class Ctubanhang extends Model {
     public static $groupKhachhang = [
         'ma_bp',
         'ma_kh',
-        'ten_kh',
     ];
 
     public static $groupDonhang = [
