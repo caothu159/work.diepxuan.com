@@ -31,9 +31,10 @@ Route::get( '/debug-sentry', function () {
 } );
 
 Route::domain( 'work.diepxuan.com' )->group( function () {
-    Route::get( '/', 'Work\TonghopController@index' );
+    Route::get( '/', 'Work\TonghopController@banhang' )->name( 'home' );
 
-    Route::get( 'tonghop', 'Work\TonghopController@index' )->name( 'tonghop' );
+    Route::get( 'tonghop', 'Work\TonghopController@banhang' )->name( 'tonghop' );
+    Route::post( 'tonghop', 'Work\TonghopController@banhang' )->name( 'tonghop' );
 
     Route::get( 'banhang/{from?}/{to?}', 'Work\BanhangController@index' )->name( 'banhang' );
     Route::resource( 'banhang', 'Work\BanhangController' );

@@ -18,7 +18,7 @@ class TonghopController extends Controller {
      * @return mixed
      * @throws Exception
      */
-    public function index( Request $request ) {
+    public function banhang( Request $request ) {
         $tuychon = $request->input( 'tuychon' ) ?: 'donhang';
         $this->_updateRequestInput( $request, true );
         $ctubanhangs = Ctubanhang::whereBetween( 'ngay_ct', [
@@ -30,73 +30,7 @@ class TonghopController extends Controller {
             'ctubanhangs' => $ctubanhangs,
             'from'        => $request->input( 'from' ),
             'to'          => $request->input( 'to' ),
-            'router'      => 'tonghop',
         ] );
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return Response
-     */
-    public function create() {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param Request $request
-     *
-     * @return Response
-     */
-    public function store( Request $request ) {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param Ctubanhang $ctubanhang
-     *
-     * @return Response
-     */
-    public function show( Ctubanhang $ctubanhang ) {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param \App\Ctubanhang $ctubanhang
-     * @param Ctubanhang $ctubanhang
-     *
-     * @return Response
-     */
-    public function edit( Ctubanhang $ctubanhang ) {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param Request $request
-     * @param Ctubanhang $ctubanhang
-     *
-     * @return Response
-     */
-    public function update( Request $request, Ctubanhang $ctubanhang ) {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param Ctubanhang $ctubanhang
-     *
-     * @return Response
-     */
-    public function destroy( Ctubanhang $ctubanhang ) {
-        //
-    }
 }
