@@ -189,6 +189,7 @@ class Ctubanhang extends Model {
      */
     public function scopeNhomdonhang( $query ) {
         return $query->groupBy( Ctubanhang::$groupDonhang )
+                     ->addSelect( 'ten_kh' )
                      ->addSelect( Ctubanhang::$groupDonhang )
                      ->addSelect( DB::raw( 'sum(tien2) as tien2' ) );
     }
