@@ -131,8 +131,8 @@ class Ctubanhang extends Model {
     public $timestamps = true;
 
     public static $groupKhachhang = [
-        'ma_kh',
         'ma_bp',
+        'ma_kh',
         'ten_kh',
     ];
 
