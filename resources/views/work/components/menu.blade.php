@@ -18,7 +18,7 @@
     </a>
     <ul class="dropdown-menu" aria-labelledby="banhangDropdown">
         <a class="dropdown-item"
-           href="{{ route('banhang', [ 'from' => $from, 'to' => $to ]) }}">{{ __('Hóa đơn bán hàng') }}</a>
+           href="{{ route('banhang', [ 'from' => request()->get('from'), 'to' => request()->get('to') ]) }}">{{ __('Hóa đơn bán hàng') }}</a>
         <div class="dropdown-divider"></div>
         <a class="dropdown-item" href="{{ route('banhang') }}">{{ __('Phiếu nhập trả hàng') }}</a>
     </ul>
@@ -30,7 +30,7 @@
     </a>
     <ul class="dropdown-menu" aria-labelledby="muahangDropdown">
         <a class="dropdown-item"
-           href="{{ route('muahang', [ 'from' => $from, 'to' => $to ]) }}">{{ __('Hóa đơn mua hàng') }}</a>
+           href="{{ route('muahang', [ 'from' => request()->get('from'), 'to' => request()->get('to') ]) }}">{{ __('Hóa đơn mua hàng') }}</a>
         <div class="dropdown-divider"></div>
     </ul>
 </li>

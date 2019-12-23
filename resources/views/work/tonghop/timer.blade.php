@@ -1,27 +1,27 @@
 @extends('work.components.timer')
 
 @section('work.components.timer.extend')
-    <div class="form-check form-check-inline mr-sm-2">
-        <input class="form-check-input" type="radio" name="tuychon" id="tuychon1"
-               value="donhang" {{ $tuychon=='donhang'?'checked':'' }}>
-        <label class="form-check-label" for="tuychon1">{{ 'Đơn hàng' }}</label>
-    </div>
-    <div class="form-check form-check-inline mr-sm-2">
-        <input class="form-check-input" type="radio" name="tuychon" id="tuychon2"
-               value="khachhang" {{ $tuychon=='khachhang'?'checked':'' }}>
-        <label class="form-check-label" for="tuychon2">{{ 'Khách hàng' }}</label>
-    </div>
-    <div class="form-check form-check-inline mr-sm-2">
-        <input class="form-check-input" type="radio" name="tuychon" id="tuychon3"
-               value="bophan" {{ $tuychon=='bophan'?'checked':'' }} disabled>
-        <label class="form-check-label" for="tuychon3">{{ 'Bộ phận (disabled)' }}</label>
+    <div class="clearfix"></div>
+    <div class="form-group col-sm-6">
+        <label for="selectTuychon">{{ 'Tùy Chọn' }}</label>
+        <select class="form-control" id="selectTuychon" name="tuychon">
+            <option value="donhang" {{ request()->get('tuychon')=='donhang'?'selected':'' }}>
+                {{ 'Đơn hàng' }}
+            </option>
+            <option value="khachhang" {{ request()->get('tuychon')=='khachhang'?'selected':'' }}>
+                {{ 'Khách hàng' }}
+            </option>
+        </select>
     </div>
 
-    <div class="form-group">
+    <div class="form-group col-sm-6">
         <label for="selectKhohang">{{ 'Kho Hàng' }}</label>
-        <select class="form-control" id="selectKhohang">
+        <select class="form-control" id="selectKhohang" name="khohang">
+            <option value="{{ 'all' }}">{{ 'Tất cả' }}</option>
             @foreach($khohangs as $khohang)
-                <option value="{{ $khohang->ma_kho }}">{{ $khohang->ten_kho }}</option>
+                <option value="{{ $khohang->ma_kho }}" {{ request()->get('khohang')==$khohang->ma_kho?'selected':'' }}>
+                    {{ $khohang->ten_kho }}
+                </option>
             @endforeach
         </select>
     </div>

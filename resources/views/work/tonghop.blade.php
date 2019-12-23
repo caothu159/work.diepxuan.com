@@ -7,6 +7,8 @@
         </div>
     @endif
 
-    @yield('content')
+    <div id="work-content">
+        @yield('content')
+    </div>
 
 @endsection

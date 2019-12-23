@@ -1,0 +1,7 @@
+@media print {
+    #work-content {
+        > .timer {
+            display: none;
+        }
+    }
+}

@@ -20,18 +20,16 @@ class TonghopController extends Controller {
      * @throws Exception
      */
     public function banhang( Request $request ) {
-        $tuychon = $request->input( 'tuychon' ) ?: 'donhang';
+        $request->merge( [ 'tuychon' => $request->input( 'tuychon' ) ?: 'donhang' ] );
+        $request->merge( [ 'khohang' => $request->input( 'khohang' ) ?: 'all' ] );
         $this->_updateRequestInput( $request, true );
         $ctubanhangs = Ctubanhang::whereBetween( 'ngay_ct', [
             \DateTime::createFromFormat( 'd-m-Y', $request->input( 'from' ) )->format( 'Y-m-d' ),
             \DateTime::createFromFormat( 'd-m-Y', $request->input( 'to' ) )->format( 'Y-m-d' )
-        ] )->{"nhom$tuychon"}()->get();
+        ] )->{"nhom" . $request->input( 'tuychon' )}()->nhomkhohang( $request->input( 'khohang' ) )->get();
 
-        return view( "work.tonghop.$tuychon", [
+        return view( "work.tonghop." . $request->input( 'tuychon' ), [
             'ctubanhangs' => $ctubanhangs,
-            'from'        => $request->input( 'from' ),
-            'to'          => $request->input( 'to' ),
-            'tuychon'     => $tuychon,
             'khohangs'    => Khohang::isEnable()->get()
         ] );
     }

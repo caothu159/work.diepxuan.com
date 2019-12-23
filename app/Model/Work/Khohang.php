@@ -46,11 +46,18 @@ class Khohang extends Model {
     public $timestamps = true;
 
     /**
+     * @return mixed
+     */
+    public function ctubanhangs() {
+        return $this->belongsTo( \App\Model\Work\Ctubanhang::class, 'ma_kho', 'ma_kho' );
+    }
+
+    /**
      * @param $query
      *
      * @return mixed
      */
     public function scopeIsEnable( $query ) {
-        return $query->where( 'ksd', 1 );
+        return $query->where( 'ksd', 0 );
     }
 }

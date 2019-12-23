@@ -131,7 +131,7 @@ class Ctubanhang extends Model {
     public $timestamps = true;
 
     public static $groupKhachhang = [
-        'ma_bp',
+        'ma_kho',
         'ma_kh',
     ];
 
@@ -158,6 +158,13 @@ class Ctubanhang extends Model {
     /**
      * @return mixed
      */
+    public function khohang() {
+        return $this->belongsTo( \App\Model\Work\Khohang::class, 'ma_kho', 'ma_kho' );
+    }
+
+    /**
+     * @return mixed
+     */
     public function getSimilarAttribute() {
         similar_text( $this->ma_kho, $this->ma_bp, $similar );
 
@@ -179,7 +186,8 @@ class Ctubanhang extends Model {
     public function scopeNhomkhachhang( $query ) {
         return $query->groupBy( Ctubanhang::$groupKhachhang )
                      ->addSelect( Ctubanhang::$groupKhachhang )
-                     ->addSelect( DB::raw( 'sum(tien2) as tien2' ) );
+                     ->addSelect( DB::raw( 'sum(tien2) as tien2' ) )
+                     ->orderBy( 'ma_kh', 'asc' );
     }
 
     /**
@@ -191,5 +199,19 @@ class Ctubanhang extends Model {
         return $query->groupBy( Ctubanhang::$groupDonhang )
                      ->addSelect( Ctubanhang::$groupDonhang )
                      ->addSelect( DB::raw( 'sum(tien2) as tien2' ) );
+    }
+
+    /**
+     * @param $query
+     * @param $kho
+     *
+     * @return mixed
+     */
+    public function scopeNhomkhohang( $query, $kho ) {
+        if ( 'all' == $kho ) {
+            return $query;
+        }
+
+        return $query->where( 'ma_kho', $kho );
     }
 }
