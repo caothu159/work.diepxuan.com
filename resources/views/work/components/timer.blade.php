@@ -1,4 +1,4 @@
-<form class="form-inline" action="{{ route(($router?:'banhang').'.index') }}">
+<form class="form-inline" action="{{ route(Route::currentRouteName()) }}" method="POST">
     @method('POST')
     @csrf
     <div class="input-group mr-sm-2">
