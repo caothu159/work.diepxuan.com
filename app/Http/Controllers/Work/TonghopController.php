@@ -14,8 +14,6 @@ class TonghopController extends Controller {
      * Display a listing of the resource.
      *
      * @param Request $request
-     * @param string|null $from
-     * @param string|null $to
      *
      * @return mixed
      * @throws Exception
@@ -26,7 +24,7 @@ class TonghopController extends Controller {
         $ctubanhangs = Ctubanhang::whereBetween( 'ngay_ct', [
             \DateTime::createFromFormat( 'd-m-Y', $request->input( 'from' ) )->format( 'Y-m-d' ),
             \DateTime::createFromFormat( 'd-m-Y', $request->input( 'to' ) )->format( 'Y-m-d' )
-        ] )->{$tuychon}()->get();
+        ] )->{"nhom$tuychon"}()->get();
 
         return view( 'work.tonghop.banhang', [
             'ctubanhangs' => $ctubanhangs,

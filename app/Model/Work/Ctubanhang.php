@@ -131,6 +131,12 @@ class Ctubanhang extends Model {
     public $timestamps = true;
 
     public static $groupKhachhang = [
+        'ma_kh',
+        'ma_bp',
+        'ten_kh',
+    ];
+
+    public static $groupDonhang = [
         'ngay_ct',
         'ma_kh',
         'ma_kho',
@@ -171,11 +177,10 @@ class Ctubanhang extends Model {
      *
      * @return mixed
      */
-    public function scopeKhachhang( $query ) {
+    public function scopeNhomkhachhang( $query ) {
         return $query->groupBy( Ctubanhang::$groupKhachhang )
-                     ->addSelect( DB::raw( 'sum(tien2) as tien2' ) )
                      ->addSelect( Ctubanhang::$groupKhachhang )
-                     ->orderBy( 'ngay_ct', 'asc' );
+                     ->addSelect( DB::raw( 'sum(tien2) as tien2' ) );
     }
 
     /**
@@ -183,10 +188,9 @@ class Ctubanhang extends Model {
      *
      * @return mixed
      */
-    public function scopeDonhang( $query ) {
-        return $query->groupBy( Ctubanhang::$groupKhachhang )
-                     ->addSelect( DB::raw( 'sum(tien2) as tien2' ) )
-                     ->addSelect( Ctubanhang::$groupKhachhang )
-                     ->orderBy( 'ngay_ct', 'asc' );
+    public function scopeNhomdonhang( $query ) {
+        return $query->groupBy( Ctubanhang::$groupDonhang )
+                     ->addSelect( Ctubanhang::$groupDonhang )
+                     ->addSelect( DB::raw( 'sum(tien2) as tien2' ) );
     }
 }
