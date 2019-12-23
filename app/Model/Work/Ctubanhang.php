@@ -178,7 +178,6 @@ class Ctubanhang extends Model {
      */
     public function scopeNhomkhachhang( $query ) {
         return $query->groupBy( Ctubanhang::$groupKhachhang )
-                     ->addSelect( 'ten_kh' )
                      ->addSelect( Ctubanhang::$groupKhachhang )
                      ->addSelect( DB::raw( 'sum(tien2) as tien2' ) );
     }
