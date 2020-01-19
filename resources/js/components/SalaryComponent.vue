@@ -15,7 +15,8 @@
 <script>
     export default {
         mounted() {
-            console.log('Component mounted.')
+            this._initialize();
+            console.log('Component mounted.');
         },
         /**
          * Defines the data used by the component
@@ -30,9 +31,20 @@
             }
         },
         methods: {
-            loadNhanvien: function() {
-                this.nhanvien = this.loadSheet('nhanvien');
-                console.log(nhanvien);
+            _initialize: function() {
+                this._loadNhanvien();
+            },
+            _loadNhanvien: function() {
+                // this.nhanvien = this.loadSheet('nhanvien');
+                axios.put(window.location.href, {
+                        _method: 'PUT',
+                        filename: 'nhanvien.xlsx',
+                    }).then(function(response) {
+                        console.log(response);
+                    })
+                    .catch(function(response) {
+                        console.log(response);
+                    });
             },
             loadSheet: function(file) {
                 axios.put(window.location.href, {
@@ -45,8 +57,8 @@
                     }).then(function(response) {
                         console.log(response);
                     })
-                    .catch(function() {
-                        console.log('FAILURE!!');
+                    .catch(function(response) {
+                        console.log(response);
                     });
             }
         }

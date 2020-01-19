@@ -1713,6 +1713,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
+    this._initialize();
+
     console.log('Component mounted.');
   },
 
@@ -1729,9 +1731,19 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   methods: {
-    loadNhanvien: function loadNhanvien() {
-      this.nhanvien = this.loadSheet('nhanvien');
-      console.log(nhanvien);
+    _initialize: function _initialize() {
+      this._loadNhanvien();
+    },
+    _loadNhanvien: function _loadNhanvien() {
+      // this.nhanvien = this.loadSheet('nhanvien');
+      axios.put(window.location.href, {
+        _method: 'PUT',
+        filename: 'nhanvien.xlsx'
+      }).then(function (response) {
+        console.log(response);
+      })["catch"](function (response) {
+        console.log(response);
+      });
     },
     loadSheet: function loadSheet(file) {
       axios.put(window.location.href, {
@@ -1743,8 +1755,8 @@ __webpack_require__.r(__webpack_exports__);
         }
       }).then(function (response) {
         console.log(response);
-      })["catch"](function () {
-        console.log('FAILURE!!');
+      })["catch"](function (response) {
+        console.log(response);
       });
     }
   }
@@ -83343,7 +83355,6 @@ __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
 window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
 window.XLSX = __webpack_require__(/*! xlsx */ "./node_modules/xlsx/xlsx.js");
-window.Salary = [];
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue
