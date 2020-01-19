@@ -6,6 +6,7 @@
 
 namespace App\Http\Controllers\Salary;
 
+use App\Model\Salary\Sheet;
 use App\Salary;
 use App\Services\DatafileService;
 use Exception;
@@ -13,18 +14,20 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
-class SalaryController extends Controller {
+class SalaryController extends Controller
+{
 
     /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct() {
-        $this->middleware( [
+    public function __construct()
+    {
+        $this->middleware([
             'auth',
             'clearcache',
-        ] );
+        ]);
     }
 
     /**
@@ -36,15 +39,30 @@ class SalaryController extends Controller {
      * @return Factory|\Illuminate\View\View
      * @throws Exception
      */
-    public function index( string $year = null, string $month = null ) {
-        return view( 'home', [
+    public function index(string $year = null, string $month = null)
+    {
+        return view('home', [
             'controller' => $this,
             'time'       => [
                 'year'  => $year,
                 'month' => $month,
             ],
-            'data'       => $this->_loadSalary( $year, $month ),
-        ] );
+            'data'       => $this->_loadSalary($year, $month),
+        ]);
+    }
+
+    /**
+     * [sheet description]
+     * @param  Request     $request [description]
+     * @param  string|null $year    [description]
+     * @param  string|null $month   [description]
+     * @return [type]               [description]
+     */
+    public function sheet(Request $request, string $year = null, string $month = null)
+    {
+        $sheet = new Sheet($request->input('filename'), $year, $month);
+
+        return $sheet->download();
     }
 
     /**
@@ -52,7 +70,8 @@ class SalaryController extends Controller {
      *
      * @return Response
      */
-    public function create() {
+    public function create()
+    {
         //
     }
 
@@ -66,13 +85,14 @@ class SalaryController extends Controller {
      * @return \Illuminate\Http\RedirectResponse
      * @throws Exception
      */
-    public function import( DatafileService $datafileService, string $year = null, string $month = null ) {
-        $datafileService->salaryImport( $year ?: date( 'Y' ), $month ?: date( 'm' ) );
+    public function import(DatafileService $datafileService, string $year = null, string $month = null)
+    {
+        $datafileService->salaryImport($year ?: date('Y'), $month ?: date('m'));
 
-        return redirect()->route( 'salary.index', [
+        return redirect()->route('salary.index', [
             'year'  => $year,
             'month' => $month,
-        ] );
+        ]);
     }
 
     /**
@@ -82,7 +102,8 @@ class SalaryController extends Controller {
      *
      * @return Response
      */
-    public function store( Request $request ) {
+    public function store(Request $request)
+    {
         //
     }
 
@@ -93,7 +114,8 @@ class SalaryController extends Controller {
      *
      * @return Response
      */
-    public function show( $id ) {
+    public function show($id)
+    {
         //
     }
 
@@ -104,7 +126,8 @@ class SalaryController extends Controller {
      *
      * @return Response
      */
-    public function edit( $id ) {
+    public function edit($id)
+    {
         //
     }
 
@@ -116,7 +139,8 @@ class SalaryController extends Controller {
      *
      * @return Response
      */
-    public function update( Request $request, $id ) {
+    public function update(Request $request, $id)
+    {
         //
     }
 
@@ -127,7 +151,8 @@ class SalaryController extends Controller {
      *
      * @return Response
      */
-    public function destroy( $id ) {
+    public function destroy($id)
+    {
         //
     }
 
@@ -140,12 +165,13 @@ class SalaryController extends Controller {
      * @return Collection $collection
      * @throws Exception
      */
-    protected function _loadSalary( string $year = null, string $month = null ) {
-        $dt = sprintf( '%s-%s', $year ?: date( 'Y' ), $month ?: ( date( 'm' ) . ' -1 month' ) );
+    protected function _loadSalary(string $year = null, string $month = null)
+    {
+        $dt = sprintf('%s-%s', $year ?: date('Y'), $month ?: (date('m') . ' -1 month'));
 
-        $month = new \DateTime( $dt );
-        $month = $month->getTimestamp() / ( 24 * 60 * 60 ) + 25569;
+        $month = new \DateTime($dt);
+        $month = $month->getTimestamp() / (24 * 60 * 60) + 25569;
 
-        return Salary::where( 'month', $month )->orderBy( 'name', 'asc' )->get();
+        return Salary::where('month', $month)->orderBy('name', 'asc')->get();
     }
 }

@@ -7,6 +7,8 @@
         </div>
     @endif
 
+    <div id="salary"></div>
+
     <div class="col-12">
         <div class="row align-items-stretch salary-container" id="accordionSalary">
             @include('components/timepicker')
