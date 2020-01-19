@@ -7,7 +7,7 @@
         </div>
     @endif
 
-    <div id="salary"></div>
+    <salary-component></salary-component>
 
     <div class="col-12">
         <div class="row align-items-stretch salary-container" id="accordionSalary">
