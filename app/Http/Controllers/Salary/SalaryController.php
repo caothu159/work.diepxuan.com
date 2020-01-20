@@ -58,9 +58,9 @@ class SalaryController extends Controller
      * @param  string|null $month   [description]
      * @return [type]               [description]
      */
-    public function sheet(Request $request, string $year = null, string $month = null)
+    public function sheet(Request $request, string $year, string $month, string $filename)
     {
-        $sheet = new Sheet($request->input('filename'), $year, $month);
+        $sheet = new Sheet($filename, $year, $month);
 
         return $sheet->download();
     }

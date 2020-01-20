@@ -36,24 +36,26 @@
             },
             _loadNhanvien: function() {
                 // this.nhanvien = this.loadSheet('nhanvien');
-                axios.put(window.location.href, {
-                        _method: 'PUT',
-                        filename: 'nhanvien.xlsx',
-                    }).then(function(response) {
-                        console.log(response);
-                    })
-                    .catch(function(response) {
-                        console.log(response);
+                // filename: 'nhanvien.xlsx',
+                var url = window.location.href + 'nhanvien.xlsx';
+                /* set up async GET request */
+                var req = new XMLHttpRequest();
+                req.open("GET", url, true);
+                req.responseType = "arraybuffer";
+                req.onload = function(e) {
+                    var data = new Uint8Array(req.response);
+                    var workbook = XLSX.read(data, {
+                        type: "array"
                     });
+                    /* DO SOMETHING WITH workbook HERE */
+                    console.log(workbook);
+                }
+                req.send();
             },
             loadSheet: function(file) {
                 axios.put(window.location.href, {
                         _method: 'PUT',
                         filename: file,
-                    }, {
-                        headers: {
-                            'Content-Type': 'application/x-www-form-urlencoded'
-                        }
                     }).then(function(response) {
                         console.log(response);
                     })

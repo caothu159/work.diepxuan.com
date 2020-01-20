@@ -15,7 +15,7 @@ Route::domain('luong.diepxuan.com')->group(function () {
     Route::post('salary/{year?}/{month?}', 'Salary\SalaryController@import')
         ->name('salary.import')
         ->where(['year' => '[0-9]+', 'month' => '[0-9]+']);
-    Route::put('salary/{year?}/{month?}', 'Salary\SalaryController@sheet')
+    Route::get('salary/{year}/{month}/{filename}', 'Salary\SalaryController@sheet')
         ->name('salary.sheet')
         ->where(['year' => '[0-9]+', 'month' => '[0-9]+']);
     Route::get('salary/{year?}/{month?}', 'Salary\SalaryController@index')

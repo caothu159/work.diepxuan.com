@@ -42,17 +42,11 @@ class Sheet extends Eloquent
     {
         $file = $this->datapath($this->name);
 
-        if (file_exists($file)) {
-            header('Content-Description: File Transfer');
-            header('Content-Type: ' . $this->ContentType);
-            header('Content-Disposition: filename="' . basename($this->name) . '"');
-            header('Expires: 0');
-            header('Cache-Control: public, must-revalidate, max-age=0');
-            header('Pragma: public');
-            header('Content-Length: ' . filesize($file));
-            readfile($file);
-        }
-        exit;
+        $headers = [
+            'Content-Type' => $this->ContentType,
+        ];
+
+        return response()->download($file, $this->name, $headers);
     }
 
     /**
