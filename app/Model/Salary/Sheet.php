@@ -41,6 +41,9 @@ class Sheet extends Eloquent
     public function download()
     {
         $file = $this->datapath($this->name);
+        if (!file_exists($file)) {
+            return '';
+        }
 
         $headers = [
             'Content-Type' => $this->ContentType,
@@ -71,9 +74,6 @@ class Sheet extends Eloquent
      */
     private function datadir(string $year = null, string $month = null)
     {
-        $this->year  = $year ?: date('Y');
-        $this->month = $month ?: date('m');
-
         return config('salary.datadir')
         . $this->year . DIRECTORY_SEPARATOR
         . $this->month . DIRECTORY_SEPARATOR;
