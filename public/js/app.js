@@ -1733,19 +1733,14 @@ __webpack_require__.r(__webpack_exports__);
   methods: {
     _initialize: function _initialize() {
       try {
-        this._loadNhanvien();
+        this._loadSheet('nhanvien');
       } catch (e) {}
     },
-    _loadNhanvien: function _loadNhanvien() {
-      // this.nhanvien = this.loadSheet('nhanvien');
-      // filename: 'nhanvien.xlsx',
-      var url = window.location.href.split('/').filter(function (v) {
-        return v != '';
-      }).join('/') + '/nhanvien.xlsx';
-      /* set up async GET request */
-
+    _loadSheet: function _loadSheet(sheetname) {
       var req = new XMLHttpRequest();
-      req.open("GET", url, true);
+      req.open("GET", '/' + window.location.pathname.split('/').filter(function (v) {
+        return v != '';
+      }).join('/') + '/' + sheetname + '.xlsx', true);
       req.responseType = "arraybuffer";
 
       req.onload = function (e) {
@@ -1759,16 +1754,6 @@ __webpack_require__.r(__webpack_exports__);
       };
 
       req.send();
-    },
-    loadSheet: function loadSheet(file) {
-      axios.put(window.location.href, {
-        _method: 'PUT',
-        filename: file
-      }).then(function (response) {
-        console.log(response);
-      })["catch"](function (response) {
-        console.log(response);
-      });
     }
   }
 });
