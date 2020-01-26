@@ -11,14 +11,14 @@
     <title>{{ config('app.name', 'diepxuan.com') }}</title>
 
     <!-- Scripts -->
-    <script src="{{ asset('js/app.js') }}" defer></script>
+    <script src="{{ asset('js/app.js') . '?v=' . uniqid() }}" defer></script>
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet" type="text/css">
 
     <!-- Styles -->
-    <link href="{{ asset('css/app.css') .'?v='. uniqid() }}" rel="stylesheet">
+    <link href="{{ asset('css/app.css') . '?v=' . uniqid() }}" rel="stylesheet">
 </head>
 
 <body style="display: none">
