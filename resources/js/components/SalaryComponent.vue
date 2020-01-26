@@ -39,7 +39,7 @@
             _loadNhanvien: function() {
                 // this.nhanvien = this.loadSheet('nhanvien');
                 // filename: 'nhanvien.xlsx',
-                var url = window.location.href.split('/').filter(v => v != '').join('/') + 'nhanvien.xlsx';
+                var url = window.location.href.split('/').filter(v => v != '').join('/') + '/nhanvien.xlsx';
                 /* set up async GET request */
                 var req = new XMLHttpRequest();
                 req.open("GET", url, true);

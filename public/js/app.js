@@ -1741,7 +1741,7 @@ __webpack_require__.r(__webpack_exports__);
       // filename: 'nhanvien.xlsx',
       var url = window.location.href.split('/').filter(function (v) {
         return v != '';
-      }).join('/') + 'nhanvien.xlsx';
+      }).join('/') + '/nhanvien.xlsx';
       /* set up async GET request */
 
       var req = new XMLHttpRequest();
