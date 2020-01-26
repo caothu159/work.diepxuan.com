@@ -1732,12 +1732,16 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     _initialize: function _initialize() {
-      this._loadNhanvien();
+      try {
+        this._loadNhanvien();
+      } catch (e) {}
     },
     _loadNhanvien: function _loadNhanvien() {
       // this.nhanvien = this.loadSheet('nhanvien');
       // filename: 'nhanvien.xlsx',
-      var url = window.location.href + 'nhanvien.xlsx';
+      var url = window.location.href.split('/').filter(function (v) {
+        return v != '';
+      }).join('/') + 'nhanvien.xlsx';
       /* set up async GET request */
 
       var req = new XMLHttpRequest();
@@ -1746,12 +1750,12 @@ __webpack_require__.r(__webpack_exports__);
 
       req.onload = function (e) {
         var data = new Uint8Array(req.response);
-        var workbook = XLSX.read(data, {
+        var nhanvienWB = XLSX.read(data, {
           type: "array"
         });
-        /* DO SOMETHING WITH workbook HERE */
+        /* DO SOMETHING WITH nhanvienWB HERE */
 
-        console.log(workbook);
+        console.log(nhanvienWB);
       };
 
       req.send();

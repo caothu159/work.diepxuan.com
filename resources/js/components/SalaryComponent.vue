@@ -32,23 +32,25 @@
         },
         methods: {
             _initialize: function() {
-                this._loadNhanvien();
+                try {
+                    this._loadNhanvien();
+                } catch (e) {}
             },
             _loadNhanvien: function() {
                 // this.nhanvien = this.loadSheet('nhanvien');
                 // filename: 'nhanvien.xlsx',
-                var url = window.location.href + 'nhanvien.xlsx';
+                var url = window.location.href.split('/').filter(v => v != '').join('/') + 'nhanvien.xlsx';
                 /* set up async GET request */
                 var req = new XMLHttpRequest();
                 req.open("GET", url, true);
                 req.responseType = "arraybuffer";
                 req.onload = function(e) {
                     var data = new Uint8Array(req.response);
-                    var workbook = XLSX.read(data, {
+                    var nhanvienWB = XLSX.read(data, {
                         type: "array"
                     });
-                    /* DO SOMETHING WITH workbook HERE */
-                    console.log(workbook);
+                    /* DO SOMETHING WITH nhanvienWB HERE */
+                    console.log(nhanvienWB);
                 }
                 req.send();
             },
