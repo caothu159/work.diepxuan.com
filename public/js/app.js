@@ -1714,6 +1714,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
     this._initialize();
@@ -39278,35 +39280,41 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "div",
-    _vm._l(_vm.nhanvien, function(nv, index) {
-      return _c("div", { staticClass: "col-sm-3 pl-1 pr-1 pt-0 pb-2" }, [
-        _c(
-          "div",
-          {
-            staticClass: "card text-decoration-none collapsed h-100",
-            attrs: { id: "heading" + index }
-          },
-          [
-            _c("div", { staticClass: "card-header p-2" }, [
-              _c(
-                "span",
-                { staticClass: "card-title text-success font-weight-bold" },
-                [
-                  _vm._v(
-                    "\n                    " +
-                      _vm._s(nv.__EMPTY) +
-                      "\n                "
-                  )
-                ]
-              )
-            ]),
-            _vm._v(" "),
-            _vm._m(0, true)
-          ]
-        )
-      ])
-    }),
-    0
+    { staticClass: "row" },
+    [
+      _vm._l(_vm.nhanvien, function(nv, index) {
+        return _c("div", { staticClass: "col-sm-3 pl-1 pr-1 pt-0 pb-2" }, [
+          _c(
+            "div",
+            {
+              staticClass: "card text-decoration-none collapsed h-100",
+              attrs: { id: "heading" + index }
+            },
+            [
+              _c("div", { staticClass: "card-header p-2" }, [
+                _c(
+                  "span",
+                  { staticClass: "card-title text-success font-weight-bold" },
+                  [
+                    _vm._v(
+                      "\n                    " +
+                        _vm._s(nv.__EMPTY) +
+                        "\n                "
+                    )
+                  ]
+                )
+              ]),
+              _vm._v(" "),
+              _vm._m(0, true)
+            ]
+          )
+        ])
+      }),
+      _vm._v(
+        "\n    " + _vm._s(_vm.nhanvien) + "\n    " + _vm._s(_vm.chamcong) + "\n"
+      )
+    ],
+    2
   )
 }
 var staticRenderFns = [

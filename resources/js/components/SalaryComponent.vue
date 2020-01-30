@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="row">
         <div class="col-sm-3 pl-1 pr-1 pt-0 pb-2" v-for="(nv, index) in nhanvien">
             <div class="card text-decoration-none collapsed h-100" :id="'heading' + index">
                 <div class="card-header p-2">
@@ -13,6 +13,8 @@
                 </div>
             </div>
         </div>
+        {{ nhanvien }}
+        {{ chamcong }}
     </div>
 </template>
 <script>
