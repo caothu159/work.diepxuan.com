@@ -15,7 +15,7 @@
                         <div class="d-flex justify-content-between">
                             Công:
                             <a class="font-weight-normal font-weight-bold" data-toggle="collapse" aria-expanded="false" :href="'#collapse' + index + 'presence'" :aria-controls="'collapse' + index + 'presence'">
-                                {{ 'waiting...' }}
+                                {{ nv.cong }}
                             </a>
                         </div>
                         <div class="collapse" :id="'collapse' + index + 'presence'" :aria-labelledby="'heading' + index" data-parent="#accordionSalary">
@@ -119,8 +119,11 @@
             importChamcong: function(chamcong) {
                 $.each(this.nhanvien, function(keynv, nv) {
                     nv.chamcong = {};
+                    nv.cong = 0;
                     $.each(chamcong, function(keycc, chamcong) {
+                        if (undefined == chamcong.__EMPTY) return;
                         nv.chamcong[chamcong.__EMPTY] = chamcong[nv.__EMPTY];
+                        nv.cong += chamcong[nv.__EMPTY];
                     });
                 });
             }

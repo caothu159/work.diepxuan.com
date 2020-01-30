@@ -1826,8 +1826,11 @@ __webpack_require__.r(__webpack_exports__);
     importChamcong: function importChamcong(chamcong) {
       $.each(this.nhanvien, function (keynv, nv) {
         nv.chamcong = {};
+        nv.cong = 0;
         $.each(chamcong, function (keycc, chamcong) {
+          if (undefined == chamcong.__EMPTY) return;
           nv.chamcong[chamcong.__EMPTY] = chamcong[nv.__EMPTY];
+          nv.cong += chamcong[nv.__EMPTY];
         });
       });
     }
@@ -39371,7 +39374,7 @@ var render = function() {
                           [
                             _vm._v(
                               "\n                            " +
-                                _vm._s("waiting...") +
+                                _vm._s(nv.cong) +
                                 "\n                        "
                             )
                           ]
