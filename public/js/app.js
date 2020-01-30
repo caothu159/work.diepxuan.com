@@ -1858,13 +1858,14 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     importChamcong: function importChamcong(chamcong) {
+      self = this;
       $.each(this.nhanvien, function (keynv, nv) {
         nv.congnhat = {};
         nv.cong = 0;
         $.each(chamcong, function (keycc, cong) {
           if (undefined == cong.__EMPTY) return;
           nv.congnhat[cong.__EMPTY] = {
-            'thoigian': this.getJsDateFromExcel(cong.__EMPTY).toLocaleDateString('vi-VN', {
+            'thoigian': self.getJsDateFromExcel(cong.__EMPTY).toLocaleDateString('vi-VN', {
               year: 'numeric',
               month: 'numeric',
               day: 'numeric'
@@ -1873,6 +1874,7 @@ __webpack_require__.r(__webpack_exports__);
           };
           nv.cong += cong[nv.__EMPTY];
         });
+        return nv;
       });
     },
     getJsDateFromExcel: function getJsDateFromExcel(excelDate) {
