@@ -9,6 +9,20 @@
                 </div>
                 <div class="card-body p-2">
                     <div class="card-text font-weight-light text-info">
+                        <div class="d-flex justify-content-between">
+                            Lương: <span class="text-success font-weight-bold">{{ }}</span>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            Công:
+                            <a class="font-weight-normal font-weight-bold" data-toggle="collapse" aria-expanded="false" :href="'#collapse' + index + 'presence'" :aria-controls="'collapse' + index + 'presence'">
+                                {{ 'waiting...' }}
+                            </a>
+                        </div>
+                        <div class="collapse" :id="'collapse' + index + 'presence'" :aria-labelledby="'heading' + index" data-parent="#accordionSalary">
+                            <div v-for="(cong, time) in nv.chamcong">
+                                {{ time }} - {{ cong }}
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -33,6 +47,11 @@
                 chamcong: [],
                 phancong: [],
                 nangsuat: []
+            }
+        },
+        watch: {
+            chamcong: function(newChamcong, oldChamcong) {
+                this.importChamcong(newChamcong)
             }
         },
         methods: {
@@ -95,6 +114,14 @@
                 }).then(function(workbook) {
                     window.chamcongWB = workbook;
                     self.chamcong = XLSX.utils.sheet_to_json(workbook.Sheets.chamcong);
+                });
+            },
+            importChamcong: function(chamcong) {
+                $.each(this.nhanvien, function(keynv, nv) {
+                    nv.chamcong = {};
+                    $.each(chamcong, function(keycc, chamcong) {
+                        nv.chamcong[chamcong.__EMPTY] = chamcong[nv.__EMPTY];
+                    });
                 });
             }
         }

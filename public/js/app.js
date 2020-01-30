@@ -1716,6 +1716,20 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
     this._initialize();
@@ -1734,6 +1748,11 @@ __webpack_require__.r(__webpack_exports__);
       phancong: [],
       nangsuat: []
     };
+  },
+  watch: {
+    chamcong: function chamcong(newChamcong, oldChamcong) {
+      this.importChamcong(newChamcong);
+    }
   },
   methods: {
     _initialize: function _initialize() {
@@ -1802,6 +1821,14 @@ __webpack_require__.r(__webpack_exports__);
       }).then(function (workbook) {
         window.chamcongWB = workbook;
         self.chamcong = XLSX.utils.sheet_to_json(workbook.Sheets.chamcong);
+      });
+    },
+    importChamcong: function importChamcong(chamcong) {
+      $.each(this.nhanvien, function (keynv, nv) {
+        nv.chamcong = {};
+        $.each(chamcong, function (keycc, chamcong) {
+          nv.chamcong[chamcong.__EMPTY] = chamcong[nv.__EMPTY];
+        });
       });
     }
   }
@@ -39305,7 +39332,79 @@ var render = function() {
                 )
               ]),
               _vm._v(" "),
-              _vm._m(0, true)
+              _c("div", { staticClass: "card-body p-2" }, [
+                _c(
+                  "div",
+                  { staticClass: "card-text font-weight-light text-info" },
+                  [
+                    _c(
+                      "div",
+                      { staticClass: "d-flex justify-content-between" },
+                      [
+                        _vm._v("\n                        Lương: "),
+                        _c(
+                          "span",
+                          { staticClass: "text-success font-weight-bold" },
+                          [_vm._v(_vm._s())]
+                        )
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      { staticClass: "d-flex justify-content-between" },
+                      [
+                        _vm._v(
+                          "\n                        Công:\n                        "
+                        ),
+                        _c(
+                          "a",
+                          {
+                            staticClass: "font-weight-normal font-weight-bold",
+                            attrs: {
+                              "data-toggle": "collapse",
+                              "aria-expanded": "false",
+                              href: "#collapse" + index + "presence",
+                              "aria-controls": "collapse" + index + "presence"
+                            }
+                          },
+                          [
+                            _vm._v(
+                              "\n                            " +
+                                _vm._s("waiting...") +
+                                "\n                        "
+                            )
+                          ]
+                        )
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      {
+                        staticClass: "collapse",
+                        attrs: {
+                          id: "collapse" + index + "presence",
+                          "aria-labelledby": "heading" + index,
+                          "data-parent": "#accordionSalary"
+                        }
+                      },
+                      _vm._l(nv.chamcong, function(cong, time) {
+                        return _c("div", [
+                          _vm._v(
+                            "\n                            " +
+                              _vm._s(time) +
+                              " - " +
+                              _vm._s(cong) +
+                              "\n                        "
+                          )
+                        ])
+                      }),
+                      0
+                    )
+                  ]
+                )
+              ])
             ]
           )
         ])
@@ -39317,16 +39416,7 @@ var render = function() {
     2
   )
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "card-body p-2" }, [
-      _c("div", { staticClass: "card-text font-weight-light text-info" })
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 
 
