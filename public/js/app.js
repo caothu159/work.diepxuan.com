@@ -1764,6 +1764,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
     this._initialize();
@@ -39359,56 +39361,87 @@ var render = function() {
     { staticClass: "row" },
     [
       _vm._l(_vm.nhanvien, function(nv, index) {
-        return _c("div", { staticClass: "col-sm-3 pl-1 pr-1 pt-0 pb-2" }, [
-          _c(
-            "div",
-            {
-              staticClass: "card text-decoration-none collapsed h-100",
-              attrs: { id: "heading" + index }
-            },
-            [
-              _c("div", { staticClass: "card-header p-2" }, [
-                _c(
-                  "span",
-                  { staticClass: "card-title text-success font-weight-bold" },
-                  [
-                    _vm._v(
-                      "\n                    " +
-                        _vm._s(nv.__EMPTY) +
-                        "\n                "
-                    )
-                  ]
-                )
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "card-body p-2" }, [
-                _c(
-                  "div",
-                  { staticClass: "card-text font-weight-light text-info" },
-                  [
-                    _c(
-                      "div",
-                      { staticClass: "d-flex justify-content-between" },
-                      [
-                        _vm._v("\n                        Lương: "),
-                        _c(
-                          "span",
-                          { staticClass: "text-success font-weight-bold" },
-                          [_vm._v(_vm._s())]
-                        )
-                      ]
-                    ),
-                    _vm._v(" "),
-                    _c(
-                      "div",
-                      { staticClass: "d-flex justify-content-between" },
-                      [
-                        _vm._v(
-                          "\n                        Công:\n                        "
-                        ),
-                        _c(
-                          "a",
-                          {
+        return [
+          _c("div", { staticClass: "col-sm-3 pl-1 pr-1 pt-0 pb-2" }, [
+            _c(
+              "div",
+              {
+                staticClass: "card text-decoration-none collapsed h-100",
+                attrs: { id: "heading" + index }
+              },
+              [
+                _c("div", { staticClass: "card-header p-2" }, [
+                  _c(
+                    "span",
+                    { staticClass: "card-title text-success font-weight-bold" },
+                    [
+                      _vm._v(
+                        "\n                        " +
+                          _vm._s(nv.__EMPTY) +
+                          "\n                    "
+                      )
+                    ]
+                  )
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "card-body p-2" }, [
+                  _c(
+                    "div",
+                    { staticClass: "card-text font-weight-light text-info" },
+                    [
+                      _c(
+                        "div",
+                        { staticClass: "d-flex justify-content-between" },
+                        [
+                          _vm._v("\n                            Lương: "),
+                          _c(
+                            "span",
+                            { staticClass: "text-success font-weight-bold" },
+                            [_vm._v(_vm._s())]
+                          )
+                        ]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "div",
+                        { staticClass: "d-flex justify-content-between" },
+                        [
+                          _vm._v(
+                            "\n                            Công:\n                            "
+                          ),
+                          _c(
+                            "a",
+                            {
+                              staticClass:
+                                "font-weight-normal font-weight-bold",
+                              attrs: {
+                                "data-toggle": "collapse",
+                                "aria-expanded": "false",
+                                href: "#collapse" + index,
+                                "aria-controls": "collapse" + index
+                              }
+                            },
+                            [
+                              _vm._v(
+                                "\n                                " +
+                                  _vm._s(nv.cong) +
+                                  "\n                            "
+                              )
+                            ]
+                          )
+                        ]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "div",
+                        { staticClass: "d-flex justify-content-between" },
+                        [
+                          _vm._v(
+                            "\n                            " +
+                              _vm._s("Năng suất:") +
+                              "\n                            "
+                          ),
+                          _c("a", {
                             staticClass: "font-weight-normal font-weight-bold",
                             attrs: {
                               "data-toggle": "collapse",
@@ -39416,95 +39449,65 @@ var render = function() {
                               href: "#collapse" + index,
                               "aria-controls": "collapse" + index
                             }
-                          },
-                          [
-                            _vm._v(
-                              "\n                            " +
-                                _vm._s(nv.cong) +
-                                "\n                        "
-                            )
-                          ]
-                        )
-                      ]
-                    ),
-                    _vm._v(" "),
-                    _c(
-                      "div",
-                      { staticClass: "d-flex justify-content-between" },
-                      [
-                        _vm._v(
-                          "\n                        " +
-                            _vm._s("Năng suất:") +
-                            "\n                        "
-                        ),
-                        _c("a", {
-                          staticClass: "font-weight-normal font-weight-bold",
-                          attrs: {
-                            "data-toggle": "collapse",
-                            "aria-expanded": "false",
-                            href: "#collapse" + index,
-                            "aria-controls": "collapse" + index
-                          }
-                        })
-                      ]
-                    )
-                  ]
-                )
-              ])
+                          })
+                        ]
+                      )
+                    ]
+                  )
+                ])
+              ]
+            )
+          ]),
+          _vm._v(" "),
+          _c(
+            "div",
+            {
+              staticClass: "col-sm-12 collapse",
+              attrs: {
+                id: "collapse" + index,
+                "aria-labelledby": "heading" + index,
+                "data-parent": "#accordionSalary"
+              }
+            },
+            [
+              _c(
+                "table",
+                {
+                  staticClass:
+                    "table table-hover table-condensed table-sm text-center"
+                },
+                [
+                  _vm._m(0, true),
+                  _vm._v(" "),
+                  _vm._l(nv.congnhat, function(luong) {
+                    return _c("tr", [
+                      _c("td", [_vm._v(_vm._s(luong.thoigian))]),
+                      _vm._v(" "),
+                      _c("td", [_vm._v(_vm._s(luong.cong))]),
+                      _vm._v(" "),
+                      _c("td", [_vm._v(_vm._s("-"))]),
+                      _vm._v(" "),
+                      _c("td", [_vm._v(_vm._s("-"))]),
+                      _vm._v(" "),
+                      _c("td", [_vm._v(_vm._s("-"))]),
+                      _vm._v(" "),
+                      _c("td", [_vm._v(_vm._s("-"))]),
+                      _vm._v(" "),
+                      _c("td", [_vm._v(_vm._s("-"))]),
+                      _vm._v(" "),
+                      _c("td", [_vm._v(_vm._s("-"))]),
+                      _vm._v(" "),
+                      _c("td", [_vm._v(_vm._s("-"))]),
+                      _vm._v(" "),
+                      _c("td", [_vm._v(_vm._s("-"))])
+                    ])
+                  })
+                ],
+                2
+              )
             ]
           )
-        ])
-      }),
-      _vm._v(" "),
-      _vm._l(_vm.nhanvien, function(nv, index) {
-        return _c(
-          "div",
-          {
-            staticClass: "col-sm-12 collapse",
-            attrs: {
-              id: "collapse" + index,
-              "aria-labelledby": "heading" + index,
-              "data-parent": "#accordionSalary"
-            }
-          },
-          [
-            _c(
-              "table",
-              {
-                staticClass:
-                  "table table-hover table-condensed table-sm text-center"
-              },
-              [
-                _vm._m(0, true),
-                _vm._v(" "),
-                _vm._l(nv.congnhat, function(luong) {
-                  return _c("tr", [
-                    _c("td", [_vm._v(_vm._s(luong.thoigian))]),
-                    _vm._v(" "),
-                    _c("td", [_vm._v(_vm._s(luong.cong))]),
-                    _vm._v(" "),
-                    _c("td", [_vm._v(_vm._s("-"))]),
-                    _vm._v(" "),
-                    _c("td", [_vm._v(_vm._s("-"))]),
-                    _vm._v(" "),
-                    _c("td", [_vm._v(_vm._s("-"))]),
-                    _vm._v(" "),
-                    _c("td", [_vm._v(_vm._s("-"))]),
-                    _vm._v(" "),
-                    _c("td", [_vm._v(_vm._s("-"))]),
-                    _vm._v(" "),
-                    _c("td", [_vm._v(_vm._s("-"))]),
-                    _vm._v(" "),
-                    _c("td", [_vm._v(_vm._s("-"))]),
-                    _vm._v(" "),
-                    _c("td", [_vm._v(_vm._s("-"))])
-                  ])
-                })
-              ],
-              2
-            )
-          ]
-        )
+        ]
       }),
       _vm._v(
         "\n    " + _vm._s(_vm.nhanvien) + "\n    " + _vm._s(_vm.chamcong) + "\n"
