@@ -14,18 +14,52 @@
                         </div>
                         <div class="d-flex justify-content-between">
                             Công:
-                            <a class="font-weight-normal font-weight-bold" data-toggle="collapse" aria-expanded="false" :href="'#collapse' + index + 'presence'" :aria-controls="'collapse' + index + 'presence'">
+                            <a class="font-weight-normal font-weight-bold" data-toggle="collapse" aria-expanded="false" :href="'#collapse' + index" :aria-controls="'collapse' + index">
                                 {{ nv.cong }}
                             </a>
                         </div>
-                        <div class="collapse" :id="'collapse' + index + 'presence'" :aria-labelledby="'heading' + index" data-parent="#accordionSalary">
-                            <div v-for="(cong, time) in nv.chamcong">
-                                {{ time }} - {{ cong }}
-                            </div>
+                        <div class="d-flex justify-content-between">
+                            {{ 'Năng suất:' }}
+                            <a class="font-weight-normal font-weight-bold" data-toggle="collapse" aria-expanded="false" :href="'#collapse' + index" :aria-controls="'collapse' + index">
+                                <!-- {{ number_format($salary->turnover, 2) }}
+                                @if ($salary->productivity!=0 && isset($controller) && $controller->isAdmin())
+                                <span class="font-weight-lighter">
+                                    /{{ number_format($salary->chitieu, 2) }}
+                                </span>
+                                @endif -->
+                            </a>
                         </div>
                     </div>
                 </div>
             </div>
+        </div>
+        <div class="col-sm-12 collapse" v-for="(nv, index) in nhanvien" :id="'collapse' + index" :aria-labelledby="'heading' + index" data-parent="#accordionSalary">
+            <table class="table table-hover table-condensed table-sm text-center">
+                <tr>
+                    <th></th>
+                    <th>công</th>
+                    <th></th>
+                    <th>Doanh số</th>
+                    <th>Cho nợ</th>
+                    <th>Thu nợ</th>
+                    <th>Tỉ lệ</th>
+                    <th>Năng suất</th>
+                    <th>Hệ số</th>
+                    <th>Lương</th>
+                </tr>
+                <tr v-for="($cong, $time) in nv.chamcong">
+                    <td>{{ $time }}</td>
+                    <td>{{ $cong }}</td>
+                    <td>{{ '-' }}</td>
+                    <td>{{ '-' }}</td>
+                    <td>{{ '-' }}</td>
+                    <td>{{ '-' }}</td>
+                    <td>{{ '-' }}</td>
+                    <td>{{ '-' }}</td>
+                    <td>{{ '-' }}</td>
+                    <td>{{ '-' }}</td>
+                </tr>
+            </table>
         </div>
         {{ nhanvien }}
         {{ chamcong }}

@@ -1730,6 +1730,40 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
     this._initialize();
@@ -39367,8 +39401,8 @@ var render = function() {
                             attrs: {
                               "data-toggle": "collapse",
                               "aria-expanded": "false",
-                              href: "#collapse" + index + "presence",
-                              "aria-controls": "collapse" + index + "presence"
+                              href: "#collapse" + index,
+                              "aria-controls": "collapse" + index
                             }
                           },
                           [
@@ -39384,26 +39418,23 @@ var render = function() {
                     _vm._v(" "),
                     _c(
                       "div",
-                      {
-                        staticClass: "collapse",
-                        attrs: {
-                          id: "collapse" + index + "presence",
-                          "aria-labelledby": "heading" + index,
-                          "data-parent": "#accordionSalary"
-                        }
-                      },
-                      _vm._l(nv.chamcong, function(cong, time) {
-                        return _c("div", [
-                          _vm._v(
-                            "\n                            " +
-                              _vm._s(time) +
-                              " - " +
-                              _vm._s(cong) +
-                              "\n                        "
-                          )
-                        ])
-                      }),
-                      0
+                      { staticClass: "d-flex justify-content-between" },
+                      [
+                        _vm._v(
+                          "\n                        " +
+                            _vm._s("Năng suất:") +
+                            "\n                        "
+                        ),
+                        _c("a", {
+                          staticClass: "font-weight-normal font-weight-bold",
+                          attrs: {
+                            "data-toggle": "collapse",
+                            "aria-expanded": "false",
+                            href: "#collapse" + index,
+                            "aria-controls": "collapse" + index
+                          }
+                        })
+                      ]
                     )
                   ]
                 )
@@ -39412,6 +39443,57 @@ var render = function() {
           )
         ])
       }),
+      _vm._v(" "),
+      _vm._l(_vm.nhanvien, function(nv, index) {
+        return _c(
+          "div",
+          {
+            staticClass: "col-sm-12 collapse",
+            attrs: {
+              id: "collapse" + index,
+              "aria-labelledby": "heading" + index,
+              "data-parent": "#accordionSalary"
+            }
+          },
+          [
+            _c(
+              "table",
+              {
+                staticClass:
+                  "table table-hover table-condensed table-sm text-center"
+              },
+              [
+                _vm._m(0, true),
+                _vm._v(" "),
+                _vm._l(nv.chamcong, function($cong, $time) {
+                  return _c("tr", [
+                    _c("td", [_vm._v(_vm._s($time))]),
+                    _vm._v(" "),
+                    _c("td", [_vm._v(_vm._s($cong))]),
+                    _vm._v(" "),
+                    _c("td", [_vm._v(_vm._s("-"))]),
+                    _vm._v(" "),
+                    _c("td", [_vm._v(_vm._s("-"))]),
+                    _vm._v(" "),
+                    _c("td", [_vm._v(_vm._s("-"))]),
+                    _vm._v(" "),
+                    _c("td", [_vm._v(_vm._s("-"))]),
+                    _vm._v(" "),
+                    _c("td", [_vm._v(_vm._s("-"))]),
+                    _vm._v(" "),
+                    _c("td", [_vm._v(_vm._s("-"))]),
+                    _vm._v(" "),
+                    _c("td", [_vm._v(_vm._s("-"))]),
+                    _vm._v(" "),
+                    _c("td", [_vm._v(_vm._s("-"))])
+                  ])
+                })
+              ],
+              2
+            )
+          ]
+        )
+      }),
       _vm._v(
         "\n    " + _vm._s(_vm.nhanvien) + "\n    " + _vm._s(_vm.chamcong) + "\n"
       )
@@ -39419,7 +39501,34 @@ var render = function() {
     2
   )
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("tr", [
+      _c("th"),
+      _vm._v(" "),
+      _c("th", [_vm._v("công")]),
+      _vm._v(" "),
+      _c("th"),
+      _vm._v(" "),
+      _c("th", [_vm._v("Doanh số")]),
+      _vm._v(" "),
+      _c("th", [_vm._v("Cho nợ")]),
+      _vm._v(" "),
+      _c("th", [_vm._v("Thu nợ")]),
+      _vm._v(" "),
+      _c("th", [_vm._v("Tỉ lệ")]),
+      _vm._v(" "),
+      _c("th", [_vm._v("Năng suất")]),
+      _vm._v(" "),
+      _c("th", [_vm._v("Hệ số")]),
+      _vm._v(" "),
+      _c("th", [_vm._v("Lương")])
+    ])
+  }
+]
 render._withStripped = true
 
 
