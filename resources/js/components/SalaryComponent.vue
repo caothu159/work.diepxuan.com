@@ -47,11 +47,9 @@
                     <th>Hệ số</th>
                     <th>Lương</th>
                 </tr>
-                <tr v-for="($cong, $time) in nv.chamcong">
-                    <td>
-                        {{ this.getJsDateFromExcel($time).toLocaleDateString('vi-VN', { year: 'numeric', month: 'numeric', day: 'numeric' }) }}
-                    </td>
-                    <td>{{ $cong }}</td>
+                <tr v-for="luong in nv.congnhat">
+                    <td>{{ luong.thoigian }}</td>
+                    <td>{{ luong.cong }}</td>
                     <td>{{ '-' }}</td>
                     <td>{{ '-' }}</td>
                     <td>{{ '-' }}</td>
@@ -154,11 +152,19 @@
             },
             importChamcong: function(chamcong) {
                 $.each(this.nhanvien, function(keynv, nv) {
-                    nv.chamcong = {};
+                    nv.congnhat = {};
                     nv.cong = 0;
                     $.each(chamcong, function(keycc, chamcong) {
                         if (undefined == chamcong.__EMPTY) return;
-                        nv.chamcong[chamcong.__EMPTY] = chamcong[nv.__EMPTY];
+                        nv.congnhat[chamcong.__EMPTY] = {
+                            'thoigian': this.getJsDateFromExcel(chamcong.__EMPTY)
+                                .toLocaleDateString('vi-VN', {
+                                    year: 'numeric',
+                                    month: 'numeric',
+                                    day: 'numeric'
+                                }),
+                            'cong': chamcong[nv.__EMPTY]
+                        };
                         nv.cong += chamcong[nv.__EMPTY];
                     });
                 });

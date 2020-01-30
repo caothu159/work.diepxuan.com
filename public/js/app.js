@@ -1764,8 +1764,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
     this._initialize();
@@ -1861,11 +1859,18 @@ __webpack_require__.r(__webpack_exports__);
     },
     importChamcong: function importChamcong(chamcong) {
       $.each(this.nhanvien, function (keynv, nv) {
-        nv.chamcong = {};
+        nv.congnhat = {};
         nv.cong = 0;
         $.each(chamcong, function (keycc, chamcong) {
           if (undefined == chamcong.__EMPTY) return;
-          nv.chamcong[chamcong.__EMPTY] = chamcong[nv.__EMPTY];
+          nv.congnhat[chamcong.__EMPTY] = {
+            'thoigian': this.getJsDateFromExcel(chamcong.__EMPTY).toLocaleDateString('vi-VN', {
+              year: 'numeric',
+              month: 'numeric',
+              day: 'numeric'
+            }),
+            'cong': chamcong[nv.__EMPTY]
+          };
           nv.cong += chamcong[nv.__EMPTY];
         });
       });
@@ -39470,25 +39475,11 @@ var render = function() {
               [
                 _vm._m(0, true),
                 _vm._v(" "),
-                _vm._l(nv.chamcong, function($cong, $time) {
+                _vm._l(nv.congnhat, function(luong) {
                   return _c("tr", [
-                    _c("td", [
-                      _vm._v(
-                        "\n                    " +
-                          _vm._s(
-                            this.getJsDateFromExcel(
-                              $time
-                            ).toLocaleDateString("vi-VN", {
-                              year: "numeric",
-                              month: "numeric",
-                              day: "numeric"
-                            })
-                          ) +
-                          "\n                "
-                      )
-                    ]),
+                    _c("td", [_vm._v(_vm._s(luong.thoigian))]),
                     _vm._v(" "),
-                    _c("td", [_vm._v(_vm._s($cong))]),
+                    _c("td", [_vm._v(_vm._s(luong.cong))]),
                     _vm._v(" "),
                     _c("td", [_vm._v(_vm._s("-"))]),
                     _vm._v(" "),
