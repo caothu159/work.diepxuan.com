@@ -172,7 +172,7 @@
                 });
             },
             getJsDateFromExcel: function(excelDate) {
-                return new Date((excelDate - (25567 + 1)) * 86400 * 1000);
+                return new Date((excelDate - (25567 + 2)) * 86400 * 1000);
             }
         }
     }

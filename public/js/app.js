@@ -1878,7 +1878,7 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     getJsDateFromExcel: function getJsDateFromExcel(excelDate) {
-      return new Date((excelDate - (25567 + 1)) * 86400 * 1000);
+      return new Date((excelDate - (25567 + 2)) * 86400 * 1000);
     }
   }
 });
