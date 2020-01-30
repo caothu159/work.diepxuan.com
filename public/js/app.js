@@ -1859,7 +1859,7 @@ __webpack_require__.r(__webpack_exports__);
     },
     importChamcong: function importChamcong(chamcong) {
       self = this;
-      $.each(this.nhanvien, function (keynv, nv) {
+      $.each(self.nhanvien, function (keynv, nv) {
         nv.congnhat = {};
         nv.cong = 0;
         $.each(chamcong, function (keycc, cong) {
