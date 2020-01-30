@@ -1739,7 +1739,9 @@ __webpack_require__.r(__webpack_exports__);
       } catch (e) {}
     },
     _loadSheetNhanvien: function _loadSheetNhanvien() {
+      self = this;
       /* set up an async GET request with axios */
+
       axios('/' + window.location.pathname.split('/').filter(function (v) {
         return v != '';
       }).join('/') + '/' + 'nhanvien.xlsx', {
@@ -1757,7 +1759,7 @@ __webpack_require__.r(__webpack_exports__);
         /* error in parsing */
       }).then(function (workbook) {
         window.nhanvienWB = workbook;
-        this.nhanvien = XLSX.utils.sheet_to_json(workbook.Sheets.nhanvien);
+        self.nhanvien = XLSX.utils.sheet_to_json(workbook.Sheets.nhanvien);
       });
       /**
       var req = new XMLHttpRequest();
@@ -1774,7 +1776,9 @@ __webpack_require__.r(__webpack_exports__);
       */
     },
     _loadSheetChamcong: function _loadSheetChamcong() {
+      self = this;
       /* set up an async GET request with axios */
+
       axios('/' + window.location.pathname.split('/').filter(function (v) {
         return v != '';
       }).join('/') + '/' + 'chamcong.xlsx', {
@@ -1792,7 +1796,7 @@ __webpack_require__.r(__webpack_exports__);
         /* error in parsing */
       }).then(function (workbook) {
         window.chamcongWB = workbook;
-        this.chamcong = XLSX.utils.sheet_to_json(workbook.Sheets.chamcong);
+        self.chamcong = XLSX.utils.sheet_to_json(workbook.Sheets.chamcong);
       });
     }
   }
