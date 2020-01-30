@@ -53,7 +53,7 @@
                 }).catch(function(err) {
                     /* error in parsing */
                 }).then(function(workbook) {
-                    window.nhanvienWB = XLSX.utils.sheet_to_json(workbook.Sheets.nhanvien);
+                    window.nhanvienWB = workbook
                     this.nhanvien = XLSX.utils.sheet_to_json(workbook.Sheets.nhanvien);
                 });
                 /**
@@ -86,7 +86,7 @@
                 }).catch(function(err) {
                     /* error in parsing */
                 }).then(function(workbook) {
-                    window.nhanvienWB = XLSX.utils.sheet_to_json(workbook.Sheets.chamcong);
+                    window.chamcongWB = workbook;
                     this.chamcong = XLSX.utils.sheet_to_json(workbook.Sheets.chamcong);
                 });
             }
