@@ -154,18 +154,18 @@
                 $.each(this.nhanvien, function(keynv, nv) {
                     nv.congnhat = {};
                     nv.cong = 0;
-                    $.each(chamcong, function(keycc, chamcong) {
-                        if (undefined == chamcong.__EMPTY) return;
-                        nv.congnhat[chamcong.__EMPTY] = {
-                            'thoigian': this.getJsDateFromExcel(chamcong.__EMPTY)
+                    $.each(chamcong, function(keycc, cong) {
+                        if (undefined == cong.__EMPTY) return;
+                        nv.congnhat[cong.__EMPTY] = {
+                            'thoigian': this.getJsDateFromExcel(cong.__EMPTY)
                                 .toLocaleDateString('vi-VN', {
                                     year: 'numeric',
                                     month: 'numeric',
                                     day: 'numeric'
                                 }),
-                            'cong': chamcong[nv.__EMPTY]
+                            'cong': cong[nv.__EMPTY]
                         };
-                        nv.cong += chamcong[nv.__EMPTY];
+                        nv.cong += cong[nv.__EMPTY];
                     });
                 });
             },
