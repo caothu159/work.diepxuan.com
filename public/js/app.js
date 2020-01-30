@@ -1693,9 +1693,188 @@ module.exports = {
   !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/SalaryComponent.vue?vue&type=script&lang=js& ***!
   \**************************************************************************************************************************************************************************/
 /*! exports provided: default */
-/***/ (function(module, exports) {
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
-throw new Error("Module build failed (from ./node_modules/babel-loader/lib/index.js):\nSyntaxError: /mnt/c/Users/ductn/OneDrive/SourceCode/work.diepxuan.com/resources/js/components/SalaryComponent.vue: Unexpected keyword 'function' (164:8)\n\n\u001b[0m \u001b[90m 162 | \u001b[39m            })\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 163 | \u001b[39m        }\u001b[33m,\u001b[39m\u001b[0m\n\u001b[0m\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 164 | \u001b[39m        \u001b[36mfunction\u001b[39m getJsDateFromExcel(excelDate) {\u001b[0m\n\u001b[0m \u001b[90m     | \u001b[39m        \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 165 | \u001b[39m            \u001b[36mreturn\u001b[39m \u001b[36mnew\u001b[39m \u001b[33mDate\u001b[39m((excelDate \u001b[33m-\u001b[39m (\u001b[35m25567\u001b[39m \u001b[33m+\u001b[39m \u001b[35m1\u001b[39m)) \u001b[33m*\u001b[39m \u001b[35m86400\u001b[39m \u001b[33m*\u001b[39m \u001b[35m1000\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 166 | \u001b[39m        }\u001b[0m\n\u001b[0m \u001b[90m 167 | \u001b[39m    }\u001b[0m\n    at Parser.raise (/mnt/c/Users/ductn/OneDrive/SourceCode/work.diepxuan.com/node_modules/@babel/parser/lib/index.js:7012:17)\n    at Parser.checkReservedWord (/mnt/c/Users/ductn/OneDrive/SourceCode/work.diepxuan.com/node_modules/@babel/parser/lib/index.js:10397:12)\n    at Parser.parseObjectProperty (/mnt/c/Users/ductn/OneDrive/SourceCode/work.diepxuan.com/node_modules/@babel/parser/lib/index.js:10118:12)\n    at Parser.parseObjPropValue (/mnt/c/Users/ductn/OneDrive/SourceCode/work.diepxuan.com/node_modules/@babel/parser/lib/index.js:10138:101)\n    at Parser.parseObjectMember (/mnt/c/Users/ductn/OneDrive/SourceCode/work.diepxuan.com/node_modules/@babel/parser/lib/index.js:10062:10)\n    at Parser.parseObj (/mnt/c/Users/ductn/OneDrive/SourceCode/work.diepxuan.com/node_modules/@babel/parser/lib/index.js:9982:25)\n    at Parser.parseExprAtom (/mnt/c/Users/ductn/OneDrive/SourceCode/work.diepxuan.com/node_modules/@babel/parser/lib/index.js:9604:28)\n    at Parser.parseExprSubscripts (/mnt/c/Users/ductn/OneDrive/SourceCode/work.diepxuan.com/node_modules/@babel/parser/lib/index.js:9237:23)\n    at Parser.parseMaybeUnary (/mnt/c/Users/ductn/OneDrive/SourceCode/work.diepxuan.com/node_modules/@babel/parser/lib/index.js:9217:21)\n    at Parser.parseExprOps (/mnt/c/Users/ductn/OneDrive/SourceCode/work.diepxuan.com/node_modules/@babel/parser/lib/index.js:9083:23)\n    at Parser.parseMaybeConditional (/mnt/c/Users/ductn/OneDrive/SourceCode/work.diepxuan.com/node_modules/@babel/parser/lib/index.js:9056:23)\n    at Parser.parseMaybeAssign (/mnt/c/Users/ductn/OneDrive/SourceCode/work.diepxuan.com/node_modules/@babel/parser/lib/index.js:9015:21)\n    at Parser.parseObjectProperty (/mnt/c/Users/ductn/OneDrive/SourceCode/work.diepxuan.com/node_modules/@babel/parser/lib/index.js:10113:101)\n    at Parser.parseObjPropValue (/mnt/c/Users/ductn/OneDrive/SourceCode/work.diepxuan.com/node_modules/@babel/parser/lib/index.js:10138:101)\n    at Parser.parseObjectMember (/mnt/c/Users/ductn/OneDrive/SourceCode/work.diepxuan.com/node_modules/@babel/parser/lib/index.js:10062:10)\n    at Parser.parseObj (/mnt/c/Users/ductn/OneDrive/SourceCode/work.diepxuan.com/node_modules/@babel/parser/lib/index.js:9982:25)\n    at Parser.parseExprAtom (/mnt/c/Users/ductn/OneDrive/SourceCode/work.diepxuan.com/node_modules/@babel/parser/lib/index.js:9604:28)\n    at Parser.parseExprSubscripts (/mnt/c/Users/ductn/OneDrive/SourceCode/work.diepxuan.com/node_modules/@babel/parser/lib/index.js:9237:23)\n    at Parser.parseMaybeUnary (/mnt/c/Users/ductn/OneDrive/SourceCode/work.diepxuan.com/node_modules/@babel/parser/lib/index.js:9217:21)\n    at Parser.parseExprOps (/mnt/c/Users/ductn/OneDrive/SourceCode/work.diepxuan.com/node_modules/@babel/parser/lib/index.js:9083:23)\n    at Parser.parseMaybeConditional (/mnt/c/Users/ductn/OneDrive/SourceCode/work.diepxuan.com/node_modules/@babel/parser/lib/index.js:9056:23)\n    at Parser.parseMaybeAssign (/mnt/c/Users/ductn/OneDrive/SourceCode/work.diepxuan.com/node_modules/@babel/parser/lib/index.js:9015:21)\n    at Parser.parseExportDefaultExpression (/mnt/c/Users/ductn/OneDrive/SourceCode/work.diepxuan.com/node_modules/@babel/parser/lib/index.js:11870:24)\n    at Parser.parseExport (/mnt/c/Users/ductn/OneDrive/SourceCode/work.diepxuan.com/node_modules/@babel/parser/lib/index.js:11772:31)\n    at Parser.parseStatementContent (/mnt/c/Users/ductn/OneDrive/SourceCode/work.diepxuan.com/node_modules/@babel/parser/lib/index.js:10794:27)\n    at Parser.parseStatement (/mnt/c/Users/ductn/OneDrive/SourceCode/work.diepxuan.com/node_modules/@babel/parser/lib/index.js:10690:17)\n    at Parser.parseBlockOrModuleBlockBody (/mnt/c/Users/ductn/OneDrive/SourceCode/work.diepxuan.com/node_modules/@babel/parser/lib/index.js:11266:25)\n    at Parser.parseBlockBody (/mnt/c/Users/ductn/OneDrive/SourceCode/work.diepxuan.com/node_modules/@babel/parser/lib/index.js:11253:10)\n    at Parser.parseTopLevel (/mnt/c/Users/ductn/OneDrive/SourceCode/work.diepxuan.com/node_modules/@babel/parser/lib/index.js:10621:10)\n    at Parser.parse (/mnt/c/Users/ductn/OneDrive/SourceCode/work.diepxuan.com/node_modules/@babel/parser/lib/index.js:12131:10)\n    at parse (/mnt/c/Users/ductn/OneDrive/SourceCode/work.diepxuan.com/node_modules/@babel/parser/lib/index.js:12182:38)\n    at parser (/mnt/c/Users/ductn/OneDrive/SourceCode/work.diepxuan.com/node_modules/@babel/core/lib/transformation/normalize-file.js:187:34)\n    at normalizeFile (/mnt/c/Users/ductn/OneDrive/SourceCode/work.diepxuan.com/node_modules/@babel/core/lib/transformation/normalize-file.js:113:11)\n    at runSync (/mnt/c/Users/ductn/OneDrive/SourceCode/work.diepxuan.com/node_modules/@babel/core/lib/transformation/index.js:44:43)\n    at runAsync (/mnt/c/Users/ductn/OneDrive/SourceCode/work.diepxuan.com/node_modules/@babel/core/lib/transformation/index.js:35:14)\n    at process.nextTick (/mnt/c/Users/ductn/OneDrive/SourceCode/work.diepxuan.com/node_modules/@babel/core/lib/transform.js:34:34)");
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  mounted: function mounted() {
+    this._initialize();
+
+    console.log('Component mounted.');
+  },
+
+  /**
+   * Defines the data used by the component
+   * @return {[type]} [description]
+   */
+  data: function data() {
+    return {
+      nhanvien: [],
+      chamcong: [],
+      phancong: [],
+      nangsuat: []
+    };
+  },
+  watch: {
+    chamcong: function chamcong(newChamcong, oldChamcong) {
+      this.importChamcong(newChamcong);
+    }
+  },
+  methods: {
+    _initialize: function _initialize() {
+      try {
+        this._loadSheetNhanvien();
+
+        this._loadSheetChamcong();
+      } catch (e) {}
+    },
+    _loadSheetNhanvien: function _loadSheetNhanvien() {
+      self = this;
+      /* set up an async GET request with axios */
+
+      axios('/' + window.location.pathname.split('/').filter(function (v) {
+        return v != '';
+      }).join('/') + '/' + 'nhanvien.xlsx', {
+        responseType: 'arraybuffer'
+      })["catch"](function (err) {
+        /* error in getting data */
+      }).then(function (res) {
+        /* parse the data when it is received */
+        var data = new Uint8Array(res.data);
+        var workbook = XLSX.read(data, {
+          type: "array"
+        });
+        return workbook;
+      })["catch"](function (err) {
+        /* error in parsing */
+      }).then(function (workbook) {
+        window.nhanvienWB = workbook;
+        self.nhanvien = XLSX.utils.sheet_to_json(workbook.Sheets.nhanvien);
+      });
+      /**
+      var req = new XMLHttpRequest();
+      req.open("GET", '/' + window.location.pathname.split('/').filter(v => v != '').join('/') + '/' + sheetname + '.xlsx', true);
+      req.responseType = "arraybuffer";
+      req.onload = function(e) {
+          var data = new Uint8Array(req.response);
+          window[sheetname + 'WB'] = XLSX.read(data, {
+              type: "array"
+          });
+          console.log(sheetname + 'WB');
+      }
+      req.send();
+      */
+    },
+    _loadSheetChamcong: function _loadSheetChamcong() {
+      self = this;
+      /* set up an async GET request with axios */
+
+      axios('/' + window.location.pathname.split('/').filter(function (v) {
+        return v != '';
+      }).join('/') + '/' + 'chamcong.xlsx', {
+        responseType: 'arraybuffer'
+      })["catch"](function (err) {
+        /* error in getting data */
+      }).then(function (res) {
+        /* parse the data when it is received */
+        var data = new Uint8Array(res.data);
+        var workbook = XLSX.read(data, {
+          type: "array"
+        });
+        return workbook;
+      })["catch"](function (err) {
+        /* error in parsing */
+      }).then(function (workbook) {
+        window.chamcongWB = workbook;
+        self.chamcong = XLSX.utils.sheet_to_json(workbook.Sheets.chamcong);
+      });
+    },
+    importChamcong: function importChamcong(chamcong) {
+      $.each(this.nhanvien, function (keynv, nv) {
+        nv.chamcong = {};
+        nv.cong = 0;
+        $.each(chamcong, function (keycc, chamcong) {
+          if (undefined == chamcong.__EMPTY) return;
+          nv.chamcong[chamcong.__EMPTY] = chamcong[nv.__EMPTY];
+          nv.cong += chamcong[nv.__EMPTY];
+        });
+      });
+    },
+    getJsDateFromExcel: function getJsDateFromExcel(excelDate) {
+      return new Date((excelDate - (25567 + 1)) * 86400 * 1000);
+    }
+  }
+});
 
 /***/ }),
 
@@ -39295,15 +39474,17 @@ var render = function() {
                   return _c("tr", [
                     _c("td", [
                       _vm._v(
-                        _vm._s(
-                          this.getJsDateFromExcel(
-                            $time
-                          ).toLocaleDateString("vi-VN", {
-                            year: "numeric",
-                            month: "numeric",
-                            day: "numeric"
-                          })
-                        )
+                        "\n                    " +
+                          _vm._s(
+                            this.getJsDateFromExcel(
+                              $time
+                            ).toLocaleDateString("vi-VN", {
+                              year: "numeric",
+                              month: "numeric",
+                              day: "numeric"
+                            })
+                          ) +
+                          "\n                "
                       )
                     ]),
                     _vm._v(" "),

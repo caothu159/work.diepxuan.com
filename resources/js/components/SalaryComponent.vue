@@ -48,7 +48,9 @@
                     <th>Lương</th>
                 </tr>
                 <tr v-for="($cong, $time) in nv.chamcong">
-                    <td>{{ this.getJsDateFromExcel($time).toLocaleDateString('vi-VN', {year: 'numeric', month: 'numeric', day: 'numeric'}) }}</td>
+                    <td>
+                        {{ this.getJsDateFromExcel($time).toLocaleDateString('vi-VN', { year: 'numeric', month: 'numeric', day: 'numeric' }) }}
+                    </td>
                     <td>{{ $cong }}</td>
                     <td>{{ '-' }}</td>
                     <td>{{ '-' }}</td>
@@ -161,7 +163,7 @@
                     });
                 });
             },
-            function getJsDateFromExcel(excelDate) {
+            getJsDateFromExcel: function(excelDate) {
                 return new Date((excelDate - (25567 + 1)) * 86400 * 1000);
             }
         }
