@@ -1,12 +1,14 @@
 <template>
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-8">
-                <div class="card">
-                    <div class="card-header">Example Component</div>
-                    <div class="card-body">
-                        {{ nhanvien }}
-                        {{ chamcong }}
+    <div>
+        <div class="col-sm-3 pl-1 pr-1 pt-0 pb-2" v-for="(nv, index) in nhanvien">
+            <div class="card text-decoration-none collapsed h-100" :id="'heading' + index">
+                <div class="card-header p-2">
+                    <span class="card-title text-success font-weight-bold">
+                        {{ nv.__EMPTY }}
+                    </span>
+                </div>
+                <div class="card-body p-2">
+                    <div class="card-text font-weight-light text-info">
                     </div>
                 </div>
             </div>
