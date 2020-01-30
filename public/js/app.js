@@ -1733,27 +1733,67 @@ __webpack_require__.r(__webpack_exports__);
   methods: {
     _initialize: function _initialize() {
       try {
-        this._loadSheet('nhanvien');
+        this._loadSheetNhanvien();
+
+        this._loadSheetChamcong();
       } catch (e) {}
     },
-    _loadSheet: function _loadSheet(sheetname) {
-      var req = new XMLHttpRequest();
-      req.open("GET", '/' + window.location.pathname.split('/').filter(function (v) {
+    _loadSheetNhanvien: function _loadSheetNhanvien() {
+      /* set up an async GET request with axios */
+      axios('/' + window.location.pathname.split('/').filter(function (v) {
         return v != '';
-      }).join('/') + '/' + sheetname + '.xlsx', true);
-      req.responseType = "arraybuffer";
-
-      req.onload = function (e) {
-        var data = new Uint8Array(req.response);
-        var nhanvienWB = XLSX.read(data, {
+      }).join('/') + '/' + 'nhanvien.xlsx', {
+        responseType: 'arraybuffer'
+      })["catch"](function (err) {
+        /* error in getting data */
+      }).then(function (res) {
+        /* parse the data when it is received */
+        var data = new Uint8Array(res.data);
+        var workbook = XLSX.read(data, {
           type: "array"
         });
-        /* DO SOMETHING WITH nhanvienWB HERE */
-
-        console.log(nhanvienWB);
-      };
-
+        return workbook;
+      })["catch"](function (err) {
+        /* error in parsing */
+      }).then(function (workbook) {
+        window.nhanvienWB = XLSX.utils.sheet_to_json(workbook.Sheets.nhanvien);
+        this.nhanvien = XLSX.utils.sheet_to_json(workbook.Sheets.nhanvien);
+      });
+      /**
+      var req = new XMLHttpRequest();
+      req.open("GET", '/' + window.location.pathname.split('/').filter(v => v != '').join('/') + '/' + sheetname + '.xlsx', true);
+      req.responseType = "arraybuffer";
+      req.onload = function(e) {
+          var data = new Uint8Array(req.response);
+          window[sheetname + 'WB'] = XLSX.read(data, {
+              type: "array"
+          });
+          console.log(sheetname + 'WB');
+      }
       req.send();
+      */
+    },
+    _loadSheetChamcong: function _loadSheetChamcong() {
+      /* set up an async GET request with axios */
+      axios('/' + window.location.pathname.split('/').filter(function (v) {
+        return v != '';
+      }).join('/') + '/' + 'chamcong.xlsx', {
+        responseType: 'arraybuffer'
+      })["catch"](function (err) {
+        /* error in getting data */
+      }).then(function (res) {
+        /* parse the data when it is received */
+        var data = new Uint8Array(res.data);
+        var workbook = XLSX.read(data, {
+          type: "array"
+        });
+        return workbook;
+      })["catch"](function (err) {
+        /* error in parsing */
+      }).then(function (workbook) {
+        window.nhanvienWB = XLSX.utils.sheet_to_json(workbook.Sheets.chamcong);
+        this.chamcong = XLSX.utils.sheet_to_json(workbook.Sheets.chamcong);
+      });
     }
   }
 });
