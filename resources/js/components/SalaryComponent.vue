@@ -68,6 +68,53 @@
     </div>
 </template>
 <script>
+    class Nhanvien {
+        constructor(brand) {
+            this.name = brand.__EMPTY;
+            this._congnhat = {};
+        }
+        get cong() {
+            let _cong = 0;
+            $.each(this._congnhat, function(keycc, cong) {
+                _cong += cong.cong + cong.phep;
+            });
+            return _cong;
+        }
+        get congnhat() {
+            return this._congnhat;
+        }
+        set congnhat(chamcong) {
+            self = this;
+            $.each(chamcong, function(keycc, cong) {
+                if (undefined == cong.__EMPTY) return;
+                self._congnhat[cong.__EMPTY] = self._congnhat[cong.__EMPTY] || {};
+                self._congnhat[cong.__EMPTY].thoigian = self.getJsDateFromExcel(cong.__EMPTY)
+                    .toLocaleDateString('vi-VN', {
+                        year: 'numeric',
+                        month: 'numeric',
+                        day: 'numeric'
+                    }),
+                    self._congnhat[cong.__EMPTY].cong = cong[self.name];
+            });
+        }
+        set nghikhongphep(nghikhongphep) {
+            self = this;
+            $.each(nghikhongphep, function(keycc, phep) {
+                if (undefined == phep.__EMPTY) return;
+                self._congnhat[phep.__EMPTY] = self._congnhat[phep.__EMPTY] || {};
+                self._congnhat[phep.__EMPTY].thoigian = self.getJsDateFromExcel(phep.__EMPTY)
+                    .toLocaleDateString('vi-VN', {
+                        year: 'numeric',
+                        month: 'numeric',
+                        day: 'numeric'
+                    });
+                self._congnhat[phep.__EMPTY].phep = phep[self.name];
+            });
+        }
+        getJsDateFromExcel(excelDate) {
+            return new Date((excelDate - (25567 + 2)) * 86400 * 1000);
+        }
+    }
     export default {
         mounted() {
             this._initialize();

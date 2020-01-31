@@ -5,7 +5,6 @@
  */
 
 require('./bootstrap');
-require('./model');
 
 window.Vue = require('vue');
 window.XLSX = require('xlsx');

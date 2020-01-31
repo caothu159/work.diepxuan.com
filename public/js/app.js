@@ -1697,6 +1697,12 @@ module.exports = {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
 //
 //
 //
@@ -1766,6 +1772,67 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+var Nhanvien =
+/*#__PURE__*/
+function () {
+  function Nhanvien(brand) {
+    _classCallCheck(this, Nhanvien);
+
+    this.name = brand.__EMPTY;
+    this._congnhat = {};
+  }
+
+  _createClass(Nhanvien, [{
+    key: "getJsDateFromExcel",
+    value: function getJsDateFromExcel(excelDate) {
+      return new Date((excelDate - (25567 + 2)) * 86400 * 1000);
+    }
+  }, {
+    key: "cong",
+    get: function get() {
+      var _cong = 0;
+      $.each(this._congnhat, function (keycc, cong) {
+        _cong += cong.cong + cong.phep;
+      });
+      return _cong;
+    }
+  }, {
+    key: "congnhat",
+    get: function get() {
+      return this._congnhat;
+    },
+    set: function set(chamcong) {
+      self = this;
+      $.each(chamcong, function (keycc, cong) {
+        if (undefined == cong.__EMPTY) return;
+        self._congnhat[cong.__EMPTY] = self._congnhat[cong.__EMPTY] || {};
+        self._congnhat[cong.__EMPTY].thoigian = self.getJsDateFromExcel(cong.__EMPTY).toLocaleDateString('vi-VN', {
+          year: 'numeric',
+          month: 'numeric',
+          day: 'numeric'
+        }), self._congnhat[cong.__EMPTY].cong = cong[self.name];
+      });
+    }
+  }, {
+    key: "nghikhongphep",
+    set: function set(nghikhongphep) {
+      self = this;
+      $.each(nghikhongphep, function (keycc, phep) {
+        if (undefined == phep.__EMPTY) return;
+        self._congnhat[phep.__EMPTY] = self._congnhat[phep.__EMPTY] || {};
+        self._congnhat[phep.__EMPTY].thoigian = self.getJsDateFromExcel(phep.__EMPTY).toLocaleDateString('vi-VN', {
+          year: 'numeric',
+          month: 'numeric',
+          day: 'numeric'
+        });
+        self._congnhat[phep.__EMPTY].phep = phep[self.name];
+      });
+    }
+  }]);
+
+  return Nhanvien;
+}();
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
     this._initialize();
@@ -83636,8 +83703,6 @@ var XLS = XLSX, ODS = XLSX;
  */
 __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
-__webpack_require__(/*! ./model */ "./resources/js/model.js");
-
 window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
 window.XLSX = __webpack_require__(/*! xlsx */ "./node_modules/xlsx/xlsx.js");
 /**
@@ -83788,82 +83853,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_SalaryComponent_vue_vue_type_template_id_69128138___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
-
-/***/ }),
-
-/***/ "./resources/js/model.js":
-/*!*******************************!*\
-  !*** ./resources/js/model.js ***!
-  \*******************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-var Nhanvien =
-/*#__PURE__*/
-function () {
-  function Nhanvien(brand) {
-    _classCallCheck(this, Nhanvien);
-
-    this.name = brand.__EMPTY;
-    this._congnhat = {};
-  }
-
-  _createClass(Nhanvien, [{
-    key: "getJsDateFromExcel",
-    value: function getJsDateFromExcel(excelDate) {
-      return new Date((excelDate - (25567 + 2)) * 86400 * 1000);
-    }
-  }, {
-    key: "cong",
-    get: function get() {
-      var _cong = 0;
-      $.each(this._congnhat, function (keycc, cong) {
-        _cong += cong.cong + cong.phep;
-      });
-      return _cong;
-    }
-  }, {
-    key: "congnhat",
-    get: function get() {
-      return this._congnhat;
-    },
-    set: function set(chamcong) {
-      self = this;
-      $.each(chamcong, function (keycc, cong) {
-        if (undefined == cong.__EMPTY) return;
-        self._congnhat[cong.__EMPTY] = self._congnhat[cong.__EMPTY] || {};
-        self._congnhat[cong.__EMPTY].thoigian = self.getJsDateFromExcel(cong.__EMPTY).toLocaleDateString('vi-VN', {
-          year: 'numeric',
-          month: 'numeric',
-          day: 'numeric'
-        }), self._congnhat[cong.__EMPTY].cong = cong[self.name];
-      });
-    }
-  }, {
-    key: "nghikhongphep",
-    set: function set(nghikhongphep) {
-      self = this;
-      $.each(nghikhongphep, function (keycc, phep) {
-        if (undefined == phep.__EMPTY) return;
-        self._congnhat[phep.__EMPTY] = self._congnhat[phep.__EMPTY] || {};
-        self._congnhat[phep.__EMPTY].thoigian = self.getJsDateFromExcel(phep.__EMPTY).toLocaleDateString('vi-VN', {
-          year: 'numeric',
-          month: 'numeric',
-          day: 'numeric'
-        });
-        self._congnhat[phep.__EMPTY].phep = phep[self.name];
-      });
-    }
-  }]);
-
-  return Nhanvien;
-}();
 
 /***/ }),
 
