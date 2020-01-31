@@ -126,11 +126,11 @@
          */
         data() {
             return {
-                nhanvien: [],
-                chamcong: [],
-                nghikhongphep: [],
-                phancong: [],
-                nangsuat: []
+                nhanvien: {},
+                chamcong: {},
+                nghikhongphep: {},
+                phancong: {},
+                nangsuat: {}
             }
         },
         watch: {
@@ -167,7 +167,7 @@
                 }).then(function(workbook) {
                     window.nhanvienWB = workbook;
                     $.each(XLSX.utils.sheet_to_json(workbook.Sheets.nhanvien), function(keynv, nv) {
-                        self.nhanvien[nv.__EMPTY] = new Nhanvien(nv);
+                        self.nhanvien[] = new Nhanvien(nv);
                     });
                 });
                 /**
