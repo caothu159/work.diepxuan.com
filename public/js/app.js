@@ -1823,7 +1823,6 @@ __webpack_require__.r(__webpack_exports__);
         /* error in parsing */
       }).then(function (workbook) {
         window.nhanvienWB = workbook;
-        self = this;
         $.each(XLSX.utils.sheet_to_json(workbook.Sheets.nhanvien), function (keynv, nv) {
           self.nhanvien[nv.__EMPTY] = new Nhanvien(nv);
         });

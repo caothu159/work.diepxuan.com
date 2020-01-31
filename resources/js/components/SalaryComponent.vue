@@ -118,8 +118,7 @@
                 }).catch(function(err) {
                     /* error in parsing */
                 }).then(function(workbook) {
-                    window.nhanvienWB = workbook
-                    self = this;
+                    window.nhanvienWB = workbook;
                     $.each(XLSX.utils.sheet_to_json(workbook.Sheets.nhanvien), function(keynv, nv) {
                         self.nhanvien[nv.__EMPTY] = new Nhanvien(nv);
                     });
