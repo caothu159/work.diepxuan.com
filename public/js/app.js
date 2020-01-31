@@ -1789,6 +1789,9 @@ __webpack_require__.r(__webpack_exports__);
   watch: {
     chamcong: function chamcong(newChamcong, oldChamcong) {
       this.importChamcong(newChamcong);
+    },
+    nghikhongphep: function nghikhongphep(newNghikhongphep, oldNghikhongphep) {
+      this.importNghikhongphep(newNghikhongphep);
     }
   },
   methods: {
@@ -1881,9 +1884,9 @@ __webpack_require__.r(__webpack_exports__);
         return nv;
       });
     },
-    importNghikhongphep: function importNghikhongphep(chamcong) {
+    importNghikhongphep: function importNghikhongphep(nghikhongphep) {
       self = this;
-      console.log(self.nghikhongphep);
+      console.log(nghikhongphep);
     },
     getJsDateFromExcel: function getJsDateFromExcel(excelDate) {
       return new Date((excelDate - (25567 + 2)) * 86400 * 1000);

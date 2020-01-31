@@ -88,7 +88,10 @@
         },
         watch: {
             chamcong: function(newChamcong, oldChamcong) {
-                this.importChamcong(newChamcong)
+                this.importChamcong(newChamcong);
+            },
+            nghikhongphep: function(newNghikhongphep, oldNghikhongphep) {
+                this.importNghikhongphep(newNghikhongphep);
             }
         },
         methods: {
@@ -175,9 +178,9 @@
                     return nv;
                 });
             },
-            importNghikhongphep: function(chamcong) {
+            importNghikhongphep: function(nghikhongphep) {
                 self = this;
-                console.log(self.nghikhongphep);
+                console.log(nghikhongphep);
             },
             getJsDateFromExcel: function(excelDate) {
                 return new Date((excelDate - (25567 + 2)) * 86400 * 1000);
