@@ -75,6 +75,7 @@
         }
         get cong() {
             let _cong = 0;
+            console.log(this._congnhat);
             $.each(this._congnhat, function(keycc, cong) {
                 _cong += cong.cong + cong.phep;
             });
