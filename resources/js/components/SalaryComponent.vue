@@ -5,7 +5,7 @@
                 <div class="card text-decoration-none collapsed h-100" :id="'heading' + index">
                     <div class="card-header p-2">
                         <span class="card-title text-success font-weight-bold">
-                            {{ nv.__EMPTY }}
+                            {{ nv.name }}
                         </span>
                     </div>
                     <div class="card-body p-2">
@@ -72,14 +72,20 @@
         constructor(brand) {
             this.name = brand.__EMPTY;
             this._congnhat = {};
+            console.log(brand);
         }
         get cong() {
+            self = this;
             let _cong = 0;
-            console.log(this._congnhat);
-            $.each(this._congnhat, function(keycc, cong) {
-                _cong += cong.cong + cong.phep;
+            $.each(self._congnhat, function(keycc, cong) {
+                _cong += cong.cong || 0;
+                _cong += cong.phep || 0;
+                if (_cong < -1) _cong = -1;
             });
             return _cong;
+        }
+        set cong(x) {
+            return;
         }
         get congnhat() {
             return this._congnhat;
@@ -95,8 +101,11 @@
                         month: 'numeric',
                         day: 'numeric'
                     }),
-                    self._congnhat[cong.__EMPTY].cong = cong[self.name];
+                    self._congnhat[cong.__EMPTY].cong = cong[self.name] || 0;
             });
+        }
+        get nghikhongphep() {
+            return this._congnhat;
         }
         set nghikhongphep(nghikhongphep) {
             self = this;
@@ -109,7 +118,7 @@
                         month: 'numeric',
                         day: 'numeric'
                     });
-                self._congnhat[phep.__EMPTY].phep = phep[self.name];
+                self._congnhat[phep.__EMPTY].phep = phep[self.name] || phep[self.name.toLowerCase()] || 0;
             });
         }
         getJsDateFromExcel(excelDate) {
@@ -118,8 +127,9 @@
     }
     export default {
         mounted() {
-            this._initialize();
-            console.log('Component mounted.');
+            try {
+                this._loadSheetNhanvien();
+            } catch (e) {}
         },
         /**
          * Defines the data used by the component
@@ -143,12 +153,6 @@
             }
         },
         methods: {
-            _initialize: function() {
-                try {
-                    this._loadSheetNhanvien();
-                    this._loadSheetChamcong();
-                } catch (e) {}
-            },
             _loadSheetNhanvien: function() {
                 self = this;
                 /* set up an async GET request with axios */
@@ -170,20 +174,8 @@
                     $.each(XLSX.utils.sheet_to_json(workbook.Sheets.nhanvien), function(keynv, nv) {
                         self.nhanvien[nv.__EMPTY] = new Nhanvien(nv);
                     });
+                    self._loadSheetChamcong();
                 });
-                /**
-                var req = new XMLHttpRequest();
-                req.open("GET", '/' + window.location.pathname.split('/').filter(v => v != '').join('/') + '/' + sheetname + '.xlsx', true);
-                req.responseType = "arraybuffer";
-                req.onload = function(e) {
-                    var data = new Uint8Array(req.response);
-                    window[sheetname + 'WB'] = XLSX.read(data, {
-                        type: "array"
-                    });
-                    console.log(sheetname + 'WB');
-                }
-                req.send();
-                */
             },
             _loadSheetChamcong: function() {
                 self = this;

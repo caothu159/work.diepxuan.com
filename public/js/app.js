@@ -1780,6 +1780,7 @@ function () {
 
     this.name = brand.__EMPTY;
     this._congnhat = {};
+    console.log(brand);
   }
 
   _createClass(Nhanvien, [{
@@ -1790,12 +1791,17 @@ function () {
   }, {
     key: "cong",
     get: function get() {
+      self = this;
       var _cong = 0;
-      console.log(this._congnhat);
-      $.each(this._congnhat, function (keycc, cong) {
-        _cong += cong.cong + cong.phep;
+      $.each(self._congnhat, function (keycc, cong) {
+        _cong += cong.cong || 0;
+        _cong += cong.phep || 0;
+        if (_cong < -1) _cong = -1;
       });
       return _cong;
+    },
+    set: function set(x) {
+      return;
     }
   }, {
     key: "congnhat",
@@ -1811,11 +1817,14 @@ function () {
           year: 'numeric',
           month: 'numeric',
           day: 'numeric'
-        }), self._congnhat[cong.__EMPTY].cong = cong[self.name];
+        }), self._congnhat[cong.__EMPTY].cong = cong[self.name] || 0;
       });
     }
   }, {
     key: "nghikhongphep",
+    get: function get() {
+      return this._congnhat;
+    },
     set: function set(nghikhongphep) {
       self = this;
       $.each(nghikhongphep, function (keycc, phep) {
@@ -1826,7 +1835,7 @@ function () {
           month: 'numeric',
           day: 'numeric'
         });
-        self._congnhat[phep.__EMPTY].phep = phep[self.name];
+        self._congnhat[phep.__EMPTY].phep = phep[self.name] || phep[self.name.toLowerCase()] || 0;
       });
     }
   }]);
@@ -1836,9 +1845,9 @@ function () {
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
-    this._initialize();
-
-    console.log('Component mounted.');
+    try {
+      this._loadSheetNhanvien();
+    } catch (e) {}
   },
 
   /**
@@ -1863,13 +1872,6 @@ function () {
     }
   },
   methods: {
-    _initialize: function _initialize() {
-      try {
-        this._loadSheetNhanvien();
-
-        this._loadSheetChamcong();
-      } catch (e) {}
-    },
     _loadSheetNhanvien: function _loadSheetNhanvien() {
       self = this;
       /* set up an async GET request with axios */
@@ -1894,20 +1896,9 @@ function () {
         $.each(XLSX.utils.sheet_to_json(workbook.Sheets.nhanvien), function (keynv, nv) {
           self.nhanvien[nv.__EMPTY] = new Nhanvien(nv);
         });
+
+        self._loadSheetChamcong();
       });
-      /**
-      var req = new XMLHttpRequest();
-      req.open("GET", '/' + window.location.pathname.split('/').filter(v => v != '').join('/') + '/' + sheetname + '.xlsx', true);
-      req.responseType = "arraybuffer";
-      req.onload = function(e) {
-          var data = new Uint8Array(req.response);
-          window[sheetname + 'WB'] = XLSX.read(data, {
-              type: "array"
-          });
-          console.log(sheetname + 'WB');
-      }
-      req.send();
-      */
     },
     _loadSheetChamcong: function _loadSheetChamcong() {
       self = this;
@@ -39443,7 +39434,7 @@ var render = function() {
                     [
                       _vm._v(
                         "\n                        " +
-                          _vm._s(nv.__EMPTY) +
+                          _vm._s(nv.name) +
                           "\n                    "
                       )
                     ]
