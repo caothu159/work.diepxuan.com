@@ -126,11 +126,11 @@
          */
         data() {
             return {
-                nhanvien: {},
-                chamcong: {},
-                nghikhongphep: {},
-                phancong: {},
-                nangsuat: {}
+                nhanvien: [],
+                chamcong: [],
+                nghikhongphep: [],
+                phancong: [],
+                nangsuat: []
             }
         },
         watch: {
