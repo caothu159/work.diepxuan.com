@@ -1781,6 +1781,7 @@ __webpack_require__.r(__webpack_exports__);
     return {
       nhanvien: [],
       chamcong: [],
+      nghikhongphep: [],
       phancong: [],
       nangsuat: []
     };
@@ -1857,6 +1858,7 @@ __webpack_require__.r(__webpack_exports__);
       }).then(function (workbook) {
         window.chamcongWB = workbook;
         self.chamcong = XLSX.utils.sheet_to_json(workbook.Sheets.chamcong);
+        self.nghikhongphep = XLSX.utils.sheet_to_json(workbook.Sheets.nghikhongphep);
       });
     },
     importChamcong: function importChamcong(chamcong) {
@@ -1878,6 +1880,10 @@ __webpack_require__.r(__webpack_exports__);
         });
         return nv;
       });
+    },
+    importNghikhongphep: function importNghikhongphep(chamcong) {
+      self = this;
+      console.log(self.nghikhongphep);
     },
     getJsDateFromExcel: function getJsDateFromExcel(excelDate) {
       return new Date((excelDate - (25567 + 2)) * 86400 * 1000);
