@@ -1779,11 +1779,11 @@ __webpack_require__.r(__webpack_exports__);
    */
   data: function data() {
     return {
-      nhanvien: [],
-      chamcong: [],
-      nghikhongphep: [],
-      phancong: [],
-      nangsuat: []
+      nhanvien: {},
+      chamcong: {},
+      nghikhongphep: {},
+      phancong: {},
+      nangsuat: {}
     };
   },
   watch: {
@@ -1823,7 +1823,10 @@ __webpack_require__.r(__webpack_exports__);
         /* error in parsing */
       }).then(function (workbook) {
         window.nhanvienWB = workbook;
-        self.nhanvien = XLSX.utils.sheet_to_json(workbook.Sheets.nhanvien);
+        self = this;
+        $.each(XLSX.utils.sheet_to_json(workbook.Sheets.nhanvien), function (keynv, nv) {
+          self.nhanvien[nv.__EMPTY] = new Nhanvien(nv);
+        });
       });
       /**
       var req = new XMLHttpRequest();
@@ -1867,29 +1870,16 @@ __webpack_require__.r(__webpack_exports__);
     importChamcong: function importChamcong(chamcong) {
       self = this;
       $.each(self.nhanvien, function (keynv, nv) {
-        nv.congnhat = {};
-        nv.cong = 0;
-        $.each(chamcong, function (keycc, cong) {
-          if (undefined == cong.__EMPTY) return;
-          nv.congnhat[cong.__EMPTY] = {
-            'thoigian': self.getJsDateFromExcel(cong.__EMPTY).toLocaleDateString('vi-VN', {
-              year: 'numeric',
-              month: 'numeric',
-              day: 'numeric'
-            }),
-            'cong': cong[nv.__EMPTY]
-          };
-          nv.cong += cong[nv.__EMPTY];
-        });
+        nv.congnhat = chamcong;
         return nv;
       });
     },
     importNghikhongphep: function importNghikhongphep(nghikhongphep) {
       self = this;
-      console.log(nghikhongphep);
-    },
-    getJsDateFromExcel: function getJsDateFromExcel(excelDate) {
-      return new Date((excelDate - (25567 + 2)) * 86400 * 1000);
+      $.each(self.nhanvien, function (keynv, nv) {
+        nv.nghikhongphep = nghikhongphep;
+        return nv;
+      });
     }
   }
 });
@@ -83647,6 +83637,8 @@ var XLS = XLSX, ODS = XLSX;
  */
 __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
+__webpack_require__(/*! ./model */ "./resources/js/model.js");
+
 window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
 window.XLSX = __webpack_require__(/*! xlsx */ "./node_modules/xlsx/xlsx.js");
 /**
@@ -83797,6 +83789,82 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_SalaryComponent_vue_vue_type_template_id_69128138___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
+
+/***/ }),
+
+/***/ "./resources/js/model.js":
+/*!*******************************!*\
+  !*** ./resources/js/model.js ***!
+  \*******************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+var Nhanvien =
+/*#__PURE__*/
+function () {
+  function Nhanvien(brand) {
+    _classCallCheck(this, Nhanvien);
+
+    this.name = brand.__EMPTY;
+    this._congnhat = {};
+  }
+
+  _createClass(Nhanvien, [{
+    key: "getJsDateFromExcel",
+    value: function getJsDateFromExcel(excelDate) {
+      return new Date((excelDate - (25567 + 2)) * 86400 * 1000);
+    }
+  }, {
+    key: "cong",
+    get: function get() {
+      var _cong = 0;
+      $.each(this._congnhat, function (keycc, cong) {
+        _cong += cong.cong + cong.phep;
+      });
+      return _cong;
+    }
+  }, {
+    key: "congnhat",
+    get: function get() {
+      return this._congnhat;
+    },
+    set: function set(chamcong) {
+      self = this;
+      $.each(chamcong, function (keycc, cong) {
+        if (undefined == cong.__EMPTY) return;
+        self._congnhat[cong.__EMPTY] = self._congnhat[cong.__EMPTY] || {};
+        self._congnhat[cong.__EMPTY].thoigian = self.getJsDateFromExcel(cong.__EMPTY).toLocaleDateString('vi-VN', {
+          year: 'numeric',
+          month: 'numeric',
+          day: 'numeric'
+        }), self._congnhat[cong.__EMPTY].cong = cong[self.name];
+      });
+    }
+  }, {
+    key: "nghikhongphep",
+    set: function set(nghikhongphep) {
+      self = this;
+      $.each(nghikhongphep, function (keycc, phep) {
+        if (undefined == phep.__EMPTY) return;
+        self._congnhat[phep.__EMPTY] = self._congnhat[phep.__EMPTY] || {};
+        self._congnhat[phep.__EMPTY].thoigian = self.getJsDateFromExcel(phep.__EMPTY).toLocaleDateString('vi-VN', {
+          year: 'numeric',
+          month: 'numeric',
+          day: 'numeric'
+        });
+        self._congnhat[phep.__EMPTY].phep = phep[self.name];
+      });
+    }
+  }]);
+
+  return Nhanvien;
+}();
 
 /***/ }),
 

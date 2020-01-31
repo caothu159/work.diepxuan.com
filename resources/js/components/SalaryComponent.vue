@@ -79,11 +79,11 @@
          */
         data() {
             return {
-                nhanvien: [],
-                chamcong: [],
-                nghikhongphep: [],
-                phancong: [],
-                nangsuat: []
+                nhanvien: {},
+                chamcong: {},
+                nghikhongphep: {},
+                phancong: {},
+                nangsuat: {}
             }
         },
         watch: {
@@ -119,7 +119,10 @@
                     /* error in parsing */
                 }).then(function(workbook) {
                     window.nhanvienWB = workbook
-                    self.nhanvien = XLSX.utils.sheet_to_json(workbook.Sheets.nhanvien);
+                    self = this;
+                    $.each(XLSX.utils.sheet_to_json(workbook.Sheets.nhanvien), function(keynv, nv) {
+                        self.nhanvien[nv.__EMPTY] = new Nhanvien(nv);
+                    });
                 });
                 /**
                 var req = new XMLHttpRequest();
@@ -160,30 +163,16 @@
             importChamcong: function(chamcong) {
                 self = this;
                 $.each(self.nhanvien, function(keynv, nv) {
-                    nv.congnhat = {};
-                    nv.cong = 0;
-                    $.each(chamcong, function(keycc, cong) {
-                        if (undefined == cong.__EMPTY) return;
-                        nv.congnhat[cong.__EMPTY] = {
-                            'thoigian': self.getJsDateFromExcel(cong.__EMPTY)
-                                .toLocaleDateString('vi-VN', {
-                                    year: 'numeric',
-                                    month: 'numeric',
-                                    day: 'numeric'
-                                }),
-                            'cong': cong[nv.__EMPTY]
-                        };
-                        nv.cong += cong[nv.__EMPTY];
-                    });
+                    nv.congnhat = chamcong;
                     return nv;
                 });
             },
             importNghikhongphep: function(nghikhongphep) {
                 self = this;
-                console.log(nghikhongphep);
-            },
-            getJsDateFromExcel: function(excelDate) {
-                return new Date((excelDate - (25567 + 2)) * 86400 * 1000);
+                $.each(self.nhanvien, function(keynv, nv) {
+                    nv.nghikhongphep = nghikhongphep;
+                    return nv;
+                });
             }
         }
     }
