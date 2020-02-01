@@ -1770,17 +1770,75 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 //
 //
 //
-//
-//
+var CongNhat =
+/*#__PURE__*/
+function () {
+  function CongNhat(thoigian, nhanvien) {
+    _classCallCheck(this, CongNhat);
+
+    /** primary params */
+    this.thoigian = thoigian;
+    /** extra params from nhanvien */
+
+    this.luongCoBanTheoNgay = nhanvien.luongCoBanTheoNgay;
+    /** cal params */
+
+    this._cong = 0;
+    this._phep = 0;
+  }
+
+  _createClass(CongNhat, [{
+    key: "cong",
+    get: function get() {
+      var _cong = 0;
+      _cong += this._cong || 0;
+      _cong += this._phep || 0;
+      if (_cong < -1) _cong = -1;
+      return _cong;
+    },
+    set: function set(x) {
+      this._cong = x || 0;
+    }
+  }, {
+    key: "phep",
+    get: function get() {
+      return this.cong;
+    },
+    set: function set(x) {
+      this._phep = x || 0;
+    }
+  }, {
+    key: "luongCoBan",
+    get: function get() {
+      return this.cong * this.luongCoBanTheoNgay;
+    }
+  }, {
+    key: "luongNangSuat",
+    get: function get() {
+      return 0;
+    }
+  }, {
+    key: "luong",
+    get: function get() {
+      return this.luongCoBan + this.luongNangSuat;
+    }
+  }]);
+
+  return CongNhat;
+}();
+
 var Nhanvien =
 /*#__PURE__*/
 function () {
   function Nhanvien(brand) {
     _classCallCheck(this, Nhanvien);
 
+    this.index = brand.__EMPTY.split(' ').join('_').toLowerCase();
     this.name = brand.__EMPTY;
+    this.luongCoBan = brand['Luong co ban'];
+    this.luongKho = brand['Luong kho'];
+    this.chiTieu = brand['Chi tieu'];
     this._congnhat = {};
-    console.log(brand);
   }
 
   _createClass(Nhanvien, [{
@@ -1789,20 +1847,32 @@ function () {
       return new Date((excelDate - (25567 + 2)) * 86400 * 1000);
     }
   }, {
+    key: "luongCoBanTheoNgay",
+    get: function get() {
+      return this.luongCoBan / 30;
+    }
+  }, {
     key: "cong",
     get: function get() {
       self = this;
       var _cong = 0;
-      $.each(self._congnhat, function (keycc, cong) {
-        _cong += cong.cong || 0;
-        _cong += cong.phep || 0;
-        if (_cong < -1) _cong = -1;
+      $.each(self._congnhat, function (keycc, congnhat) {
+        _cong += congnhat.cong || 0;
       });
       return _cong;
     },
-    set: function set(x) {
-      return;
-    }
+    set: function set(x) {}
+  }, {
+    key: "luong",
+    get: function get() {
+      self = this;
+      var _luong = 0;
+      $.each(self._congnhat, function (keycc, congnhat) {
+        _luong += congnhat.luong || 0;
+      });
+      return _luong;
+    },
+    set: function set(x) {}
   }, {
     key: "congnhat",
     get: function get() {
@@ -1812,7 +1882,7 @@ function () {
       self = this;
       $.each(chamcong, function (keycc, cong) {
         if (undefined == cong.__EMPTY) return;
-        self._congnhat[cong.__EMPTY] = self._congnhat[cong.__EMPTY] || {};
+        self._congnhat[cong.__EMPTY] = self._congnhat[cong.__EMPTY] || new CongNhat(cong.__EMPTY, self);
         self._congnhat[cong.__EMPTY].thoigian = self.getJsDateFromExcel(cong.__EMPTY).toLocaleDateString('vi-VN', {
           year: 'numeric',
           month: 'numeric',
@@ -1829,7 +1899,7 @@ function () {
       self = this;
       $.each(nghikhongphep, function (keycc, phep) {
         if (undefined == phep.__EMPTY) return;
-        self._congnhat[phep.__EMPTY] = self._congnhat[phep.__EMPTY] || {};
+        self._congnhat[phep.__EMPTY] = self._congnhat[phep.__EMPTY] || new CongNhat(cong.__EMPTY, self);
         self._congnhat[phep.__EMPTY].thoigian = self.getJsDateFromExcel(phep.__EMPTY).toLocaleDateString('vi-VN', {
           year: 'numeric',
           month: 'numeric',
@@ -39417,14 +39487,14 @@ var render = function() {
     "div",
     { staticClass: "row" },
     [
-      _vm._l(_vm.nhanvien, function(nv, index) {
+      _vm._l(_vm.nhanvien, function(nv) {
         return [
           _c("div", { staticClass: "col-sm-3 pl-1 pr-1 pt-0 pb-2" }, [
             _c(
               "div",
               {
                 staticClass: "card text-decoration-none collapsed h-100",
-                attrs: { id: "heading" + index }
+                attrs: { id: "heading" + nv.index }
               },
               [
                 _c("div", { staticClass: "card-header p-2" }, [
@@ -39454,7 +39524,7 @@ var render = function() {
                           _c(
                             "span",
                             { staticClass: "text-success font-weight-bold" },
-                            [_vm._v(_vm._s())]
+                            [_vm._v(_vm._s(nv.luong.toFixed(2)))]
                           )
                         ]
                       ),
@@ -39474,8 +39544,8 @@ var render = function() {
                               attrs: {
                                 "data-toggle": "collapse",
                                 "aria-expanded": "false",
-                                href: "#collapse" + index,
-                                "aria-controls": "collapse" + index
+                                href: "#collapse" + nv.index,
+                                "aria-controls": "collapse" + nv.index
                               }
                             },
                             [
@@ -39503,8 +39573,8 @@ var render = function() {
                             attrs: {
                               "data-toggle": "collapse",
                               "aria-expanded": "false",
-                              href: "#collapse" + index,
-                              "aria-controls": "collapse" + index
+                              href: "#collapse" + nv.index,
+                              "aria-controls": "collapse" + nv.index
                             }
                           })
                         ]
@@ -39521,8 +39591,8 @@ var render = function() {
             {
               staticClass: "col-sm-12 collapse",
               attrs: {
-                id: "collapse" + index,
-                "aria-labelledby": "heading" + index,
+                id: "collapse" + nv.index,
+                "aria-labelledby": "heading" + nv.index,
                 "data-parent": "#accordionSalary"
               }
             },
@@ -39536,13 +39606,11 @@ var render = function() {
                 [
                   _vm._m(0, true),
                   _vm._v(" "),
-                  _vm._l(nv.congnhat, function(luong) {
+                  _vm._l(nv.congnhat, function(congnhat) {
                     return _c("tr", [
-                      _c("td", [_vm._v(_vm._s(luong.thoigian))]),
+                      _c("td", [_vm._v(_vm._s(congnhat.thoigian))]),
                       _vm._v(" "),
-                      _c("td", [_vm._v(_vm._s(luong.cong))]),
-                      _vm._v(" "),
-                      _c("td", [_vm._v(_vm._s("-"))]),
+                      _c("td", [_vm._v(_vm._s(congnhat.cong))]),
                       _vm._v(" "),
                       _c("td", [_vm._v(_vm._s("-"))]),
                       _vm._v(" "),
@@ -39556,7 +39624,9 @@ var render = function() {
                       _vm._v(" "),
                       _c("td", [_vm._v(_vm._s("-"))]),
                       _vm._v(" "),
-                      _c("td", [_vm._v(_vm._s("-"))])
+                      _c("td", [_vm._v(_vm._s("-"))]),
+                      _vm._v(" "),
+                      _c("td", [_vm._v(_vm._s(congnhat.luong.toFixed(2)))])
                     ])
                   })
                 ],
@@ -39565,10 +39635,7 @@ var render = function() {
             ]
           )
         ]
-      }),
-      _vm._v(
-        "\n    " + _vm._s(_vm.nhanvien) + "\n    " + _vm._s(_vm.chamcong) + "\n"
-      )
+      })
     ],
     2
   )

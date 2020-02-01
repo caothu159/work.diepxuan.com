@@ -7,10 +7,9 @@
         </div>
     @endif
 
-    <salary-component></salary-component>
-
     <div class="col-12">
         <div class="row align-items-stretch salary-container" id="accordionSalary">
+            <salary-component></salary-component>
             @include('components/timepicker')
             @include('salary/salary')
         </div>

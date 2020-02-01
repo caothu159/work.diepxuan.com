@@ -1,8 +1,8 @@
 <template>
     <div class="row">
-        <template v-for="(nv, index) in nhanvien">
+        <template v-for="nv in nhanvien">
             <div class="col-sm-3 pl-1 pr-1 pt-0 pb-2">
-                <div class="card text-decoration-none collapsed h-100" :id="'heading' + index">
+                <div class="card text-decoration-none collapsed h-100" :id="'heading' + nv.index">
                     <div class="card-header p-2">
                         <span class="card-title text-success font-weight-bold">
                             {{ nv.name }}
@@ -11,17 +11,17 @@
                     <div class="card-body p-2">
                         <div class="card-text font-weight-light text-info">
                             <div class="d-flex justify-content-between">
-                                Lương: <span class="text-success font-weight-bold">{{ }}</span>
+                                Lương: <span class="text-success font-weight-bold">{{ nv.luong.toFixed(2) }}</span>
                             </div>
                             <div class="d-flex justify-content-between">
                                 Công:
-                                <a class="font-weight-normal font-weight-bold" data-toggle="collapse" aria-expanded="false" :href="'#collapse' + index" :aria-controls="'collapse' + index">
+                                <a class="font-weight-normal font-weight-bold" data-toggle="collapse" aria-expanded="false" :href="'#collapse' + nv.index" :aria-controls="'collapse' + nv.index">
                                     {{ nv.cong }}
                                 </a>
                             </div>
                             <div class="d-flex justify-content-between">
                                 {{ 'Năng suất:' }}
-                                <a class="font-weight-normal font-weight-bold" data-toggle="collapse" aria-expanded="false" :href="'#collapse' + index" :aria-controls="'collapse' + index">
+                                <a class="font-weight-normal font-weight-bold" data-toggle="collapse" aria-expanded="false" :href="'#collapse' + nv.index" :aria-controls="'collapse' + nv.index">
                                     <!-- {{ number_format($salary->turnover, 2) }}
                                 @if ($salary->productivity!=0 && isset($controller) && $controller->isAdmin())
                                 <span class="font-weight-lighter">
@@ -34,7 +34,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-sm-12 collapse" :id="'collapse' + index" :aria-labelledby="'heading' + index" data-parent="#accordionSalary">
+            <div class="col-sm-12 collapse" :id="'collapse' + nv.index" :aria-labelledby="'heading' + nv.index" data-parent="#accordionSalary">
                 <table class="table table-hover table-condensed table-sm text-center">
                     <tr>
                         <th></th>
@@ -48,9 +48,9 @@
                         <th>Hệ số</th>
                         <th>Lương</th>
                     </tr>
-                    <tr v-for="luong in nv.congnhat">
-                        <td>{{ luong.thoigian }}</td>
-                        <td>{{ luong.cong }}</td>
+                    <tr v-for="congnhat in nv.congnhat">
+                        <td>{{ congnhat.thoigian }}</td>
+                        <td>{{ congnhat.cong }}</td>
                         <td>{{ '-' }}</td>
                         <td>{{ '-' }}</td>
                         <td>{{ '-' }}</td>
@@ -58,35 +58,80 @@
                         <td>{{ '-' }}</td>
                         <td>{{ '-' }}</td>
                         <td>{{ '-' }}</td>
-                        <td>{{ '-' }}</td>
+                        <td>{{ congnhat.luong.toFixed(2) }}</td>
                     </tr>
                 </table>
             </div>
         </template>
-        {{ nhanvien }}
-        {{ chamcong }}
     </div>
 </template>
 <script>
+    class CongNhat {
+        constructor(thoigian, nhanvien) {
+            /** primary params */
+            this.thoigian = thoigian;
+            /** extra params from nhanvien */
+            this.luongCoBanTheoNgay = nhanvien.luongCoBanTheoNgay;
+            /** cal params */
+            this._cong = 0;
+            this._phep = 0;
+        }
+        get cong() {
+            let _cong = 0;
+            _cong += this._cong || 0;
+            _cong += this._phep || 0;
+            if (_cong < -1) _cong = -1;
+            return _cong;
+        }
+        set cong(x) {
+            this._cong = x || 0;
+        }
+        get phep() {
+            return this.cong;
+        }
+        set phep(x) {
+            this._phep = x || 0;
+        }
+        get luongCoBan() {
+            return this.cong * this.luongCoBanTheoNgay;
+        }
+        get luongNangSuat() {
+            return 0;
+        }
+        get luong() {
+            return this.luongCoBan + this.luongNangSuat;
+        }
+    }
     class Nhanvien {
         constructor(brand) {
+            this.index = brand.__EMPTY.split(' ').join('_').toLowerCase();
             this.name = brand.__EMPTY;
+            this.luongCoBan = brand['Luong co ban'];
+            this.luongKho = brand['Luong kho'];
+            this.chiTieu = brand['Chi tieu'];
             this._congnhat = {};
-            console.log(brand);
+        }
+        get luongCoBanTheoNgay() {
+            return this.luongCoBan / 30;
         }
         get cong() {
             self = this;
             let _cong = 0;
-            $.each(self._congnhat, function(keycc, cong) {
-                _cong += cong.cong || 0;
-                _cong += cong.phep || 0;
-                if (_cong < -1) _cong = -1;
+            $.each(self._congnhat, function(keycc, congnhat) {
+                _cong += congnhat.cong || 0;
             });
             return _cong;
         }
-        set cong(x) {
-            return;
+        set cong(x) {}
+        get luong() {
+            self = this;
+            let _luong = 0;
+            $.each(self._congnhat, function(keycc, congnhat) {
+                _luong += congnhat.luong || 0;
+            });
+            return _luong;
         }
+        set luong(x) {}
         get congnhat() {
             return this._congnhat;
         }
@@ -94,7 +139,7 @@
             self = this;
             $.each(chamcong, function(keycc, cong) {
                 if (undefined == cong.__EMPTY) return;
-                self._congnhat[cong.__EMPTY] = self._congnhat[cong.__EMPTY] || {};
+                self._congnhat[cong.__EMPTY] = self._congnhat[cong.__EMPTY] || new CongNhat(cong.__EMPTY, self);
                 self._congnhat[cong.__EMPTY].thoigian = self.getJsDateFromExcel(cong.__EMPTY)
                     .toLocaleDateString('vi-VN', {
                         year: 'numeric',
@@ -111,7 +156,7 @@
             self = this;
             $.each(nghikhongphep, function(keycc, phep) {
                 if (undefined == phep.__EMPTY) return;
-                self._congnhat[phep.__EMPTY] = self._congnhat[phep.__EMPTY] || {};
+                self._congnhat[phep.__EMPTY] = self._congnhat[phep.__EMPTY] || new CongNhat(cong.__EMPTY, self);
                 self._congnhat[phep.__EMPTY].thoigian = self.getJsDateFromExcel(phep.__EMPTY)
                     .toLocaleDateString('vi-VN', {
                         year: 'numeric',
