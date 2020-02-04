@@ -1697,12 +1697,12 @@ module.exports = {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
 //
 //
 //
@@ -1774,6 +1774,17 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 //
 //
 //
+var Phancong = function Phancong(phancong) {
+  _classCallCheck(this, Phancong);
+
+  self = this;
+  phancong.forEach(function (_phancong, _key) {
+    if ('__EMPTY' == _key) return;
+    if ('__rowNum__' == _key) return;
+    self[_key] = _phancong;
+  });
+};
+
 var CongNhat =
 /*#__PURE__*/
 function () {
@@ -1903,13 +1914,31 @@ function () {
       self = this;
       $.each(nghikhongphep, function (keycc, phep) {
         if (undefined == phep.__EMPTY) return;
-        self._congnhat[phep.__EMPTY] = self._congnhat[phep.__EMPTY] || new CongNhat(cong.__EMPTY, self);
+        self._congnhat[phep.__EMPTY] = self._congnhat[phep.__EMPTY] || new CongNhat(phep.__EMPTY, self);
         self._congnhat[phep.__EMPTY].thoigian = self.getJsDateFromExcel(phep.__EMPTY).toLocaleDateString('vi-VN', {
           year: 'numeric',
           month: 'numeric',
           day: 'numeric'
         });
         self._congnhat[phep.__EMPTY].phep = phep[self.name] || phep[self.name.toLowerCase()] || 0;
+      });
+    }
+  }, {
+    key: "phancong",
+    get: function get() {
+      return this._congnhat;
+    },
+    set: function set(phancong) {
+      self = this;
+      $.each(phancong, function (keypc, phancong) {
+        if (undefined == phancong.__EMPTY) return;
+        self._congnhat[phancong.__EMPTY] = self._congnhat[phancong.__EMPTY] || new CongNhat(phancong.__EMPTY, self);
+        self._congnhat[phancong.__EMPTY].thoigian = self.getJsDateFromExcel(phancong.__EMPTY).toLocaleDateString('vi-VN', {
+          year: 'numeric',
+          month: 'numeric',
+          day: 'numeric'
+        });
+        console.log(phancong); // self._congnhat[phancong.__EMPTY].phancong = phancong[self.name] || phep[self.name.toLowerCase()] || 0;
       });
     }
   }]);
@@ -1920,9 +1949,8 @@ function () {
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
     try {
-      this._loadSheetNhanvien();
+      this._loadSheetNhanvien(); // console.log('mounted');
 
-      console.log('mounted');
     } catch (e) {}
   },
 
@@ -1947,6 +1975,10 @@ function () {
     },
     nghikhongphep: function nghikhongphep(newNghikhongphep, oldNghikhongphep) {
       this.importNghikhongphep(newNghikhongphep);
+      this.forceRerender();
+    },
+    phancong: function phancong(newPhancong, oldPhancong) {
+      this.importPhancong(newPhancong);
       this.forceRerender();
     }
   },
@@ -2030,8 +2062,11 @@ function () {
         /* error in parsing */
       }).then(function (workbook) {
         window.phancongWB = workbook;
-        self.phancong = XLSX.utils.sheet_to_json(workbook.Sheets.phancong);
-        console.log(self.phancong);
+        var _phancong = {};
+        $.each(XLSX.utils.sheet_to_json(workbook.Sheets.phancong), function (keypc, phancong) {
+          _phancong[phancong.__EMPTY] = new Phancong(phancong);
+        });
+        self.phancong = _phancong;
       });
     },
     importChamcong: function importChamcong(chamcong) {
@@ -2045,6 +2080,13 @@ function () {
       self = this;
       $.each(self.nhanvien, function (keynv, nv) {
         nv.nghikhongphep = nghikhongphep;
+        return nv;
+      });
+    },
+    importPhancong: function importPhancong(phancong) {
+      self = this;
+      $.each(self.nhanvien, function (keynv, nv) {
+        nv.phancong = phancong;
         return nv;
       });
     }
@@ -83887,6 +83929,32 @@ if (token) {
 //     cluster: process.env.MIX_PUSHER_APP_CLUSTER,
 //     encrypted: true
 // });
+
+/**
+ * Object.prototype.forEach() polyfill
+ * https://gomakethings.com/looping-through-objects-with-es6/
+ * @author Chris Ferdinandi
+ * @license MIT
+ */
+
+
+if (!Object.prototype.forEach) {
+  Object.defineProperty(Object.prototype, 'forEach', {
+    value: function value(callback, thisArg) {
+      if (this == null) {
+        throw new TypeError('Not an object');
+      }
+
+      thisArg = thisArg || window;
+
+      for (var key in this) {
+        if (this.hasOwnProperty(key)) {
+          callback.call(thisArg, this[key], key, this);
+        }
+      }
+    }
+  });
+}
 
 /***/ }),
 

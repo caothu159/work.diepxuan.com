@@ -70,6 +70,16 @@
     </div>
 </template>
 <script>
+    class Phancong {
+        constructor(phancong) {
+            self = this;
+            phancong.forEach(function(_phancong, _key) {
+                if ('__EMPTY' == _key) return;
+                if ('__rowNum__' == _key) return;
+                self[_key] = _phancong;
+            });
+        }
+    }
     class CongNhat {
         constructor(thoigian, nhanvien) {
             /** primary params */
@@ -160,7 +170,7 @@
             self = this;
             $.each(nghikhongphep, function(keycc, phep) {
                 if (undefined == phep.__EMPTY) return;
-                self._congnhat[phep.__EMPTY] = self._congnhat[phep.__EMPTY] || new CongNhat(cong.__EMPTY, self);
+                self._congnhat[phep.__EMPTY] = self._congnhat[phep.__EMPTY] || new CongNhat(phep.__EMPTY, self);
                 self._congnhat[phep.__EMPTY].thoigian = self.getJsDateFromExcel(phep.__EMPTY)
                     .toLocaleDateString('vi-VN', {
                         year: 'numeric',
@@ -168,6 +178,24 @@
                         day: 'numeric'
                     });
                 self._congnhat[phep.__EMPTY].phep = phep[self.name] || phep[self.name.toLowerCase()] || 0;
+            });
+        }
+        get phancong() {
+            return this._congnhat;
+        }
+        set phancong(phancong) {
+            self = this;
+            $.each(phancong, function(keypc, phancong) {
+                if (undefined == phancong.__EMPTY) return;
+                self._congnhat[phancong.__EMPTY] = self._congnhat[phancong.__EMPTY] || new CongNhat(phancong.__EMPTY, self);
+                self._congnhat[phancong.__EMPTY].thoigian = self.getJsDateFromExcel(phancong.__EMPTY)
+                    .toLocaleDateString('vi-VN', {
+                        year: 'numeric',
+                        month: 'numeric',
+                        day: 'numeric'
+                    });
+                console.log(phancong);
+                // self._congnhat[phancong.__EMPTY].phancong = phancong[self.name] || phep[self.name.toLowerCase()] || 0;
             });
         }
         getJsDateFromExcel(excelDate) {
@@ -178,7 +206,7 @@
         mounted() {
             try {
                 this._loadSheetNhanvien();
-                console.log('mounted');
+                // console.log('mounted');
             } catch (e) {}
         },
         /**
@@ -202,6 +230,10 @@
             },
             nghikhongphep: function(newNghikhongphep, oldNghikhongphep) {
                 this.importNghikhongphep(newNghikhongphep);
+                this.forceRerender();
+            },
+            phancong: function(newPhancong, oldPhancong) {
+                this.importPhancong(newPhancong);
                 this.forceRerender();
             }
         },
@@ -274,8 +306,11 @@
                     /* error in parsing */
                 }).then(function(workbook) {
                     window.phancongWB = workbook;
-                    self.phancong = XLSX.utils.sheet_to_json(workbook.Sheets.phancong);
-                    console.log(self.phancong);
+                    let _phancong = {};
+                    $.each(XLSX.utils.sheet_to_json(workbook.Sheets.phancong), function(keypc, phancong) {
+                        _phancong[phancong.__EMPTY] = new Phancong(phancong);
+                    });
+                    self.phancong = _phancong;
                 });
             },
             importChamcong: function(chamcong) {
@@ -289,6 +324,13 @@
                 self = this;
                 $.each(self.nhanvien, function(keynv, nv) {
                     nv.nghikhongphep = nghikhongphep;
+                    return nv;
+                });
+            },
+            importPhancong: function(phancong) {
+                self = this;
+                $.each(self.nhanvien, function(keynv, nv) {
+                    nv.phancong = phancong;
                     return nv;
                 });
             }
