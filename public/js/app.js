@@ -1770,6 +1770,8 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 //
 //
 //
+//
+//
 var CongNhat =
 /*#__PURE__*/
 function () {
@@ -1917,6 +1919,8 @@ function () {
   mounted: function mounted() {
     try {
       this._loadSheetNhanvien();
+
+      console.log('mounted');
     } catch (e) {}
   },
 
@@ -1966,6 +1970,7 @@ function () {
         $.each(XLSX.utils.sheet_to_json(workbook.Sheets.nhanvien), function (keynv, nv) {
           self.nhanvien[nv.__EMPTY] = new Nhanvien(nv);
         });
+        console.log(self.nhanvien);
 
         self._loadSheetChamcong();
       });
@@ -1993,6 +1998,8 @@ function () {
         window.chamcongWB = workbook;
         self.chamcong = XLSX.utils.sheet_to_json(workbook.Sheets.chamcong);
         self.nghikhongphep = XLSX.utils.sheet_to_json(workbook.Sheets.nghikhongphep);
+        console.log(self.chamcong);
+        console.log(self.nghikhongphep);
       });
     },
     importChamcong: function importChamcong(chamcong) {

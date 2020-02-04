@@ -63,6 +63,8 @@
                 </table>
             </div>
         </template>
+        <!-- {{ nhanvien }} -->
+        <!-- {{ chamcong }} -->
     </div>
 </template>
 <script>
@@ -174,6 +176,7 @@
         mounted() {
             try {
                 this._loadSheetNhanvien();
+                console.log('mounted');
             } catch (e) {}
         },
         /**
@@ -219,6 +222,7 @@
                     $.each(XLSX.utils.sheet_to_json(workbook.Sheets.nhanvien), function(keynv, nv) {
                         self.nhanvien[nv.__EMPTY] = new Nhanvien(nv);
                     });
+                    console.log(self.nhanvien);
                     self._loadSheetChamcong();
                 });
             },
@@ -242,6 +246,8 @@
                     window.chamcongWB = workbook;
                     self.chamcong = XLSX.utils.sheet_to_json(workbook.Sheets.chamcong);
                     self.nghikhongphep = XLSX.utils.sheet_to_json(workbook.Sheets.nghikhongphep);
+                    console.log(self.chamcong);
+                    console.log(self.nghikhongphep);
                 });
             },
             importChamcong: function(chamcong) {
