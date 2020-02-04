@@ -230,7 +230,6 @@
                     $.each(XLSX.utils.sheet_to_json(workbook.Sheets.nhanvien), function(keynv, nv) {
                         self.nhanvien[nv.__EMPTY] = new Nhanvien(nv);
                     });
-                    console.log(self.nhanvien);
                     self._loadSheetChamcong();
                 });
             },
@@ -254,8 +253,29 @@
                     window.chamcongWB = workbook;
                     self.chamcong = XLSX.utils.sheet_to_json(workbook.Sheets.chamcong);
                     self.nghikhongphep = XLSX.utils.sheet_to_json(workbook.Sheets.nghikhongphep);
-                    console.log(self.chamcong);
-                    console.log(self.nghikhongphep);
+                    self._loadSheetPhancong();
+                });
+            },
+            _loadSheetPhancong: function() {
+                self = this;
+                /* set up an async GET request with axios */
+                axios('/' + window.location.pathname.split('/').filter(v => v != '').join('/') + '/' + 'phancong.xlsx', {
+                    responseType: 'arraybuffer'
+                }).catch(function(err) {
+                    /* error in getting data */
+                }).then(function(res) {
+                    /* parse the data when it is received */
+                    var data = new Uint8Array(res.data);
+                    var workbook = XLSX.read(data, {
+                        type: "array"
+                    });
+                    return workbook;
+                }).catch(function(err) {
+                    /* error in parsing */
+                }).then(function(workbook) {
+                    window.phancongWB = workbook;
+                    self.phancong = XLSX.utils.sheet_to_json(workbook.Sheets.phancong);
+                    console.log(self.phancong);
                 });
             },
             importChamcong: function(chamcong) {
