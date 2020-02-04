@@ -1772,6 +1772,8 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 //
 //
 //
+//
+//
 var CongNhat =
 /*#__PURE__*/
 function () {
@@ -1930,6 +1932,7 @@ function () {
    */
   data: function data() {
     return {
+      componentKey: 0,
       nhanvien: {},
       chamcong: {},
       nghikhongphep: {},
@@ -1940,12 +1943,17 @@ function () {
   watch: {
     chamcong: function chamcong(newChamcong, oldChamcong) {
       this.importChamcong(newChamcong);
+      this.forceRerender();
     },
     nghikhongphep: function nghikhongphep(newNghikhongphep, oldNghikhongphep) {
       this.importNghikhongphep(newNghikhongphep);
+      this.forceRerender();
     }
   },
   methods: {
+    forceRerender: function forceRerender() {
+      this.componentKey += 1;
+    },
     _loadSheetNhanvien: function _loadSheetNhanvien() {
       self = this;
       /* set up an async GET request with axios */
@@ -39490,62 +39498,95 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c(
-    "div",
-    { staticClass: "row" },
-    [
-      _vm._l(_vm.nhanvien, function(nv) {
-        return [
-          _c("div", { staticClass: "col-sm-3 pl-1 pr-1 pt-0 pb-2" }, [
-            _c(
-              "div",
-              {
-                staticClass: "card text-decoration-none collapsed h-100",
-                attrs: { id: "heading" + nv.index }
-              },
-              [
-                _c("div", { staticClass: "card-header p-2" }, [
-                  _c(
-                    "span",
-                    { staticClass: "card-title text-success font-weight-bold" },
-                    [
-                      _vm._v(
-                        "\n                        " +
-                          _vm._s(nv.name) +
-                          "\n                    "
-                      )
-                    ]
-                  )
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "card-body p-2" }, [
-                  _c(
-                    "div",
-                    { staticClass: "card-text font-weight-light text-info" },
-                    [
-                      _c(
-                        "div",
-                        { staticClass: "d-flex justify-content-between" },
-                        [
-                          _vm._v("\n                            Lương: "),
-                          _c(
-                            "span",
-                            { staticClass: "text-success font-weight-bold" },
-                            [_vm._v(_vm._s(nv.luong.toFixed(2)))]
-                          )
-                        ]
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "div",
-                        { staticClass: "d-flex justify-content-between" },
-                        [
-                          _vm._v(
-                            "\n                            Công:\n                            "
-                          ),
-                          _c(
-                            "a",
-                            {
+  return _c("div", { staticClass: "col-12" }, [
+    _c(
+      "div",
+      { key: _vm.componentKey, staticClass: "row" },
+      [
+        _vm._l(_vm.nhanvien, function(nv) {
+          return [
+            _c("div", { staticClass: "col-sm-3 pl-1 pr-1 pt-0 pb-2" }, [
+              _c(
+                "div",
+                {
+                  staticClass: "card text-decoration-none collapsed h-100",
+                  attrs: { id: "heading" + nv.index }
+                },
+                [
+                  _c("div", { staticClass: "card-header p-2" }, [
+                    _c(
+                      "span",
+                      {
+                        staticClass: "card-title text-success font-weight-bold"
+                      },
+                      [
+                        _vm._v(
+                          "\n                            " +
+                            _vm._s(nv.name) +
+                            "\n                        "
+                        )
+                      ]
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "card-body p-2" }, [
+                    _c(
+                      "div",
+                      { staticClass: "card-text font-weight-light text-info" },
+                      [
+                        _c(
+                          "div",
+                          { staticClass: "d-flex justify-content-between" },
+                          [
+                            _vm._v("\n                                Lương: "),
+                            _c(
+                              "span",
+                              { staticClass: "text-success font-weight-bold" },
+                              [_vm._v(_vm._s(nv.luong.toFixed(2)))]
+                            )
+                          ]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "div",
+                          { staticClass: "d-flex justify-content-between" },
+                          [
+                            _vm._v(
+                              "\n                                Công:\n                                "
+                            ),
+                            _c(
+                              "a",
+                              {
+                                staticClass:
+                                  "font-weight-normal font-weight-bold",
+                                attrs: {
+                                  "data-toggle": "collapse",
+                                  "aria-expanded": "false",
+                                  href: "#collapse" + nv.index,
+                                  "aria-controls": "collapse" + nv.index
+                                }
+                              },
+                              [
+                                _vm._v(
+                                  "\n                                    " +
+                                    _vm._s(nv.cong) +
+                                    "\n                                "
+                                )
+                              ]
+                            )
+                          ]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "div",
+                          { staticClass: "d-flex justify-content-between" },
+                          [
+                            _vm._v(
+                              "\n                                " +
+                                _vm._s("Năng suất:") +
+                                "\n                                "
+                            ),
+                            _c("a", {
                               staticClass:
                                 "font-weight-normal font-weight-bold",
                               attrs: {
@@ -39554,98 +39595,70 @@ var render = function() {
                                 href: "#collapse" + nv.index,
                                 "aria-controls": "collapse" + nv.index
                               }
-                            },
-                            [
-                              _vm._v(
-                                "\n                                " +
-                                  _vm._s(nv.cong) +
-                                  "\n                            "
-                              )
-                            ]
-                          )
-                        ]
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "div",
-                        { staticClass: "d-flex justify-content-between" },
-                        [
-                          _vm._v(
-                            "\n                            " +
-                              _vm._s("Năng suất:") +
-                              "\n                            "
-                          ),
-                          _c("a", {
-                            staticClass: "font-weight-normal font-weight-bold",
-                            attrs: {
-                              "data-toggle": "collapse",
-                              "aria-expanded": "false",
-                              href: "#collapse" + nv.index,
-                              "aria-controls": "collapse" + nv.index
-                            }
-                          })
-                        ]
-                      )
-                    ]
-                  )
-                ])
+                            })
+                          ]
+                        )
+                      ]
+                    )
+                  ])
+                ]
+              )
+            ]),
+            _vm._v(" "),
+            _c(
+              "div",
+              {
+                staticClass: "col-sm-12 collapse",
+                attrs: {
+                  id: "collapse" + nv.index,
+                  "aria-labelledby": "heading" + nv.index,
+                  "data-parent": "#accordionSalary"
+                }
+              },
+              [
+                _c(
+                  "table",
+                  {
+                    staticClass:
+                      "table table-hover table-condensed table-sm text-center"
+                  },
+                  [
+                    _vm._m(0, true),
+                    _vm._v(" "),
+                    _vm._l(nv.congnhat, function(congnhat) {
+                      return _c("tr", [
+                        _c("td", [_vm._v(_vm._s(congnhat.thoigian))]),
+                        _vm._v(" "),
+                        _c("td", [_vm._v(_vm._s(congnhat.cong))]),
+                        _vm._v(" "),
+                        _c("td", [_vm._v(_vm._s("-"))]),
+                        _vm._v(" "),
+                        _c("td", [_vm._v(_vm._s("-"))]),
+                        _vm._v(" "),
+                        _c("td", [_vm._v(_vm._s("-"))]),
+                        _vm._v(" "),
+                        _c("td", [_vm._v(_vm._s("-"))]),
+                        _vm._v(" "),
+                        _c("td", [_vm._v(_vm._s("-"))]),
+                        _vm._v(" "),
+                        _c("td", [_vm._v(_vm._s("-"))]),
+                        _vm._v(" "),
+                        _c("td", [_vm._v(_vm._s("-"))]),
+                        _vm._v(" "),
+                        _c("td", [_vm._v(_vm._s(congnhat.luong.toFixed(2)))])
+                      ])
+                    })
+                  ],
+                  2
+                )
               ]
             )
-          ]),
-          _vm._v(" "),
-          _c(
-            "div",
-            {
-              staticClass: "col-sm-12 collapse",
-              attrs: {
-                id: "collapse" + nv.index,
-                "aria-labelledby": "heading" + nv.index,
-                "data-parent": "#accordionSalary"
-              }
-            },
-            [
-              _c(
-                "table",
-                {
-                  staticClass:
-                    "table table-hover table-condensed table-sm text-center"
-                },
-                [
-                  _vm._m(0, true),
-                  _vm._v(" "),
-                  _vm._l(nv.congnhat, function(congnhat) {
-                    return _c("tr", [
-                      _c("td", [_vm._v(_vm._s(congnhat.thoigian))]),
-                      _vm._v(" "),
-                      _c("td", [_vm._v(_vm._s(congnhat.cong))]),
-                      _vm._v(" "),
-                      _c("td", [_vm._v(_vm._s("-"))]),
-                      _vm._v(" "),
-                      _c("td", [_vm._v(_vm._s("-"))]),
-                      _vm._v(" "),
-                      _c("td", [_vm._v(_vm._s("-"))]),
-                      _vm._v(" "),
-                      _c("td", [_vm._v(_vm._s("-"))]),
-                      _vm._v(" "),
-                      _c("td", [_vm._v(_vm._s("-"))]),
-                      _vm._v(" "),
-                      _c("td", [_vm._v(_vm._s("-"))]),
-                      _vm._v(" "),
-                      _c("td", [_vm._v(_vm._s("-"))]),
-                      _vm._v(" "),
-                      _c("td", [_vm._v(_vm._s(congnhat.luong.toFixed(2)))])
-                    ])
-                  })
-                ],
-                2
-              )
-            ]
-          )
-        ]
-      })
-    ],
-    2
-  )
+          ]
+        })
+      ],
+      2
+    )
+  ])
 }
 var staticRenderFns = [
   function() {
