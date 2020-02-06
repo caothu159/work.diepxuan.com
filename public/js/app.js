@@ -1697,93 +1697,119 @@ module.exports = {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+var Phancong =
+/*#__PURE__*/
+function () {
+  function Phancong(phancong) {
+    _classCallCheck(this, Phancong);
 
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-var Phancong = function Phancong(phancong) {
-  _classCallCheck(this, Phancong);
+    var self = this;
+    phancong.forEach(function (_phancong, _key) {
+      if ('__EMPTY' == _key) return;
+      if ('__rowNum__' == _key) return;
+      _key = _key.split('x').join('');
+      self[_key] = _phancong.split('-');
+    });
+  }
 
-  self = this;
-  phancong.forEach(function (_phancong, _key) {
-    if ('__EMPTY' == _key) return;
-    if ('__rowNum__' == _key) return;
-    self[_key] = _phancong;
-  });
-};
+  _createClass(Phancong, [{
+    key: "load",
+    value: function load(nhanvien) {
+      self = this;
+      self.dsxe = [];
+
+      for (var key in this) {
+        if (self.hasOwnProperty(key)) {
+          self.dsxe[count(self.dsxe)] = key;
+        }
+      }
+
+      self.nv = nhanvien;
+      self.dsxe.forEach(function (xe) {
+        if ($.inArray(self.nv, self[xe])) self.xe = xe;
+        self.solaixe = count(self[xe]);
+      });
+      return self;
+    }
+  }]);
+
+  return Phancong;
+}();
 
 var CongNhat =
 /*#__PURE__*/
@@ -1869,7 +1895,7 @@ function () {
   }, {
     key: "cong",
     get: function get() {
-      self = this;
+      var self = this;
       var _cong = 0;
       $.each(self._congnhat, function (keycc, congnhat) {
         _cong += congnhat.cong || 0;
@@ -1880,7 +1906,7 @@ function () {
   }, {
     key: "luong",
     get: function get() {
-      self = this;
+      var self = this;
       var _luong = 0;
       $.each(self._congnhat, function (keycc, congnhat) {
         _luong += congnhat.luong || 0;
@@ -1894,7 +1920,7 @@ function () {
       return this._congnhat;
     },
     set: function set(chamcong) {
-      self = this;
+      var self = this;
       $.each(chamcong, function (keycc, cong) {
         if (undefined == cong.__EMPTY) return;
         self._congnhat[cong.__EMPTY] = self._congnhat[cong.__EMPTY] || new CongNhat(cong.__EMPTY, self);
@@ -1911,7 +1937,7 @@ function () {
       return this._congnhat;
     },
     set: function set(nghikhongphep) {
-      self = this;
+      var self = this;
       $.each(nghikhongphep, function (keycc, phep) {
         if (undefined == phep.__EMPTY) return;
         self._congnhat[phep.__EMPTY] = self._congnhat[phep.__EMPTY] || new CongNhat(phep.__EMPTY, self);
@@ -1928,17 +1954,19 @@ function () {
     get: function get() {
       return this._congnhat;
     },
-    set: function set(phancong) {
-      self = this;
-      $.each(phancong, function (keypc, phancong) {
-        if (undefined == phancong.__EMPTY) return;
-        self._congnhat[phancong.__EMPTY] = self._congnhat[phancong.__EMPTY] || new CongNhat(phancong.__EMPTY, self);
-        self._congnhat[phancong.__EMPTY].thoigian = self.getJsDateFromExcel(phancong.__EMPTY).toLocaleDateString('vi-VN', {
+    set: function set(_phancong) {
+      var self = this;
+      $.each(_phancong, function (keypc, phancong) {
+        var pc = phancong;
+        pc = pc.load(self.name);
+        self._congnhat[pc.__EMPTY] = self._congnhat[pc.__EMPTY] || new CongNhat(pc.__EMPTY, self);
+        self._congnhat[pc.__EMPTY].thoigian = self.getJsDateFromExcel(pc.__EMPTY).toLocaleDateString('vi-VN', {
           year: 'numeric',
           month: 'numeric',
           day: 'numeric'
-        });
-        console.log(phancong); // self._congnhat[phancong.__EMPTY].phancong = phancong[self.name] || phep[self.name.toLowerCase()] || 0;
+        }); // self._congnhat[pc.__EMPTY].doanhSo = pc;
+
+        console.log(pc);
       });
     }
   }]);
@@ -1949,8 +1977,17 @@ function () {
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
     try {
-      this._loadSheetNhanvien(); // console.log('mounted');
+      var _self = this;
 
+      _self._loadStep = 1;
+
+      (function checkLoadStep() {
+        if (_self._loadStep == 1) _self._loadSheetNhanvien();
+        if (_self._loadStep == 2) _self._loadSheetChamcong();
+        if (_self._loadStep == 3) _self._loadSheetPhancong();else window.setTimeout(checkLoadStep, 500);
+      })();
+
+      console.log('mounted');
     } catch (e) {}
   },
 
@@ -1960,6 +1997,7 @@ function () {
    */
   data: function data() {
     return {
+      _loadStep: 0,
       componentKey: 0,
       nhanvien: {},
       chamcong: {},
@@ -1987,7 +2025,8 @@ function () {
       this.componentKey += 1;
     },
     _loadSheetNhanvien: function _loadSheetNhanvien() {
-      self = this;
+      var self = this;
+      self._loadStep = 0;
       /* set up an async GET request with axios */
 
       axios('/' + window.location.pathname.split('/').filter(function (v) {
@@ -2010,12 +2049,13 @@ function () {
         $.each(XLSX.utils.sheet_to_json(workbook.Sheets.nhanvien), function (keynv, nv) {
           self.nhanvien[nv.__EMPTY] = new Nhanvien(nv);
         });
-
-        self._loadSheetChamcong();
+        self._loadStep = 2;
+        console.log('_loadSheetNhanvien');
       });
     },
     _loadSheetChamcong: function _loadSheetChamcong() {
-      self = this;
+      var self = this;
+      self._loadStep = 0;
       /* set up an async GET request with axios */
 
       axios('/' + window.location.pathname.split('/').filter(function (v) {
@@ -2037,12 +2077,13 @@ function () {
         window.chamcongWB = workbook;
         self.chamcong = XLSX.utils.sheet_to_json(workbook.Sheets.chamcong);
         self.nghikhongphep = XLSX.utils.sheet_to_json(workbook.Sheets.nghikhongphep);
-
-        self._loadSheetPhancong();
+        self._loadStep = 3;
+        console.log('_loadSheetChamcong');
       });
     },
     _loadSheetPhancong: function _loadSheetPhancong() {
-      self = this;
+      var self = this;
+      self._loadStep = 0;
       /* set up an async GET request with axios */
 
       axios('/' + window.location.pathname.split('/').filter(function (v) {
@@ -2067,27 +2108,27 @@ function () {
           _phancong[phancong.__EMPTY] = new Phancong(phancong);
         });
         self.phancong = _phancong;
+        console.log('_loadSheetPhancong');
       });
     },
     importChamcong: function importChamcong(chamcong) {
-      self = this;
+      var self = this;
       $.each(self.nhanvien, function (keynv, nv) {
         nv.congnhat = chamcong;
         return nv;
       });
     },
     importNghikhongphep: function importNghikhongphep(nghikhongphep) {
-      self = this;
+      var self = this;
       $.each(self.nhanvien, function (keynv, nv) {
         nv.nghikhongphep = nghikhongphep;
         return nv;
       });
     },
     importPhancong: function importPhancong(phancong) {
-      self = this;
-      $.each(self.nhanvien, function (keynv, nv) {
+      this.nhanvien.forEach(function (nv) {
         nv.phancong = phancong;
-        return nv;
+        console.log(nv);
       });
     }
   }
