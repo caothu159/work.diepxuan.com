@@ -68,33 +68,6 @@
     </div>
 </template>
 <script>
-    class Phancong {
-        constructor(phancong) {
-            let self = this;
-            phancong.forEach(function(_phancong, _key) {
-                if ('__EMPTY' == _key) return;
-                if ('__rowNum__' == _key) return;
-                _key = _key.split('x').join('');
-                self[_key] = _phancong.split('-');
-            });
-        }
-        load(nhanvien) {
-            self = this;
-            self.dsxe = [];
-            for (var key in this) {
-                if (self.hasOwnProperty(key)) {
-                    self.dsxe[count(self.dsxe)] = key;
-                }
-            }
-            self.nv = nhanvien;
-            self.dsxe.forEach(function(xe) {
-                if ($.inArray(self.nv, self[xe]))
-                    self.xe = xe;
-                self.solaixe = count(self[xe]);
-            });
-            return self;
-        }
-    }
     class CongNhat {
         constructor(thoigian, nhanvien) {
             /** primary params */
@@ -201,17 +174,13 @@
         set phancong(_phancong) {
             let self = this;
             $.each(_phancong, function(keypc, phancong) {
-                let pc = phancong;
-                pc = pc.load(self.name);
-                self._congnhat[pc.__EMPTY] = self._congnhat[pc.__EMPTY] || new CongNhat(pc.__EMPTY, self);
-                self._congnhat[pc.__EMPTY].thoigian = self.getJsDateFromExcel(pc.__EMPTY)
+                self._congnhat[phancong.__EMPTY] = self._congnhat[phancong.__EMPTY] || new CongNhat(phancong.__EMPTY, self);
+                self._congnhat[phancong.__EMPTY].thoigian = self.getJsDateFromExcel(phancong.__EMPTY)
                     .toLocaleDateString('vi-VN', {
                         year: 'numeric',
                         month: 'numeric',
                         day: 'numeric'
                     });
-                // self._congnhat[pc.__EMPTY].doanhSo = pc;
-                console.log(pc);
             });
         }
         getJsDateFromExcel(excelDate) {
@@ -270,7 +239,10 @@
                 self._loadStep = 0;
                 /* set up an async GET request with axios */
                 axios('/' + window.location.pathname.split('/').filter(v => v != '').join('/') + '/' + 'nhanvien.xlsx', {
-                    responseType: 'arraybuffer'
+                    responseType: 'arraybuffer',
+                    headers: {
+                        'Cache-Control': 'no-cache'
+                    }
                 }).catch(function(err) {
                     /* error in getting data */
                 }).then(function(res) {
@@ -296,7 +268,10 @@
                 self._loadStep = 0;
                 /* set up an async GET request with axios */
                 axios('/' + window.location.pathname.split('/').filter(v => v != '').join('/') + '/' + 'chamcong.xlsx', {
-                    responseType: 'arraybuffer'
+                    responseType: 'arraybuffer',
+                    headers: {
+                        'Cache-Control': 'no-cache'
+                    }
                 }).catch(function(err) {
                     /* error in getting data */
                 }).then(function(res) {
@@ -321,7 +296,10 @@
                 self._loadStep = 0;
                 /* set up an async GET request with axios */
                 axios('/' + window.location.pathname.split('/').filter(v => v != '').join('/') + '/' + 'phancong.xlsx', {
-                    responseType: 'arraybuffer'
+                    responseType: 'arraybuffer',
+                    headers: {
+                        'Cache-Control': 'no-cache'
+                    }
                 }).catch(function(err) {
                     /* error in getting data */
                 }).then(function(res) {
@@ -337,9 +315,10 @@
                     window.phancongWB = workbook;
                     let _phancong = {};
                     $.each(XLSX.utils.sheet_to_json(workbook.Sheets.phancong), function(keypc, phancong) {
-                        _phancong[phancong.__EMPTY] = new Phancong(phancong);
+                        _phancong[phancong.__EMPTY] = phancong;
                     });
                     self.phancong = _phancong;
+                    self._loadStep = 4;
                     console.log('_loadSheetPhancong');
                 });
             },
@@ -360,7 +339,7 @@
             importPhancong: function(phancong) {
                 this.nhanvien.forEach(function(nv) {
                     nv.phancong = phancong;
-                    console.log(nv);
+                    // console.log(nv);
                 });
             }
         }

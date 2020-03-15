@@ -1772,45 +1772,6 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 //
 //
 //
-var Phancong =
-/*#__PURE__*/
-function () {
-  function Phancong(phancong) {
-    _classCallCheck(this, Phancong);
-
-    var self = this;
-    phancong.forEach(function (_phancong, _key) {
-      if ('__EMPTY' == _key) return;
-      if ('__rowNum__' == _key) return;
-      _key = _key.split('x').join('');
-      self[_key] = _phancong.split('-');
-    });
-  }
-
-  _createClass(Phancong, [{
-    key: "load",
-    value: function load(nhanvien) {
-      self = this;
-      self.dsxe = [];
-
-      for (var key in this) {
-        if (self.hasOwnProperty(key)) {
-          self.dsxe[count(self.dsxe)] = key;
-        }
-      }
-
-      self.nv = nhanvien;
-      self.dsxe.forEach(function (xe) {
-        if ($.inArray(self.nv, self[xe])) self.xe = xe;
-        self.solaixe = count(self[xe]);
-      });
-      return self;
-    }
-  }]);
-
-  return Phancong;
-}();
-
 var CongNhat =
 /*#__PURE__*/
 function () {
@@ -1957,16 +1918,12 @@ function () {
     set: function set(_phancong) {
       var self = this;
       $.each(_phancong, function (keypc, phancong) {
-        var pc = phancong;
-        pc = pc.load(self.name);
-        self._congnhat[pc.__EMPTY] = self._congnhat[pc.__EMPTY] || new CongNhat(pc.__EMPTY, self);
-        self._congnhat[pc.__EMPTY].thoigian = self.getJsDateFromExcel(pc.__EMPTY).toLocaleDateString('vi-VN', {
+        self._congnhat[phancong.__EMPTY] = self._congnhat[phancong.__EMPTY] || new CongNhat(phancong.__EMPTY, self);
+        self._congnhat[phancong.__EMPTY].thoigian = self.getJsDateFromExcel(phancong.__EMPTY).toLocaleDateString('vi-VN', {
           year: 'numeric',
           month: 'numeric',
           day: 'numeric'
-        }); // self._congnhat[pc.__EMPTY].doanhSo = pc;
-
-        console.log(pc);
+        });
       });
     }
   }]);
@@ -1977,14 +1934,13 @@ function () {
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
     try {
-      var _self = this;
-
-      _self._loadStep = 1;
+      var self = this;
+      self._loadStep = 1;
 
       (function checkLoadStep() {
-        if (_self._loadStep == 1) _self._loadSheetNhanvien();
-        if (_self._loadStep == 2) _self._loadSheetChamcong();
-        if (_self._loadStep == 3) _self._loadSheetPhancong();else window.setTimeout(checkLoadStep, 500);
+        if (self._loadStep == 1) self._loadSheetNhanvien();
+        if (self._loadStep == 2) self._loadSheetChamcong();
+        if (self._loadStep == 3) self._loadSheetPhancong();else window.setTimeout(checkLoadStep, 500);
       })();
 
       console.log('mounted');
@@ -2032,7 +1988,10 @@ function () {
       axios('/' + window.location.pathname.split('/').filter(function (v) {
         return v != '';
       }).join('/') + '/' + 'nhanvien.xlsx', {
-        responseType: 'arraybuffer'
+        responseType: 'arraybuffer',
+        headers: {
+          'Cache-Control': 'no-cache'
+        }
       })["catch"](function (err) {
         /* error in getting data */
       }).then(function (res) {
@@ -2061,7 +2020,10 @@ function () {
       axios('/' + window.location.pathname.split('/').filter(function (v) {
         return v != '';
       }).join('/') + '/' + 'chamcong.xlsx', {
-        responseType: 'arraybuffer'
+        responseType: 'arraybuffer',
+        headers: {
+          'Cache-Control': 'no-cache'
+        }
       })["catch"](function (err) {
         /* error in getting data */
       }).then(function (res) {
@@ -2089,7 +2051,10 @@ function () {
       axios('/' + window.location.pathname.split('/').filter(function (v) {
         return v != '';
       }).join('/') + '/' + 'phancong.xlsx', {
-        responseType: 'arraybuffer'
+        responseType: 'arraybuffer',
+        headers: {
+          'Cache-Control': 'no-cache'
+        }
       })["catch"](function (err) {
         /* error in getting data */
       }).then(function (res) {
@@ -2105,9 +2070,10 @@ function () {
         window.phancongWB = workbook;
         var _phancong = {};
         $.each(XLSX.utils.sheet_to_json(workbook.Sheets.phancong), function (keypc, phancong) {
-          _phancong[phancong.__EMPTY] = new Phancong(phancong);
+          _phancong[phancong.__EMPTY] = phancong;
         });
         self.phancong = _phancong;
+        self._loadStep = 4;
         console.log('_loadSheetPhancong');
       });
     },
@@ -2127,8 +2093,7 @@ function () {
     },
     importPhancong: function importPhancong(phancong) {
       this.nhanvien.forEach(function (nv) {
-        nv.phancong = phancong;
-        console.log(nv);
+        nv.phancong = phancong; // console.log(nv);
       });
     }
   }
@@ -84054,6 +84019,28 @@ if (token) {
 //     encrypted: true
 // });
 
+/**
+ * A simple forEach() implementation for Arrays, Objects and NodeLists
+ * @private
+ * @param {Array|Object|NodeList} collection Collection of items to iterate
+ * @param {Function} callback Callback function for each iteration
+ * @param {Array|Object|NodeList} scope Object/NodeList/Array that forEach is iterating over (aka `this`)
+ */
+
+
+var forEach = function forEach(collection, callback, scope) {
+  if (Object.prototype.toString.call(collection) === '[object Object]') {
+    for (var prop in collection) {
+      if (Object.prototype.hasOwnProperty.call(collection, prop)) {
+        callback.call(scope, collection[prop], prop, collection);
+      }
+    }
+  } else {
+    for (var i = 0, len = collection.length; i < len; i++) {
+      callback.call(scope, collection[i], i, collection);
+    }
+  }
+};
 /**
  * Object.prototype.forEach() polyfill
  * https://gomakethings.com/looping-through-objects-with-es6/
