@@ -1697,6 +1697,8 @@ module.exports = {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
@@ -1772,6 +1774,36 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 //
 //
 //
+var Phancong =
+/*#__PURE__*/
+function () {
+  function Phancong(phancong, name) {
+    _classCallCheck(this, Phancong);
+
+    var self = this;
+    if (_typeof(self) !== _typeof(phancong)) return;
+    self.thoigian = self.getJsDateFromExcel(phancong.__EMPTY);
+    phancong.forEach(function (nv, xe) {
+      if (typeof nv !== 'string') return;
+      nv = nv.split('-');
+
+      if (nv.indexOf(name) > -1) {
+        self.xe = xe.replace(/^x/gi, 'xe ');
+        self.laixe = nv;
+      }
+    });
+  }
+
+  _createClass(Phancong, [{
+    key: "getJsDateFromExcel",
+    value: function getJsDateFromExcel(excelDate) {
+      return new Date((excelDate - (25567 + 2)) * 86400 * 1000);
+    }
+  }]);
+
+  return Phancong;
+}();
+
 var CongNhat =
 /*#__PURE__*/
 function () {
@@ -1853,6 +1885,10 @@ function () {
     get: function get() {
       return this.luongCoBan / 30;
     }
+    /**
+     * cong
+     */
+
   }, {
     key: "cong",
     get: function get() {
@@ -1864,6 +1900,10 @@ function () {
       return _cong;
     },
     set: function set(x) {}
+    /**
+     * luong
+     */
+
   }, {
     key: "luong",
     get: function get() {
@@ -1875,6 +1915,10 @@ function () {
       return _luong;
     },
     set: function set(x) {}
+    /**
+     * congnhat
+     */
+
   }, {
     key: "congnhat",
     get: function get() {
@@ -1924,6 +1968,9 @@ function () {
           month: 'numeric',
           day: 'numeric'
         });
+        var pc = new Phancong(phancong, self.name);
+        self._congnhat[phancong.__EMPTY].kho = pc.xe;
+        self._congnhat[phancong.__EMPTY].nvkho = pc.nv;
       });
     }
   }]);
@@ -39703,7 +39750,7 @@ var render = function() {
                         _vm._v(" "),
                         _c("td", [_vm._v(_vm._s(congnhat.cong))]),
                         _vm._v(" "),
-                        _c("td", [_vm._v(_vm._s("-"))]),
+                        _c("td", [_vm._v(_vm._s(congnhat.kho))]),
                         _vm._v(" "),
                         _c("td", [_vm._v(_vm._s("-"))]),
                         _vm._v(" "),

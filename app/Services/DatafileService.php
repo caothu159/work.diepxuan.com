@@ -124,7 +124,7 @@ class DatafileService
         $this->employeeImport();
         $this->presenceImport();
         $this->divisionImport();
-        // $this->productivityImport();
+        $this->productivityImport();
     }
 
     /**

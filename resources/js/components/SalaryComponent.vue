@@ -52,7 +52,7 @@
                         <tr v-for="congnhat in nv.congnhat">
                             <td>{{ congnhat.thoigian }}</td>
                             <td>{{ congnhat.cong }}</td>
-                            <td>{{ '-' }}</td>
+                            <td>{{ congnhat.kho }}</td>
                             <td>{{ '-' }}</td>
                             <td>{{ '-' }}</td>
                             <td>{{ '-' }}</td>
@@ -68,6 +68,26 @@
     </div>
 </template>
 <script>
+    class Phancong {
+        constructor(phancong, name) {
+            let self = this;
+            if (typeof self !== typeof phancong)
+                return;
+            self.thoigian = self.getJsDateFromExcel(phancong.__EMPTY);
+            phancong.forEach(function(nv, xe) {
+                if (typeof nv !== 'string')
+                    return;
+                nv = nv.split('-');
+                if (nv.indexOf(name) > -1) {
+                    self.xe = xe.replace(/^x/gi, 'xe ');
+                    self.laixe = nv;
+                }
+            });
+        }
+        getJsDateFromExcel(excelDate) {
+            return new Date((excelDate - (25567 + 2)) * 86400 * 1000);
+        }
+    }
     class CongNhat {
         constructor(thoigian, nhanvien) {
             /** primary params */
@@ -116,6 +136,9 @@
         get luongCoBanTheoNgay() {
             return this.luongCoBan / 30;
         }
+        /**
+         * cong
+         */
         get cong() {
             let self = this;
             let _cong = 0;
@@ -125,6 +148,9 @@
             return _cong;
         }
         set cong(x) {}
+        /**
+         * luong
+         */
         get luong() {
             let self = this;
             let _luong = 0;
@@ -134,6 +160,9 @@
             return _luong;
         }
         set luong(x) {}
+        /**
+         * congnhat
+         */
         get congnhat() {
             return this._congnhat;
         }
@@ -181,6 +210,9 @@
                         month: 'numeric',
                         day: 'numeric'
                     });
+                let pc = new Phancong(phancong, self.name);
+                self._congnhat[phancong.__EMPTY].kho = pc.xe;
+                self._congnhat[phancong.__EMPTY].nvkho = pc.nv;
             });
         }
         getJsDateFromExcel(excelDate) {
