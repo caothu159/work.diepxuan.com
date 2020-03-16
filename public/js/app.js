@@ -1819,6 +1819,9 @@ function () {
 
     this._cong = 0;
     this._phep = 0;
+    this.heso = 0;
+    this.nangsuat = 0;
+    this.chitieu = 0;
   }
 
   _createClass(CongNhat, [{
@@ -1849,7 +1852,7 @@ function () {
   }, {
     key: "luongNangSuat",
     get: function get() {
-      return 0;
+      return this.heso * this.chitieu;
     }
   }, {
     key: "luong",
@@ -1872,7 +1875,15 @@ function () {
     this.luongCoBan = brand['Luong co ban'];
     this.luongKho = brand['Luong kho'];
     this.chiTieu = brand['Chi tieu'];
+    this.heSo = {};
     this._congnhat = {};
+    var self = this;
+    brand.forEach(function (heso, muctieu) {
+      if (!isFinite(muctieu)) return;
+      if (!isFinite(heso)) return;
+      if (heso === 0) return;
+      self.heSo[muctieu * 1000] = heso;
+    });
   }
 
   _createClass(Nhanvien, [{
@@ -1970,7 +1981,52 @@ function () {
         });
         var pc = new Phancong(phancong, self.name);
         self._congnhat[phancong.__EMPTY].kho = pc.xe;
-        self._congnhat[phancong.__EMPTY].nvkho = pc.nv;
+        self._congnhat[phancong.__EMPTY].nvkho = pc.laixe;
+      });
+    }
+    /**
+     * nang suat
+     */
+
+  }, {
+    key: "nangsuat",
+    get: function get() {
+      return this._congnhat;
+    },
+    set: function set(_nangsuat) {
+      var self = this;
+
+      _nangsuat.forEach(function (nangsuat) {
+        self._congnhat[nangsuat.__EMPTY] = self._congnhat[nangsuat.__EMPTY] || new CongNhat(nangsuat.__EMPTY, self);
+        self._congnhat[nangsuat.__EMPTY].thoigian = self.getJsDateFromExcel(nangsuat.__EMPTY).toLocaleDateString('vi-VN', {
+          year: 'numeric',
+          month: 'numeric',
+          day: 'numeric'
+        });
+        var kho = self._congnhat[nangsuat.__EMPTY].kho || false;
+        if (!kho) return;
+        kho = kho.replace(/^xe /gi, '');
+        self._congnhat[nangsuat.__EMPTY].doanhso = nangsuat['ns ' + kho] || 0;
+        self._congnhat[nangsuat.__EMPTY].thuno = nangsuat['thu no ' + kho] || 0;
+        self._congnhat[nangsuat.__EMPTY].chono = nangsuat['no ' + kho] || 0;
+
+        if (self._congnhat[nangsuat.__EMPTY].kho === 'kho') {
+          return;
+        }
+
+        try {
+          self._congnhat[nangsuat.__EMPTY].tile = 1 / self._congnhat[nangsuat.__EMPTY].nvkho.length;
+        } catch (e) {
+          self._congnhat[nangsuat.__EMPTY].tile = 1;
+        }
+
+        self._congnhat[nangsuat.__EMPTY].nangsuat = self._congnhat[nangsuat.__EMPTY].tile * (self._congnhat[nangsuat.__EMPTY].doanhso + self._congnhat[nangsuat.__EMPTY].chono * 0.7 - self._congnhat[nangsuat.__EMPTY].thuno * 0.7);
+        self._congnhat[nangsuat.__EMPTY].chitieu = self._congnhat[nangsuat.__EMPTY].nangsuat;
+        self._congnhat[nangsuat.__EMPTY].chitieu -= self.chiTieu / 30 * self._congnhat[nangsuat.__EMPTY].cong;
+        self.heSo.forEach(function (heso, muctieu) {
+          self._congnhat[nangsuat.__EMPTY].heso = self.heSo[0];
+          if (self._congnhat[nangsuat.__EMPTY].chitieu >= muctieu) self._congnhat[nangsuat.__EMPTY].heso = heso;
+        });
       });
     }
   }]);
@@ -1987,7 +2043,8 @@ function () {
       (function checkLoadStep() {
         if (self._loadStep == 1) self._loadSheetNhanvien();
         if (self._loadStep == 2) self._loadSheetChamcong();
-        if (self._loadStep == 3) self._loadSheetPhancong();else window.setTimeout(checkLoadStep, 500);
+        if (self._loadStep == 3) self._loadSheetPhancong();
+        if (self._loadStep == 4) self._loadSheetNangsuat();else window.setTimeout(checkLoadStep, 1000);
       })();
 
       console.log('mounted');
@@ -2020,6 +2077,10 @@ function () {
     },
     phancong: function phancong(newPhancong, oldPhancong) {
       this.importPhancong(newPhancong);
+      this.forceRerender();
+    },
+    nangsuat: function nangsuat(newNangsuat, oldNangsuat) {
+      this.importNangsuat(newNangsuat);
       this.forceRerender();
     }
   },
@@ -2124,6 +2185,40 @@ function () {
         console.log('_loadSheetPhancong');
       });
     },
+    _loadSheetNangsuat: function _loadSheetNangsuat() {
+      var self = this;
+      self._loadStep = 0;
+      /* set up an async GET request with axios */
+
+      axios('/' + window.location.pathname.split('/').filter(function (v) {
+        return v != '';
+      }).join('/') + '/' + 'nangsuat.xlsx', {
+        responseType: 'arraybuffer',
+        headers: {
+          'Cache-Control': 'no-cache'
+        }
+      })["catch"](function (err) {
+        /* error in getting data */
+      }).then(function (res) {
+        /* parse the data when it is received */
+        var data = new Uint8Array(res.data);
+        var workbook = XLSX.read(data, {
+          type: "array"
+        });
+        return workbook;
+      })["catch"](function (err) {
+        /* error in parsing */
+      }).then(function (workbook) {
+        window.nangsuatWB = workbook;
+        var _nangsuat = {};
+        $.each(XLSX.utils.sheet_to_json(workbook.Sheets.nangsuat), function (keyns, nangsuat) {
+          _nangsuat[nangsuat.__EMPTY] = nangsuat;
+        });
+        self.nangsuat = _nangsuat;
+        self._loadStep = 5;
+        console.log('_loadSheetNangsuat');
+      });
+    },
     importChamcong: function importChamcong(chamcong) {
       var self = this;
       $.each(self.nhanvien, function (keynv, nv) {
@@ -2140,7 +2235,12 @@ function () {
     },
     importPhancong: function importPhancong(phancong) {
       this.nhanvien.forEach(function (nv) {
-        nv.phancong = phancong; // console.log(nv);
+        nv.phancong = phancong;
+      });
+    },
+    importNangsuat: function importNangsuat(nangsuat) {
+      this.nhanvien.forEach(function (nv) {
+        nv.nangsuat = nangsuat;
       });
     }
   }
@@ -39748,23 +39848,25 @@ var render = function() {
                       return _c("tr", [
                         _c("td", [_vm._v(_vm._s(congnhat.thoigian))]),
                         _vm._v(" "),
-                        _c("td", [_vm._v(_vm._s(congnhat.cong))]),
+                        _c("td", [_vm._v(_vm._s(congnhat.cong || "-"))]),
                         _vm._v(" "),
-                        _c("td", [_vm._v(_vm._s(congnhat.kho))]),
+                        _c("td", [_vm._v(_vm._s(congnhat.kho || "-"))]),
                         _vm._v(" "),
-                        _c("td", [_vm._v(_vm._s("-"))]),
+                        _c("td", [_vm._v(_vm._s(congnhat.doanhso || "-"))]),
                         _vm._v(" "),
-                        _c("td", [_vm._v(_vm._s("-"))]),
+                        _c("td", [_vm._v(_vm._s(congnhat.chono || "-"))]),
                         _vm._v(" "),
-                        _c("td", [_vm._v(_vm._s("-"))]),
+                        _c("td", [_vm._v(_vm._s(congnhat.thuno || "-"))]),
                         _vm._v(" "),
-                        _c("td", [_vm._v(_vm._s("-"))]),
+                        _c("td", [_vm._v(_vm._s(congnhat.tile || "-"))]),
                         _vm._v(" "),
-                        _c("td", [_vm._v(_vm._s("-"))]),
+                        _c("td", [_vm._v(_vm._s(congnhat.nangsuat || "-"))]),
                         _vm._v(" "),
-                        _c("td", [_vm._v(_vm._s("-"))]),
+                        _c("td", [_vm._v(_vm._s(congnhat.heso || "-"))]),
                         _vm._v(" "),
-                        _c("td", [_vm._v(_vm._s(congnhat.luong.toFixed(2)))])
+                        _c("td", [
+                          _vm._v(_vm._s(congnhat.luong.toFixed(2) || "-"))
+                        ])
                       ])
                     })
                   ],
