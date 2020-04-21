@@ -23,6 +23,7 @@
                                 <div class="d-flex justify-content-between">
                                     {{ 'Năng suất:' }}
                                     <a class="font-weight-normal font-weight-bold" data-toggle="collapse" aria-expanded="false" :href="'#collapse' + nv.index" :aria-controls="'collapse' + nv.index">
+                                        {{ nv.nangsuat }}
                                         <!-- {{ number_format($salary->turnover, 2) }}
                                 @if ($salary->productivity!=0 && isset($controller) && $controller->isAdmin())
                                 <span class="font-weight-lighter">
@@ -121,10 +122,10 @@
             return this.cong * this.luongCoBanTheoNgay;
         }
         get luongNangSuat() {
-            return this.heso * this.chitieu;
+            return this.heso * this.chitieu || 0;
         }
         get luong() {
-            return this.luongCoBan + this.luongNangSuat;
+            return this.luongCoBan + this.luongNangSuat || 0;
         }
     }
     class Nhanvien {
@@ -230,7 +231,12 @@
          * nang suat
          */
         get nangsuat() {
-            return this._congnhat;
+            let self = this;
+            let _nangsuat = 0;
+            $.each(self._congnhat, function(keycc, congnhat) {
+                _nangsuat += congnhat.nangsuat || 0;
+            });
+            return _nangsuat;
         }
         set nangsuat(_nangsuat) {
             let self = this;
@@ -264,9 +270,9 @@
                 self._congnhat[nangsuat.__EMPTY].chitieu = self._congnhat[nangsuat.__EMPTY].nangsuat;
                 self._congnhat[nangsuat.__EMPTY].chitieu -= self.chiTieu / 30 * self._congnhat[nangsuat.__EMPTY].cong;
                 self.heSo.forEach(function(heso, muctieu) {
-                    self._congnhat[nangsuat.__EMPTY].heso = self.heSo[0];
+                    self._congnhat[nangsuat.__EMPTY].heso = self.heSo[0] || 0.01;
                     if (self._congnhat[nangsuat.__EMPTY].chitieu >= muctieu)
-                        self._congnhat[nangsuat.__EMPTY].heso = heso;
+                        self._congnhat[nangsuat.__EMPTY].heso = heso || 0.01;
                 });
             });
         }
