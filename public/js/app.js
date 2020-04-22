@@ -1774,6 +1774,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 //
 //
 //
+//
 var Phancong =
 /*#__PURE__*/
 function () {
@@ -1852,12 +1853,12 @@ function () {
   }, {
     key: "luongNangSuat",
     get: function get() {
-      return this.heso * this.chitieu;
+      return this.heso * this.chitieu || 0;
     }
   }, {
     key: "luong",
     get: function get() {
-      return this.luongCoBan + this.luongNangSuat;
+      return this.luongCoBan + this.luongNangSuat || 0;
     }
   }]);
 
@@ -1991,7 +1992,12 @@ function () {
   }, {
     key: "nangsuat",
     get: function get() {
-      return this._congnhat;
+      var self = this;
+      var _nangsuat = 0;
+      $.each(self._congnhat, function (keycc, congnhat) {
+        _nangsuat += congnhat.nangsuat || 0;
+      });
+      return _nangsuat;
     },
     set: function set(_nangsuat) {
       var self = this;
@@ -2024,8 +2030,8 @@ function () {
         self._congnhat[nangsuat.__EMPTY].chitieu = self._congnhat[nangsuat.__EMPTY].nangsuat;
         self._congnhat[nangsuat.__EMPTY].chitieu -= self.chiTieu / 30 * self._congnhat[nangsuat.__EMPTY].cong;
         self.heSo.forEach(function (heso, muctieu) {
-          self._congnhat[nangsuat.__EMPTY].heso = self.heSo[0];
-          if (self._congnhat[nangsuat.__EMPTY].chitieu >= muctieu) self._congnhat[nangsuat.__EMPTY].heso = heso;
+          self._congnhat[nangsuat.__EMPTY].heso = self.heSo[0] || 0.01;
+          if (self._congnhat[nangsuat.__EMPTY].chitieu >= muctieu) self._congnhat[nangsuat.__EMPTY].heso = heso || 0.01;
         });
       });
     }
@@ -39805,16 +39811,26 @@ var render = function() {
                                 _vm._s("Năng suất:") +
                                 "\n                                "
                             ),
-                            _c("a", {
-                              staticClass:
-                                "font-weight-normal font-weight-bold",
-                              attrs: {
-                                "data-toggle": "collapse",
-                                "aria-expanded": "false",
-                                href: "#collapse" + nv.index,
-                                "aria-controls": "collapse" + nv.index
-                              }
-                            })
+                            _c(
+                              "a",
+                              {
+                                staticClass:
+                                  "font-weight-normal font-weight-bold",
+                                attrs: {
+                                  "data-toggle": "collapse",
+                                  "aria-expanded": "false",
+                                  href: "#collapse" + nv.index,
+                                  "aria-controls": "collapse" + nv.index
+                                }
+                              },
+                              [
+                                _vm._v(
+                                  "\n                                    " +
+                                    _vm._s(nv.nangsuat) +
+                                    "\n                                    "
+                                )
+                              ]
+                            )
                           ]
                         )
                       ]
