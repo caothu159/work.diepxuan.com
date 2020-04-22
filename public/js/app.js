@@ -2029,9 +2029,9 @@ function () {
         self._congnhat[nangsuat.__EMPTY].nangsuat = self._congnhat[nangsuat.__EMPTY].tile * (self._congnhat[nangsuat.__EMPTY].doanhso + self._congnhat[nangsuat.__EMPTY].chono * 0.7 - self._congnhat[nangsuat.__EMPTY].thuno * 0.7);
         self._congnhat[nangsuat.__EMPTY].chitieu = self._congnhat[nangsuat.__EMPTY].nangsuat;
         self._congnhat[nangsuat.__EMPTY].chitieu -= self.chiTieu / 30 * self._congnhat[nangsuat.__EMPTY].cong;
+        self._congnhat[nangsuat.__EMPTY].heso = self.heSo[0] || 0.01;
         self.heSo.forEach(function (heso, muctieu) {
-          self._congnhat[nangsuat.__EMPTY].heso = self.heSo[0] || 0.01;
-          if (self._congnhat[nangsuat.__EMPTY].chitieu >= muctieu) self._congnhat[nangsuat.__EMPTY].heso = heso || 0.01;
+          if (self._congnhat[nangsuat.__EMPTY].chitieu >= muctieu) self._congnhat[nangsuat.__EMPTY].heso = Math.max(self._congnhat[nangsuat.__EMPTY].heso, heso);
         });
       });
     }
