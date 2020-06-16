@@ -7,7 +7,7 @@
 require('./bootstrap');
 
 window.Vue = require('vue');
-window.XLSX = require('xlsx');
+
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue
@@ -21,6 +21,8 @@ window.XLSX = require('xlsx');
 
 // Vue.component('example-component', require('./components/ExampleComponent.vue').default);
 Vue.component('salary-component', require('./components/SalaryComponent.vue').default);
+Vue.component('datepicker', require('./components/DatepickerComponent.vue').default);
+
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -29,5 +31,5 @@ Vue.component('salary-component', require('./components/SalaryComponent.vue').de
  */
 
 const app = new Vue({
-    el: '#app',
+    el: '#app'
 });

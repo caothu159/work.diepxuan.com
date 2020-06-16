@@ -40,7 +40,7 @@ class Controller extends \App\Http\Controllers\Controller {
      * Fix dateinput automatic
      *
      * @param Request $request
-     * @param bool $force
+     * @param bool $force bat buoc
      */
     protected function _updateRequestInput( Request $request, bool $force = false ) {
         if ( '' != ( $inputFrom = $request->input( 'from' ) ) || $force ) {
