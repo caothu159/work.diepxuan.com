@@ -21,16 +21,18 @@ class BanhangController extends Controller {
      */
     public function index( Request $request, string $from = null, string $to = null ) {
         if ( $this->isRedirect ) {
-            return redirect()->route( 'tonghop', [
+            return redirect()->route( 'banhang', [
                 'from' => $request->input( 'from' ),
                 'to'   => $request->input( 'to' )
             ] );
         }
 
         $this->_updateDateInput( $from, $to );
+        $request->merge( [ 'from' => $from ] );
+        $request->merge( [ 'to' => $to ] );
         $ctubanhangs = Ctubanhang::whereBetween( 'ngay_ct', [
-            \DateTime::createFromFormat( 'd-m-Y', $from )->format( 'Y-m-d' ),
-            \DateTime::createFromFormat( 'd-m-Y', $to )->format( 'Y-m-d' )
+            \DateTime::createFromFormat( 'd-m-Y', $request->input( 'from' ) )->format( 'Y-m-d' ),
+            \DateTime::createFromFormat( 'd-m-Y', $request->input( 'to' ) )->format( 'Y-m-d' )
         ] )->get();
 
         return view( 'work.banhang.chungtu', [

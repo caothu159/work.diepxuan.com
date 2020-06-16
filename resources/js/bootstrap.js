@@ -1,4 +1,5 @@
 window._ = require('lodash');
+window.XLSX = require('xlsx');
 
 /**
  * We'll load jQuery and the Bootstrap jQuery plugin which provides support
@@ -11,7 +12,8 @@ try {
     window.$ = window.jQuery = require('jquery');
 
     require('bootstrap');
-} catch (e) {}
+} catch (e) {
+}
 
 /**
  * We'll load the axios HTTP library which allows us to easily issue requests
@@ -61,9 +63,9 @@ if (token) {
  * @param {Function} callback Callback function for each iteration
  * @param {Array|Object|NodeList} scope Object/NodeList/Array that forEach is iterating over (aka `this`)
  */
-var forEach = function(collection, callback, scope) {
+function forEach(collection, callback, scope) {
     if (Object.prototype.toString.call(collection) === '[object Object]') {
-        for (var prop in collection) {
+        for (let prop in collection) {
             if (Object.prototype.hasOwnProperty.call(collection, prop)) {
                 callback.call(scope, collection[prop], prop, collection);
             }
@@ -73,7 +75,7 @@ var forEach = function(collection, callback, scope) {
             callback.call(scope, collection[i], i, collection);
         }
     }
-};
+}
 
 /**
  * Object.prototype.forEach() polyfill
@@ -83,7 +85,7 @@ var forEach = function(collection, callback, scope) {
  */
 if (!Object.prototype.forEach) {
     Object.defineProperty(Object.prototype, 'forEach', {
-        value: function(callback, thisArg) {
+        value: function (callback, thisArg) {
             if (this == null) {
                 throw new TypeError('Not an object');
             }

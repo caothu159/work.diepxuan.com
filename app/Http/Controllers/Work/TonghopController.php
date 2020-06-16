@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Work;
 
 use App\Model\Work\Ctubanhang;
 use App\Model\Work\Khohang;
-use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
@@ -16,13 +15,24 @@ class TonghopController extends Controller {
      *
      * @param Request $request
      *
+     * @param string|null $from
+     * @param string|null $to
+     *
      * @return mixed
-     * @throws Exception
      */
-    public function banhang( Request $request ) {
+    public function index( Request $request, string $from = null, string $to = null ) {
+        if ( $this->isRedirect ) {
+            return redirect()->route( 'tonghop', [
+                'from' => $request->input( 'from' ),
+                'to'   => $request->input( 'to' )
+            ] );
+        }
+
+        $this->_updateDateInput( $from, $to );
+        $request->merge( [ 'from' => $from ] );
+        $request->merge( [ 'to' => $to ] );
         $request->merge( [ 'tuychon' => $request->input( 'tuychon' ) ?: 'donhang' ] );
         $request->merge( [ 'khohang' => $request->input( 'khohang' ) ?: 'all' ] );
-        $this->_updateRequestInput( $request, true );
         $ctubanhangs = Ctubanhang::whereBetween( 'ngay_ct', [
             \DateTime::createFromFormat( 'd-m-Y', $request->input( 'from' ) )->format( 'Y-m-d' ),
             \DateTime::createFromFormat( 'd-m-Y', $request->input( 'to' ) )->format( 'Y-m-d' )
