@@ -19,7 +19,12 @@ class BanhangController extends Controller {
      * @return mixed
      * @throws Exception
      */
-    public function index( Request $request, string $from = null, string $to = null ) {
+    public
+    function index(
+        Request $request,
+        string $from = null,
+        string $to = null
+    ) {
         if ( $this->isRedirect ) {
             return redirect()->route( 'banhang', [
                 'from' => $request->input( 'from' ),
@@ -48,7 +53,8 @@ class BanhangController extends Controller {
      *
      * @return Response
      */
-    public function create() {
+    public
+    function create() {
         //
     }
 
@@ -59,7 +65,10 @@ class BanhangController extends Controller {
      *
      * @return Response
      */
-    public function store( Request $request ) {
+    public
+    function store(
+        Request $request
+    ) {
         //
     }
 
@@ -70,7 +79,10 @@ class BanhangController extends Controller {
      *
      * @return Response
      */
-    public function show( Ctubanhang $ctubanhang ) {
+    public
+    function show(
+        Ctubanhang $ctubanhang
+    ) {
         //
     }
 
@@ -81,7 +93,10 @@ class BanhangController extends Controller {
      *
      * @return void
      */
-    public function edit( Ctubanhang $ctubanhang ) {
+    public
+    function edit(
+        Ctubanhang $ctubanhang
+    ) {
         //
     }
 
@@ -93,7 +108,11 @@ class BanhangController extends Controller {
      *
      * @return Response
      */
-    public function update( Request $request, Ctubanhang $ctubanhang ) {
+    public
+    function update(
+        Request $request,
+        Ctubanhang $ctubanhang
+    ) {
         //
     }
 
@@ -104,7 +123,10 @@ class BanhangController extends Controller {
      *
      * @return Response
      */
-    public function destroy( Ctubanhang $ctubanhang ) {
+    public
+    function destroy(
+        Ctubanhang $ctubanhang
+    ) {
         //
     }
 }

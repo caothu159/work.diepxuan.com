@@ -214,4 +214,15 @@ class Ctubanhang extends Model {
 
         return $query->where( 'ma_kho', $kho );
     }
+
+    /**
+     * @param $query
+     *
+     * @return mixed
+     */
+    public function scopeIsSource( $query ) {
+        $sync = Sync::where( 'type', 'ma_cty' )->first();
+
+        return $query->where( $sync->type, '=', $sync->from );
+    }
 }

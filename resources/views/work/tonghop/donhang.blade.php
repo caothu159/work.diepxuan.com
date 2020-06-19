@@ -1,3 +1,4 @@
+{{-- @deprecated --}}
 @extends('work.tonghop')
 
 @section('content')

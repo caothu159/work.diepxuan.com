@@ -2,13 +2,15 @@
 
 namespace App\Http\Controllers\Work;
 
-use App\Model\Work\Ctubanhang;
-use App\Model\Work\Khohang;
+use App\Http\Controllers\Work\Factory\DongBoDmsp;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
-use Illuminate\Support\Facades\DB;
 
 class TonghopController extends Controller {
+    use DongBoDmsp;
+
+    protected $data = [];
+    protected $from;
+    protected $to;
 
     /**
      * Display a listing of the resource.
@@ -31,17 +33,85 @@ class TonghopController extends Controller {
         $this->_updateDateInput( $from, $to );
         $request->merge( [ 'from' => $from ] );
         $request->merge( [ 'to' => $to ] );
-        $request->merge( [ 'tuychon' => $request->input( 'tuychon' ) ?: 'donhang' ] );
-        $request->merge( [ 'khohang' => $request->input( 'khohang' ) ?: 'all' ] );
-        $ctubanhangs = Ctubanhang::whereBetween( 'ngay_ct', [
-            \DateTime::createFromFormat( 'd-m-Y', $request->input( 'from' ) )->format( 'Y-m-d' ),
-            \DateTime::createFromFormat( 'd-m-Y', $request->input( 'to' ) )->format( 'Y-m-d' )
-        ] )->{"nhom" . $request->input( 'tuychon' )}()->nhomkhohang( $request->input( 'khohang' ) )->get();
+        $this->from = $from;
+        $this->to   = $to;
 
-        return view( "work.tonghop." . $request->input( 'tuychon' ), [
-            'ctubanhangs' => $ctubanhangs,
-            'khohangs'    => Khohang::isEnable()->get()
+        if ( ! is_null( $request->input( 'synctype' ) ) ) {
+            $this->{'dongbo' . ucfirst( $request->input( 'synctype' ) )}();
+        }
+
+        return view( "work.tonghop.tonghop", [
+            'data' => $this->data
         ] );
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return Response
+     */
+    public function create() {
+        //
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param Request $request
+     *
+     * @param string|null $from
+     * @param string|null $to
+     *
+     * @return Response
+     */
+    public function store( Request $request, string $from = null, string $to = null ) {
+        //
+        return $this->index( $request, $from, $to );
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param Ctumuahang $ctubanhang
+     *
+     * @return Response
+     */
+    public function show( Ctumuahang $ctubanhang ) {
+        //
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param Ctumuahang $ctubanhang
+     *
+     * @return Response
+     */
+    public function edit( Ctumuahang $ctubanhang ) {
+        //
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param Request $request
+     * @param Ctumuahang $ctubanhang
+     *
+     * @return Response
+     */
+    public function update( Request $request, Ctumuahang $ctubanhang ) {
+        //
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param Ctumuahang $ctubanhang
+     *
+     * @return Response
+     */
+    public function destroy( Ctumuahang $ctubanhang ) {
+        //
     }
 
 }
