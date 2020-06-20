@@ -36,10 +36,6 @@ class TonghopController extends Controller {
         $this->from = $from;
         $this->to   = $to;
 
-        if ( ! is_null( $request->input( 'synctype' ) ) ) {
-            $this->{'dongbo' . ucfirst( $request->input( 'synctype' ) )}();
-        }
-
         return view( "work.tonghop.tonghop", [
             'data' => $this->data
         ] );

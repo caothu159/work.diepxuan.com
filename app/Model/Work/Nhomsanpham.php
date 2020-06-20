@@ -87,4 +87,23 @@ class Nhomsanpham extends AbstractModel {
 
         return $query->where( $sync->type, '=', $sync->from );
     }
+
+    static function sync() {
+        $sync   = Sync::where( 'type', 'ma_cty' )->first();
+        $dmnhsp = Nhomsanpham::isSource()->isEnable()->get();
+        foreach ( $dmnhsp as $nhsp ) {
+            $_nhsp                = $nhsp;
+            $_nhsp->{$sync->type} = $sync->to;
+            $_nhsp                = Nhomsanpham::updateOrCreate( [
+                $sync->type => $_nhsp->{$sync->type},
+                'ma_nhvt'   => $_nhsp->ma_nhvt,
+            ], array_filter( $_nhsp->toArray() ) );
+            if ( \App::runningInConsole() || strpos( php_sapi_name(), 'cli' ) !== false ) {
+                echo "\r\e[32mSyncing:\e[0m $_nhsp->ma_nhvt - $_nhsp->ten_nhvt\033[K";
+            }
+        }
+        if ( \App::runningInConsole() || strpos( php_sapi_name(), 'cli' ) !== false ) {
+            echo "\r\n";
+        }
+    }
 }
