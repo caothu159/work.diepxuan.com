@@ -20,7 +20,7 @@ trait DongBoDmsp {
         foreach ( $dmsp as $sp ) {
             $_sp                = $sp;
             $_sp->{$sync->type} = $sync->to;
-            Sanpham::updateOrCreate( [
+            $_sp                = Sanpham::updateOrCreate( [
                 $sync->type => $_sp->{$sync->type},
                 'ma_vt'     => $_sp->ma_vt,
             ], array_filter( $_sp->toArray() ) );
@@ -40,7 +40,7 @@ trait DongBoDmsp {
         foreach ( $dmnhsp as $nhsp ) {
             $_nhsp                = $nhsp;
             $_nhsp->{$sync->type} = $sync->to;
-            Nhomsanpham::updateOrCreate( [
+            $_nhsp                = Nhomsanpham::updateOrCreate( [
                 $sync->type => $_nhsp->{$sync->type},
                 'ma_nhvt'   => $_nhsp->ma_nhvt,
             ], array_filter( $_nhsp->toArray() ) );

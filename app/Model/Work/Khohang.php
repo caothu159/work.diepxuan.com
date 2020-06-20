@@ -2,9 +2,7 @@
 
 namespace App\Model\Work;
 
-use Illuminate\Database\Eloquent\Model;
-
-class Khohang extends Model {
+class Khohang extends AbstractModel {
 
     const CREATED_AT = 'cdate';
     const UPDATED_AT = 'ldate';

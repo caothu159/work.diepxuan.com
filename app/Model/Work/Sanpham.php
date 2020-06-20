@@ -5,6 +5,7 @@ namespace App\Model\Work;
 use App\Model\Sync;
 
 class Sanpham extends AbstractModel {
+    use HasCompositePrimaryKey;
 
     const CREATED_AT = 'cDate';
     const UPDATED_AT = 'lDate';
@@ -59,8 +60,6 @@ class Sanpham extends AbstractModel {
      * @var array
      */
     protected $hidden = [
-        'lDate',
-        'cDate',
     ];
 
     /**

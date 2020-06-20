@@ -5,6 +5,7 @@ namespace App\Model\Work;
 use App\Model\Sync;
 
 class Nhomsanpham extends AbstractModel {
+    use HasCompositePrimaryKey;
 
     const CREATED_AT = 'cdate';
     const UPDATED_AT = 'ldate';
@@ -58,8 +59,6 @@ class Nhomsanpham extends AbstractModel {
      * @var array
      */
     protected $hidden = [
-        'ldate',
-        'cdate',
     ];
 
     /**
