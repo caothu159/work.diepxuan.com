@@ -21,10 +21,11 @@
             <thead id="heading{{ $ctbh->stt_rec }}">
             <tr href="#collapse{{ $ctbh->stt_rec }}" aria-controls="collapse{{ $ctbh->stt_rec }}"
                 data-toggle="collapse" aria-expanded="false" class="isPointer">
-                <th>{{$ctbh->ngay_ct}}</th>
+                <th>{{$ctbh->ngay_ct->format('d/m/Y')}}</th>
+                {{--                <th>{{Carbon\Carbon::createFromFormat('Y-m-d H:i:s',$ctbh->ngay_ct)->format('d/m/Y')}}</th>--}}
                 <th>{{$ctbh->stt_rec}}</th>
-                <th>{{$ctbh->dien_giai}}</th>
-                <th>{{$ctbh->t_tien2}}</th>
+                <th colspan="2">{{$ctbh->dien_giai}}</th>
+                <th class="text-right">{{number_format($ctbh->t_tien2,0,","," ")}}</th>
             </tr>
             </thead>
             <tbody class="collapse" id="collapse{{ $ctbh->stt_rec }}" aria-labelledby="heading{{ $ctbh->stt_rec }}"
@@ -32,10 +33,11 @@
 
             @foreach($ctbh->vattus as $vt)
                 <tr>
+                    <td></td>
                     <td>{{$vt->ten_vt}}</td>
-                    <td>{{$vt->so_luong}}</td>
-                    <td>{{$vt->gia2}}</td>
-                    <td>{{$vt->tt}}</td>
+                    <td class="text-right">{{number_format($vt->so_luong)}}</td>
+                    <td class="text-right">{{number_format($vt->gia2,0,","," ")}}</td>
+                    <td class="text-right">{{number_format($vt->tt,0,","," ")}}</td>
                 </tr>
             @endforeach
 
