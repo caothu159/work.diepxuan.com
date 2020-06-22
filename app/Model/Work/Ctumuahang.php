@@ -2,6 +2,9 @@
 
 namespace App\Model\Work;
 
+use App\Model\Sync;
+use Illuminate\Database\Eloquent\Builder;
+
 class Ctumuahang extends AbstractModel {
 
     const CREATED_AT = 'cdate';
@@ -41,5 +44,40 @@ class Ctumuahang extends AbstractModel {
      * @var bool
      */
     public $timestamps = true;
+
+    /**
+     * Lay danh sach vat tu.
+     */
+    public function vattus() {
+        return $this->hasMany( Ctumuahangvt::class, 'stt_rec', 'stt_rec' );
+    }
+
+    /**
+     * @param $query
+     *
+     * @return mixed
+     */
+    public function scopeIsDestination( $query ) {
+        $syncCty = Sync::where( 'type', 'ma_cty' )->first();
+        $syncKh  = Sync::where( 'type', 'ma_kh' )->first();
+
+        return $query->where( [
+            [ $syncCty->type, '=', $syncCty->to ],
+            [ $syncKh->type, '=', $syncKh->to ],
+        ] );
+    }
+
+    /**
+     * The "booting" method of the model.
+     *
+     * @return void
+     */
+    protected static function boot() {
+        parent::boot();
+
+        static::addGlobalScope( 'PO3', function ( Builder $builder ) {
+            $builder->where( 'ma_ct', '=', 'PO3' );
+        } );
+    }
 
 }

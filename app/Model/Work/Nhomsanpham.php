@@ -77,17 +77,6 @@ class Nhomsanpham extends AbstractModel {
         return $query->where( 'ksd', 0 );
     }
 
-    /**
-     * @param $query
-     *
-     * @return mixed
-     */
-    public function scopeIsSource( $query ) {
-        $sync = Sync::where( 'type', 'ma_cty' )->first();
-
-        return $query->where( $sync->type, '=', $sync->from );
-    }
-
     static function sync() {
         $sync   = Sync::where( 'type', 'ma_cty' )->first();
         $dmnhsp = Nhomsanpham::isSource()->isEnable()->get();

@@ -7,7 +7,41 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 class AbstractModel extends Model {
-    protected $dateFormat = 'Y-m-d H:i:s';
+
+    /**
+     * @param $query
+     *
+     * @return mixed
+     */
+    function scopeIsSource( $query ) {
+        $sync = Sync::where( 'type', 'ma_cty' )->first();
+
+        return $query->where( $sync->type, '=', $sync->from );
+    }
+
+    /**
+     * @param $query
+     *
+     * @return mixed
+     */
+    function scopeIsDestination( $query ) {
+        $syncCty = Sync::where( 'type', 'ma_cty' )->first();
+
+        return $query->where( $syncCty->type, '=', $syncCty->to );
+    }
+
+    static public function syncChange() {
+        $ctbh   = Ctubanhang::isSource()->get();
+        $ctmh   = Ctumuahang::isDestination()->get();
+        $return = $ctbh;
+        $return->merge( $ctmh );
+        $return->sortBy( 'ngay_ct' );
+        foreach ( $ctbh as $ct ) {
+            $ct->vattus;
+        }
+
+        return $ctbh;
+    }
 }
 
 trait HasCompositePrimaryKey {

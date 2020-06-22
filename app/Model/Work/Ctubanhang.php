@@ -2,10 +2,10 @@
 
 namespace App\Model\Work;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\DB;
+use App\Model\Sync;
+use Illuminate\Database\Eloquent\Builder;
 
-class Ctubanhang extends Model {
+class Ctubanhang extends AbstractModel {
 
     const CREATED_AT = 'cdate';
     const UPDATED_AT = 'ldate';
@@ -43,25 +43,7 @@ class Ctubanhang extends Model {
      *
      * @var bool
      */
-    public $timestamps = true;
-
-    public static $groupKhachhang = [
-        'ma_kho',
-        'ma_kh',
-    ];
-
-    public static $groupDonhang = [
-        'ngay_ct',
-        'ma_kh',
-        'ma_kho',
-        'ma_bp',
-        'ten_kh',
-        'dien_giai',
-        'ma_kho',
-        'luser',
-        'so_ct',
-        'ma_ct',
-    ];
+    public $timestamps = false;
 
     /**
      * @return mixed
@@ -71,42 +53,10 @@ class Ctubanhang extends Model {
     }
 
     /**
-     * @return mixed
+     * Lay danh sach vat tu.
      */
-    public function khohang() {
-        return $this->belongsTo( \App\Model\Work\Khohang::class, 'ma_kho', 'ma_kho' );
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getSimilarAttribute() {
-        similar_text( $this->ma_kho, $this->ma_bp, $similar );
-
-        return $similar;
-    }
-
-    /**
-     * @param $query
-     *
-     * @return mixed
-     */
-    public function scopeNhomkhachhang( $query ) {
-        return $query->groupBy( Ctubanhang::$groupKhachhang )
-                     ->addSelect( Ctubanhang::$groupKhachhang )
-                     ->addSelect( DB::raw( 'sum(tien2) as tien2' ) )
-                     ->orderBy( 'ma_kh', 'asc' );
-    }
-
-    /**
-     * @param $query
-     *
-     * @return mixed
-     */
-    public function scopeNhomdonhang( $query ) {
-        return $query->groupBy( Ctubanhang::$groupDonhang )
-                     ->addSelect( Ctubanhang::$groupDonhang )
-                     ->addSelect( DB::raw( 'sum(tien2) as tien2' ) );
+    public function vattus() {
+        return $this->hasMany( Ctubanhangvt::class, 'stt_rec', 'stt_rec' );
     }
 
     /**
@@ -115,22 +65,53 @@ class Ctubanhang extends Model {
      *
      * @return mixed
      */
-    public function scopeNhomkhohang( $query, $kho ) {
-        if ( 'all' == $kho ) {
+    public function scopeNhomkhohang( $query, $kho = null ) {
+        if ( 'all' == $kho || is_null( $kho ) ) {
             return $query;
         }
 
         return $query->where( 'ma_kho', $kho );
     }
 
-    /**
-     * @param $query
-     *
-     * @return mixed
-     */
     public function scopeIsSource( $query ) {
-        $sync = Sync::where( 'type', 'ma_cty' )->first();
+        $syncCty = Sync::where( 'type', 'ma_cty' )->first();
+        $syncKh  = Sync::where( 'type', 'ma_kh' )->first();
 
-        return $query->where( $sync->type, '=', $sync->from );
+        return $query->where( [
+            [ $syncCty->type, '=', $syncCty->from ],
+            [ $syncKh->type, '=', $syncKh->from ],
+        ] );
+    }
+
+    static function sync() {
+        $sync = Sync::where( 'type', 'ma_kh' )->first();
+        $ctbh = Ctubanhang::isSource()->get();
+        foreach ( $ctbh as $sp ) {
+            $_sp                = $sp;
+            $_sp->{$sync->type} = $sync->to;
+            $_sp                = Sanpham::updateOrCreate( [
+                $sync->type => $_sp->{$sync->type},
+                'ma_vt'     => $_sp->ma_vt,
+            ], array_filter( $_sp->toArray() ) );
+            if ( \App::runningInConsole() || strpos( php_sapi_name(), 'cli' ) !== false ) {
+                echo "\r\e[32mSyncing:\e[0m $_sp->ma_vt - $_sp->ten_vt\033[K";
+            }
+        }
+        if ( \App::runningInConsole() || strpos( php_sapi_name(), 'cli' ) !== false ) {
+            echo "\r\n";
+        }
+    }
+
+    /**
+     * The "booting" method of the model.
+     *
+     * @return void
+     */
+    protected static function boot() {
+        parent::boot();
+
+        static::addGlobalScope( 'SO3', function ( Builder $builder ) {
+            $builder->where( 'ma_ct', '=', 'SO3' );
+        } );
     }
 }

@@ -23,5 +23,15 @@ class SyncTableSeeder extends Seeder {
             'to'   => '002',
             'type' => 'ma_cty',
         ] );
+
+        Sync::updateOrCreate( [
+            'from' => '0TRANNGOCDUC',
+            'to'   => 'CONGTY',
+            'type' => 'ma_kh',
+        ], [
+            'from' => '0TRANNGOCDUC',
+            'to'   => 'CONGTY',
+            'type' => 'ma_kh',
+        ] );
     }
 }

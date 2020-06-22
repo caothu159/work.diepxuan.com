@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Work;
 
 use App\Http\Controllers\Work\Factory\DongBoDmsp;
+use App\Model\Work\Ctubanhang;
 use Illuminate\Http\Request;
 
 class TonghopController extends Controller {
@@ -35,6 +36,8 @@ class TonghopController extends Controller {
         $request->merge( [ 'to' => $to ] );
         $this->from = $from;
         $this->to   = $to;
+
+        $this->data = Ctubanhang::syncChange();
 
         return view( "work.tonghop.tonghop", [
             'data' => $this->data
