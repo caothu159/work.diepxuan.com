@@ -9,10 +9,12 @@ namespace App\Model;
 use Illuminate\Database\Eloquent\Model as Eloquent;
 use Illuminate\Support\Str;
 
-//use Jenssegers\Mongodb\Eloquent\Model as Eloquent;
+class Salary extends Eloquent
+{
 
-class Salary extends Eloquent {
-
+    /**
+     * @var mixed
+     */
     private $_chitieu = null;
 
     /**
@@ -21,10 +23,10 @@ class Salary extends Eloquent {
      * @var array
      */
     protected $fillable = [
-        'name',
         'month',
+        'year',
 
-        'default',
+        'name',
 
         'presence',
         'salary_default',
@@ -63,34 +65,38 @@ class Salary extends Eloquent {
     /**
      * @return mixed
      */
-    public function presences() {
-        return $this->hasMany( \App\Presence::class );
+    public function presences()
+    {
+        return $this->hasMany(\App\Presence::class);
     }
 
     /**
      * @return mixed
      */
-    public function types() {
-        return $this->hasMany( \App\SalaryType::class );
+    public function types()
+    {
+        return $this->hasMany(\App\SalaryType::class);
     }
 
     /**
      * @return mixed
      */
-    public function user() {
-        return $this->belongsTo( \App\User::class, 'salary_name', 'name' );
+    public function user()
+    {
+        return $this->belongsTo(\App\User::class, 'salary_name', 'name');
     }
 
     /**
      * @return int
      */
-    public function getChitieuAttribute() {
-        if ( null != $this->_chitieu ) {
+    public function getChitieuAttribute()
+    {
+        if (null != $this->_chitieu) {
             return $this->_chitieu;
         }
         $this->_chitieu = 0;
-        foreach ( $this->types as $type ) {
-            if ( ! Str::contains( $type->name, 'Chi tieu' ) ) {
+        foreach ($this->types as $type) {
+            if (!Str::contains($type->name, 'Chi tieu')) {
                 continue;
             }
             $this->_chitieu = $type->value;
@@ -102,8 +108,9 @@ class Salary extends Eloquent {
     /**
      * @return mixed
      */
-    public function getNameAttribute() {
-        if ( ! $this->user ) {
+    public function getNameAttribute()
+    {
+        if (!$this->user) {
             return $this->attributes['name'];
         }
 
@@ -113,28 +120,30 @@ class Salary extends Eloquent {
     /**
      * @return float|mixed
      */
-    public function ratioInitial() {
+    public function ratioInitial()
+    {
         return 0.01;
 
         $ratio             = 0;
         $types             = $this->types;
-        $productivityTotal = $this->presences->sum( 'productivity' );
+        $productivityTotal = $this->presences->sum('productivity');
         $productivityTotal /= 30;
-        foreach ( $types as $type ) {
-            if ( ! is_numeric( $type->name ) ) {
+        foreach ($types as $type) {
+            if (!is_numeric($type->name)) {
                 continue;
             }
-            if ( $productivityTotal <= doubleval( $type->name ) * 1000 ) {
+            if ($productivityTotal <= doubleval($type->name) * 1000) {
                 continue;
             }
-            $ratio = max( $ratio, $type->value );
+            $ratio = max($ratio, $type->value);
         }
 
-        return doubleval( $ratio );
+        return doubleval($ratio);
     }
 
-    public function getWeekstartAttribute() {
-        return date( 'w', ( $this->month - 25569 ) * 86400 );
+    public function getWeekstartAttribute()
+    {
+        return date('w', ($this->month - 25569) * 86400);
     }
 
     /**
@@ -142,8 +151,9 @@ class Salary extends Eloquent {
      *
      * @return int
      */
-    public function getPresenceSalaryAttribute() {
-        $presenceSalary = $this->types->where( 'name', 'Luong co ban' )->first();
+    public function getPresenceSalaryAttribute()
+    {
+        $presenceSalary = $this->types->where('name', 'Luong co ban')->first();
         $presenceSalary = $presenceSalary ? $presenceSalary->value : 0;
         $presenceSalary /= 30;
 
@@ -155,8 +165,9 @@ class Salary extends Eloquent {
      *
      * @return int
      */
-    public function getKhobaiAttribute() {
-        $presenceSalary = $this->types->where( 'name', 'Luong kho' )->first();
+    public function getKhobaiAttribute()
+    {
+        $presenceSalary = $this->types->where('name', 'Luong kho')->first();
         $presenceSalary = $presenceSalary ? $presenceSalary->value : 0;
         $presenceSalary /= 30;
 

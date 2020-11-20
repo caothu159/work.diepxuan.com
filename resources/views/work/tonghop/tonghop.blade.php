@@ -35,7 +35,7 @@
                 <tr>
                     <td></td>
                     <td>{{$vt->ten_vt}}</td>
-                    <td class="text-right">{{number_format($vt->so_luong)}}</td>
+                    <td class="text-left">{{number_format($vt->so_luong)}}</td>
                     <td class="text-right">{{number_format($vt->gia2,0,","," ")}}</td>
                     <td class="text-right">{{number_format($vt->tt,0,","," ")}}</td>
                 </tr>

@@ -6,7 +6,7 @@ namespace App\Model\Work;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
-class AbstractModel extends Model {
+abstract class AbstractModel extends Model {
     /**
      * The storage format of the model's date columns.
      *
