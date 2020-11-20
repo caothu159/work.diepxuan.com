@@ -9,6 +9,7 @@ namespace App\Http\Controllers\Salary;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
+use Auth;
 
 class Controller extends \App\Http\Controllers\Controller {
 
@@ -16,7 +17,11 @@ class Controller extends \App\Http\Controllers\Controller {
      * @return mixed
      */
     public function isAdmin() {
-        return auth()->user()->isAdmin();
+        try {
+            return auth()->user()->isAdmin();
+        } catch(Exception $e){
+            return 0;
+        }
     }
 
     /**
