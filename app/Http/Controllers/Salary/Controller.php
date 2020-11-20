@@ -6,22 +6,19 @@
 
 namespace App\Http\Controllers\Salary;
 
-use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
-use Illuminate\Foundation\Bus\DispatchesJobs;
-use Illuminate\Foundation\Validation\ValidatesRequests;
-use Auth;
-
-class Controller extends \App\Http\Controllers\Controller {
+class Controller extends \App\Http\Controllers\Controller
+{
 
     /**
      * @return mixed
      */
-    public function isAdmin() {
-        try {
+    public function isAdmin()
+    {
+        if (auth()->check()) {
             return auth()->user()->isAdmin();
-        } catch(Exception $e){
-            return 0;
         }
+
+        return false;
     }
 
     /**
@@ -31,8 +28,9 @@ class Controller extends \App\Http\Controllers\Controller {
      *
      * @return void
      */
-    public function months( string $year = null ) {
-        return array_diff( scandir( ( new \App\Data )->datadir( $year ) ), [ '.', '..' ] );
+    public function months(string $year = null)
+    {
+        return array_diff(scandir((new \App\Data)->datadir($year)), ['.', '..']);
     }
 
     /**
@@ -40,8 +38,9 @@ class Controller extends \App\Http\Controllers\Controller {
      *
      * @return void
      */
-    public function years() {
-        return array_diff( scandir( ( new \App\Data )->datadir() ), [ '.', '..' ] );
+    public function years()
+    {
+        return array_diff(scandir((new \App\Data)->datadir()), ['.', '..']);
     }
 
     /**
@@ -52,14 +51,15 @@ class Controller extends \App\Http\Controllers\Controller {
      *
      * @return string
      */
-    public function link( string $year = null, string $month = null ) {
-        if ( ! $year ) {
-            return route( 'salary.index' );
+    public function link(string $year = null, string $month = null)
+    {
+        if (!$year) {
+            return route('salary.index');
         }
-        if ( ! $month ) {
-            return route( 'salary.index', [ 'year' => $year ] );
+        if (!$month) {
+            return route('salary.index', ['year' => $year]);
         }
 
-        return route( 'salary.index', [ 'year' => $year, 'month' => sprintf( "%02d", $month ) ] );
+        return route('salary.index', ['year' => $year, 'month' => sprintf("%02d", $month)]);
     }
 }
