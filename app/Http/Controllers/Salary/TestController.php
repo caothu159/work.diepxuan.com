@@ -13,7 +13,7 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
-class SalaryController extends Controller
+class TestController extends Controller
 {
 
     /**

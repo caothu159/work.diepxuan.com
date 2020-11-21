@@ -32,6 +32,7 @@ class SalaryService
      * @var mixed
      */
     private $timemonth;
+
     /**
      * @var mixed
      */
