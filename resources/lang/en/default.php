@@ -8,7 +8,7 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | User Language Lines
+    | Default Language Lines
     |--------------------------------------------------------------------------
     |
     | The following language lines are used during authentication for various
@@ -17,9 +17,9 @@ return [
     |
     */
 
-    'manager' => 'Quản lý tài khoản',
-    'map'     => 'Liên kết',
-    'list'    => 'Danh sách người dùng',
-    'new'     => 'Thêm mới',
+    'add' => 'Thêm dữ liệu',
+    'year' => 'năm',
+    'month' => 'tháng',
+    'day' => 'ngày',
 
 ];

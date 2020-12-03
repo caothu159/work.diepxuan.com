@@ -11,7 +11,8 @@ use Illuminate\Notifications\Notifiable;
 
 //use Jenssegers\Mongodb\Auth\User as Authenticatable;
 
-class User extends Authenticatable {
+class User extends Authenticatable
+{
     use Notifiable;
 
     /**
@@ -54,11 +55,21 @@ class User extends Authenticatable {
     /**
      * Check user is admin.
      */
-    public function isAdmin() {
+    public function isAdmin()
+    {
+        // if ($this->role->name == 'Admin' && $this->is_active == 1) {
+        //     return true;
+        // }
         return $this->role == 5;
     }
 
-    public function salaries() {
-        return $this->hasMany( \App\Salary::class, 'name', 'salary_name' );
+    public function role()
+    {
+        return $this->belongsTo(\App\Role::class);
+    }
+
+    public function salaries()
+    {
+        return $this->hasMany(\App\Salary::class, 'name', 'salary_name');
     }
 }

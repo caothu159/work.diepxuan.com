@@ -5,14 +5,23 @@
  */
 
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 
-class UsersTableSeeder extends Seeder {
+class UsersTableSeeder extends Seeder
+{
     /**
      * Run the database seeds.
      *
      * @return void
      */
-    public function run() {
-        //
+    public function run()
+    {
+        App\User::create([
+            'name' => 'Tran Ngoc Duc',
+            'username' => 'ductn',
+            'email' => 'caothu91@gmail.com',
+            'password' => Hash::make('Ductn@7691'),
+            'role' => 5,
+        ]);
     }
 }

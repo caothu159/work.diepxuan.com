@@ -11,6 +11,19 @@ use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller as BaseController;
 
-class Controller extends BaseController {
+class Controller extends BaseController
+{
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
+
+    /**
+     * @return mixed
+     */
+    public function isAdmin()
+    {
+        if (auth()->check()) {
+            return auth()->user()->isAdmin();
+        }
+
+        return false;
+    }
 }

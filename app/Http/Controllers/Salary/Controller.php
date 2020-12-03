@@ -9,17 +9,6 @@ namespace App\Http\Controllers\Salary;
 class Controller extends \App\Http\Controllers\Controller
 {
 
-    /**
-     * @return mixed
-     */
-    public function isAdmin()
-    {
-        if (auth()->check()) {
-            return auth()->user()->isAdmin();
-        }
-
-        return false;
-    }
 
     /**
      * List all month in year.

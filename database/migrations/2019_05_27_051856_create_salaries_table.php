@@ -19,12 +19,13 @@ class CreateSalariesTable extends Migration
     {
         Schema::create('salaries', function (Blueprint $table) {
             $table->bigIncrements('id');
+
             $table->unsignedBigInteger('nam');
             $table->unsignedBigInteger('thang');
             $table->unsignedBigInteger('ngay')->nullable();
 
-            $table->string('name');
-            $table->double('luongcoban');
+            $table->string('ten');
+            $table->double('luongcoban')->nullable();
             $table->double('baohiem')->nullable();
             $table->double('chitieu')->nullable();
             $table->double('heso')->nullable();

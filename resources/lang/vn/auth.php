@@ -8,7 +8,7 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | User Language Lines
+    | Authentication Language Lines
     |--------------------------------------------------------------------------
     |
     | The following language lines are used during authentication for various
@@ -17,9 +17,7 @@ return [
     |
     */
 
-    'manager' => 'Quản lý tài khoản',
-    'map'     => 'Liên kết',
-    'list'    => 'Danh sách người dùng',
-    'new'     => 'Thêm mới',
+    'failed' => 'These credentials do not match our records.',
+    'throttle' => 'Too many login attempts. Please try again in :seconds seconds.',
 
 ];

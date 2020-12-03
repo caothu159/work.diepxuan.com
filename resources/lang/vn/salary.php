@@ -8,7 +8,7 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | User Language Lines
+    | Salary Language Lines
     |--------------------------------------------------------------------------
     |
     | The following language lines are used during authentication for various
@@ -17,9 +17,7 @@ return [
     |
     */
 
-    'manager' => 'Quản lý tài khoản',
-    'map'     => 'Liên kết',
-    'list'    => 'Danh sách người dùng',
-    'new'     => 'Thêm mới',
+    'salary' => 'Bảng lương',
+    'import' => 'Nhập dữ liệu',
 
 ];

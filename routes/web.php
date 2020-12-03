@@ -11,6 +11,7 @@ Auth::routes([
 Route::domain('luong.diepxuan.com')->group(function () {
     Route::get('/', 'Salary\TestController@index')->name('home');
     Route::get('home', 'Salary\TestController@index');
+    Route::resource('salary', 'Salary\TestController');
 
     Route::resource('users', 'UsersController');
 });

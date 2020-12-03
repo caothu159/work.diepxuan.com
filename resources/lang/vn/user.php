@@ -19,7 +19,7 @@ return [
 
     'manager' => 'Quản lý tài khoản',
     'map'     => 'Liên kết',
-    'list'    => 'Danh sách người dùng',
+    'list'    => 'Danh sách',
     'new'     => 'Thêm mới',
 
 ];

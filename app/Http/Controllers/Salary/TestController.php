@@ -6,16 +6,18 @@
 
 namespace App\Http\Controllers\Salary;
 
-use App\Salary;
 use App\Services\SalaryService;
 use Exception;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use App\Salary;
 
+/**
+ * Undocumented class.
+ */
 class TestController extends Controller
 {
-
     /**
      * Create a new controller instance.
      *
@@ -23,27 +25,31 @@ class TestController extends Controller
      */
     public function __construct()
     {
-        $this->middleware([
+        $middleware = [
             'clearcache',
-        ]);
+        ];
+        $this->middleware($middleware);
     }
 
     /**
      * Display a listing of the resource.
      *
      * @param $salaryService App\Services\SalaryService
-     * @param string|null $year
-     * @param string|null $month
+     * @param $year          string|null
+     * @param $month         string|null
      *
      * @return Factory|\Illuminate\View\View
+     *
      * @throws Exception
      */
     public function index(SalaryService $salaryService, string $year = null, string $month = null)
     {
-        return view('test', [
+        $viewData = [
             'controller' => $this,
-            'data'       => $salaryService,
-        ]);
+            'service' => $salaryService,
+        ];
+
+        return view('salary', $viewData);
     }
 
     /**
@@ -53,68 +59,91 @@ class TestController extends Controller
      */
     public function create()
     {
-        //
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param Request $request
+     * @param $request Request
      *
      * @return Response
      */
     public function store(Request $request)
     {
-        //
+        $this->validate($request, [
+            'thang'     => 'required',
+            'nam' => 'required',
+            'ten'    => 'required',
+        ]);
+        $tenLst = $request->input('ten');
+        $tenLst = trim($tenLst);
+        $tenLst = explode('-', $tenLst);
+        foreach ($tenLst as $_ten) {
+            $ten = trim($_ten);
+            Salary::create([
+                'ngay'        => $request->input('ngay'),
+                'thang'        => $request->input('thang'),
+                'nam'    => $request->input('nam'),
+                'ten'       => $ten,
+                'chamcong'    => $request->input('chamcong'),
+                'diadiem' => $request->input('diadiem'),
+                'doanhso' => $request->input('doanhso'),
+                'chono' => $request->input('chono'),
+                'thuno' => $request->input('thuno'),
+                'tile' => 1 / count($tenLst),
+            ]);
+        }
+
+        return redirect()->route('salary.index')->with(
+            'thành công',
+            "Đã thêm chấm công của <strong>$request->input('ten')</strong>."
+        );
     }
 
     /**
      * Display the specified resource.
      *
-     * @param int $id
+     * @param $id int
      *
      * @return Response
      */
     public function show($id)
     {
-        //
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param int $id
+     * @param $id int
      *
      * @return Response
      */
     public function edit($id)
     {
-        //
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
-     * @param int $id
+     * @param $request \Illuminate\Http\Request
+     * @param $id      int
      *
      * @return Response
      */
     public function update(Request $request, $id)
     {
-        //
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param int $id
+     * @param $id int
      *
      * @return Response
      */
     public function destroy($id)
     {
-        //
+        Salary::destroy($id);
+        return redirect()->route('salary.index');
     }
-
 }
