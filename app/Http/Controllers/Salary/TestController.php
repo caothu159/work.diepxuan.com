@@ -1,17 +1,17 @@
 <?php
 
-/*
+/**
  * Copyright © 2019 Dxvn, Inc. All rights reserved.
  */
 
 namespace App\Http\Controllers\Salary;
 
+use App\Salary;
 use App\Services\SalaryService;
 use Exception;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use App\Salary;
 
 /**
  * Undocumented class.
@@ -34,19 +34,17 @@ class TestController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @param $salaryService App\Services\SalaryService
-     * @param $year          string|null
-     * @param $month         string|null
-     *
-     * @return Factory|\Illuminate\View\View
-     *
+     * @param  $salaryService                  App\Services\SalaryService
+     * @param  $year                           string|null
+     * @param  $month                          string|null
      * @throws Exception
+     * @return Factory|\Illuminate\View\View
      */
     public function index(SalaryService $salaryService, string $year = null, string $month = null)
     {
         $viewData = [
             'controller' => $this,
-            'service' => $salaryService,
+            'service'    => $salaryService,
         ];
 
         return view('salary', $viewData);
@@ -64,16 +62,15 @@ class TestController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param $request Request
-     *
+     * @param  $request   Request
      * @return Response
      */
     public function store(Request $request)
     {
         $this->validate($request, [
-            'thang'     => 'required',
-            'nam' => 'required',
-            'ten'    => 'required',
+            'thang' => 'required',
+            'nam'   => 'required',
+            'ten'   => 'required',
         ]);
         $tenLst = $request->input('ten');
         $tenLst = trim($tenLst);
@@ -81,16 +78,16 @@ class TestController extends Controller
         foreach ($tenLst as $_ten) {
             $ten = trim($_ten);
             Salary::create([
-                'ngay'        => $request->input('ngay'),
-                'thang'        => $request->input('thang'),
-                'nam'    => $request->input('nam'),
-                'ten'       => $ten,
-                'chamcong'    => $request->input('chamcong'),
-                'diadiem' => $request->input('diadiem'),
-                'doanhso' => $request->input('doanhso'),
-                'chono' => $request->input('chono'),
-                'thuno' => $request->input('thuno'),
-                'tile' => 1 / count($tenLst),
+                'ngay'     => $request->input('ngay'),
+                'thang'    => $request->input('thang'),
+                'nam'      => $request->input('nam'),
+                'ten'      => $ten,
+                'chamcong' => $request->input('chamcong'),
+                'diadiem'  => $request->input('diadiem'),
+                'doanhso'  => $request->input('doanhso'),
+                'chono'    => $request->input('chono'),
+                'thuno'    => $request->input('thuno'),
+                'tile'     => 1 / count($tenLst),
             ]);
         }
 
@@ -103,8 +100,7 @@ class TestController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param $id int
-     *
+     * @param  $id        int
      * @return Response
      */
     public function show($id)
@@ -114,8 +110,7 @@ class TestController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param $id int
-     *
+     * @param  $id        int
      * @return Response
      */
     public function edit($id)
@@ -125,9 +120,8 @@ class TestController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param $request \Illuminate\Http\Request
-     * @param $id      int
-     *
+     * @param  $request   \Illuminate\Http\Request
+     * @param  $id        int
      * @return Response
      */
     public function update(Request $request, $id)
@@ -137,13 +131,13 @@ class TestController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param $id int
-     *
+     * @param  $id        int
      * @return Response
      */
     public function destroy($id)
     {
         Salary::destroy($id);
+
         return redirect()->route('salary.index');
     }
 }
