@@ -20,8 +20,6 @@ class TestController extends Controller
 {
     /**
      * Create a new controller instance.
-     *
-     * @return void
      */
     public function __construct()
     {
@@ -37,14 +35,16 @@ class TestController extends Controller
      * @param  $salaryService                  App\Services\SalaryService
      * @param  $year                           string|null
      * @param  $month                          string|null
+     *
      * @throws Exception
+     *
      * @return Factory|\Illuminate\View\View
      */
     public function index(SalaryService $salaryService, string $year = null, string $month = null)
     {
         $viewData = [
             'controller' => $this,
-            'service'    => $salaryService,
+            'service' => $salaryService,
         ];
 
         return view('salary', $viewData);
@@ -63,37 +63,39 @@ class TestController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  $request   Request
+     *
      * @return Response
      */
     public function store(Request $request)
     {
         $this->validate($request, [
             'thang' => 'required',
-            'nam'   => 'required',
-            'ten'   => 'required',
+            'nam' => 'required',
+            'ten' => 'required',
         ]);
+
         $tenLst = $request->input('ten');
         $tenLst = trim($tenLst);
         $tenLst = explode('-', $tenLst);
         foreach ($tenLst as $_ten) {
             $ten = trim($_ten);
             Salary::create([
-                'ngay'     => $request->input('ngay'),
-                'thang'    => $request->input('thang'),
-                'nam'      => $request->input('nam'),
-                'ten'      => $ten,
+                'ngay' => $request->input('ngay'),
+                'thang' => $request->input('thang'),
+                'nam' => $request->input('nam'),
+                'ten' => $ten,
                 'chamcong' => $request->input('chamcong'),
-                'diadiem'  => $request->input('diadiem'),
-                'doanhso'  => $request->input('doanhso'),
-                'chono'    => $request->input('chono'),
-                'thuno'    => $request->input('thuno'),
-                'tile'     => 1 / count($tenLst),
+                'diadiem' => $request->input('diadiem'),
+                'doanhso' => $request->input('doanhso'),
+                'chono' => $request->input('chono'),
+                'thuno' => $request->input('thuno'),
+                'tile' => 1 / count($tenLst),
             ]);
         }
 
         return redirect()->route('salary.index')->with(
             'thành công',
-            "Đã thêm chấm công của <strong>$request->input('ten')</strong>."
+            "Đã thêm chấm công của <strong>{$request->input}('ten')</strong>."
         );
     }
 
@@ -101,6 +103,7 @@ class TestController extends Controller
      * Display the specified resource.
      *
      * @param  $id        int
+     *
      * @return Response
      */
     public function show($id)
@@ -111,6 +114,7 @@ class TestController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param  $id        int
+     *
      * @return Response
      */
     public function edit($id)
@@ -122,16 +126,46 @@ class TestController extends Controller
      *
      * @param  $request   \Illuminate\Http\Request
      * @param  $id        int
+     *
      * @return Response
      */
     public function update(Request $request, $id)
     {
+        $this->validate($request, [
+            'thang' => 'required',
+            'nam' => 'required',
+            'ten' => 'required',
+        ]);
+
+        Salary::updateOrCreate([
+            'id' => $id,
+            'thang' => $request->input('thang'),
+            'nam' => $request->input('nam'),
+            'ten' => $request->input('ten'),
+        ], [
+            'ngay' => $request->input('ngay'),
+            'thang' => $request->input('thang'),
+            'nam' => $request->input('nam'),
+            'ten' => $request->input('ten'),
+            'chamcong' => $request->input('chamcong'),
+            'diadiem' => $request->input('diadiem'),
+            'doanhso' => $request->input('doanhso'),
+            'chono' => $request->input('chono'),
+            'thuno' => $request->input('thuno'),
+            'tile' => $request->input('tile'),
+        ]);
+
+        return redirect()->route('salary.index')->with(
+            'thành công',
+            "Đã thêm chấm công của <strong>{$request->input}('ten')</strong>."
+        );
     }
 
     /**
      * Remove the specified resource from storage.
      *
      * @param  $id        int
+     *
      * @return Response
      */
     public function destroy($id)

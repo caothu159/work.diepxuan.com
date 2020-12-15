@@ -39,6 +39,8 @@ composer.lock
 package-lock.json
 yarn.lock
 
+.git
 .idea
 .phpintel
 sftp-config.json
+.vscode

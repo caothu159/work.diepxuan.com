@@ -1,8 +1,8 @@
 <?php
 
-/*
- * Copyright © 2019 Dxvn, Inc. All rights reserved.
- */
+namespace Database\Seeders;
+
+// Copyright © 2019 Dxvn, Inc. All rights reserved.
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
@@ -11,8 +11,6 @@ class UsersTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
-     *
-     * @return void
      */
     public function run()
     {
