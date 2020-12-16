@@ -16,15 +16,28 @@
     @csrf
     <div class="form-group">
         <input type="number" class="form-control form-control-sm" name="ngay" placeholder="{{ __('default.day') }}" />
-        <input type="number" class="form-control form-control-sm" name="thang" placeholder="{{ __('default.month') }}" />
+        <input type="number" class="form-control form-control-sm" name="thang"
+            placeholder="{{ __('default.month') }}" />
         <input type="number" class="form-control form-control-sm" name="nam" placeholder="{{ __('default.year') }}" />
     </div>
-    <div class="form-group"><input type="text" class="form-control form-control-sm" name="ten" placeholder="tên" /></div>
-    <div class="form-group"><input type="number" class="form-control form-control-sm" name="chamcong" placeholder="chấm công" /></div>
-    <div class="form-group"><input type="text" class="form-control form-control-sm" name="diadiem" placeholder="địa điểm" /></div>
-    <div class="form-group"><input type="number" class="form-control form-control-sm" name="doanhso" placeholder="doanh số" /></div>
-    <div class="form-group"><input type="number" class="form-control form-control-sm" name="chono" placeholder="cho nợ" /></div>
-    <div class="form-group"><input type="number" class="form-control form-control-sm" name="thuno" placeholder="thu nợ" /></div>
+    <div class="form-group">
+        <input type="text" class="form-control form-control-sm" name="ten" placeholder="tên" />
+    </div>
+    <div class="form-group">
+        <input type="number" class="form-control form-control-sm" name="chamcong" placeholder="chấm công" />
+    </div>
+    <div class="form-group">
+        <input type="text" class="form-control form-control-sm" name="diadiem" placeholder="địa điểm" />
+    </div>
+    <div class="form-group">
+        <input type="number" class="form-control form-control-sm" name="doanhso" placeholder="doanh số" />
+    </div>
+    <div class="form-group">
+        <input type="number" class="form-control form-control-sm" name="chono" placeholder="cho nợ" />
+    </div>
+    <div class="form-group">
+        <input type="number" class="form-control form-control-sm" name="thuno" placeholder="thu nợ" />
+    </div>
     <button type="submit" class="btn btn-primary">{{ __('default.add') }}</button>
 </form>
 
@@ -45,7 +58,7 @@
     @foreach ($service->getAll() as $salary)
     <tr>
         <td>
-            <form class="d-inline" action="{{ route('salary.destroy', ['id' => $salary->id]) }}" method="POST">
+            <form class="d-inline" action="{{ route('salary.destroy', ['salary' => $salary->id]) }}" method="POST">
                 @method('DELETE')
                 @csrf
                 <input type="hidden" value="{{ $salary->id }}" name="id">

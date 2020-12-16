@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Salary\TestController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -18,9 +19,9 @@ Auth::routes([
 ]);
 
 Route::domain('luong.diepxuan.com')->group(function () {
-    Route::get('/', 'Salary\TestController@index')->name('home');
-    Route::get('home', 'Salary\TestController@index');
-    Route::resource('salary', 'Salary\TestController');
+    Route::get('/', [TestController::class, 'index'])->name('home');
+    Route::get('home', [TestController::class, 'index']);
+    Route::resource('salary', TestController::class);
 
     Route::resource('users', 'UsersController');
 });
@@ -43,3 +44,5 @@ Route::domain('work.diepxuan.com')->group(function () {
     Route::get('muahang/{from?}/{to?}', 'Work\MuahangController@index')->name('muahang');
     Route::resource('muahang', 'Work\MuahangController');
 });
+
+// Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

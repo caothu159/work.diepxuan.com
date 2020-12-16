@@ -2,14 +2,16 @@
 
 namespace App\Models;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
+//use Jenssegers\Mongodb\Auth\User as Authenticatable;
+
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable;
+    use HasFactory;
+    use Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -18,8 +20,12 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
+        'username',
         'email',
         'password',
+
+        'salary_name',
+        'role',
     ];
 
     /**
@@ -38,6 +44,30 @@ class User extends Authenticatable
      * @var array
      */
     protected $casts = [
+        'role' => 'tinyint',
+        'username' => 'string',
+        'salary_name' => 'string',
         'email_verified_at' => 'datetime',
     ];
+
+    /**
+     * Check user is admin.
+     */
+    public function isAdmin()
+    {
+        // if ($this->role->name == 'Admin' && $this->is_active == 1) {
+        //     return true;
+        // }
+        return 5 == $this->role;
+    }
+
+    public function role()
+    {
+        return $this->belongsTo(\App\Role::class);
+    }
+
+    public function salaries()
+    {
+        return $this->hasMany(\App\Salary::class, 'name', 'salary_name');
+    }
 }

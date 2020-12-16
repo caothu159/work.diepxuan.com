@@ -25,3 +25,7 @@ Artisan::command('dongbo:dmnhsp', function () {
 Artisan::command('dongbo:dmsp', function () {
     \App\Model\Work\Sanpham::sync();
 })->describe('dong bo san pham');
+
+Artisan::command('luong:import', function () {
+    \App\Model\Work\Sanpham::sync();
+})->describe('import luong');

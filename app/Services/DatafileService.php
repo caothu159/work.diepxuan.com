@@ -113,6 +113,11 @@ class DatafileService
         // $this->serializeImport();
     }
 
+    public static function import(string $year, string $month)
+    {
+        # code...
+    }
+
     /**
      * Serialize Salary
      * Tinh luong.
