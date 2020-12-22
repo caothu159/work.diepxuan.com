@@ -4,7 +4,6 @@ namespace App\Services;
 
 use App\Car;
 use App\Data;
-// use App\Models\SalaryUser as ModelsSalaryUser;
 use App\Presence;
 use App\Salary;
 use App\SalaryUser;
@@ -24,7 +23,7 @@ class SalaryService implements SalaryServiceInterface
     private $month;
     private $name;
 
-    private $users;
+    private $user;
 
     private $filter;
     private $getAllCollection;
@@ -117,45 +116,41 @@ class SalaryService implements SalaryServiceInterface
     public function getUserOptions()
     {
         $filter = $this->filter;
-        $filter['ten1'] = ['ten', 'not like', '%*%'];
+        $filter['ten1'] = ['ten', '<>', '*'];
         $filter['ten2'] = ['ten', '<>', 'duc'];
         unset($filter['ten']);
-        return Salary::orderBy('ten', 'ASC')
+        return Salary::select('ten')
             ->groupBy('ten')
-            ->select('ten')
+            ->orderBy('ten', 'ASC')
             ->where(array_values($filter))
             ->get();
     }
 
     public function getUser(string $name = null)
     {
-        if ($this->users == null) {
-            $filter = [
-                'thang' => ['thang', '<=', $this->month],
-                'nam' => ['nam', '<=', $this->year],
-            ];
-            $this->users = SalaryUser::orderBy('nam', 'DESC')
-                ->orderBy('thang', 'DESC')
-                ->where(array_values($filter))->get();
-        }
         $name = $name ?: $this->getName();
         if ($name) {
-            $user = $this->users->first(function ($user) use ($name) {
-                return $user->ten == $name;
-            });
-            if ($user)
-                return $user;
-            $this->users = null;
+            $this->user = SalaryUser::orderBy('nam', 'DESC')
+                ->orderBy('thang', 'DESC')
+                ->orderBy('ten', 'ASC')
+                ->where(array_values([
+                    'thang' => ['thang', '<=', $this->month],
+                    'nam' => ['nam', '<=', $this->year],
+                    'ten' => ['ten', '=', $name],
+                ]))->first();
+            if ($this->user)
+                return $this->user;
             return SalaryUser::create([
                 'thang' =>  $this->month,
                 'nam' =>  $this->year,
                 'ten' =>  $name,
             ]);
         }
-        if (count($this->users)) {
-            return $this->users->first();
-        }
-        return new SalaryUser();
+        return new SalaryUser([
+            'thang' =>  $this->month,
+            'nam' =>  $this->year,
+            'ten' =>  $this->getName(),
+        ]);
     }
 
     public function getAll()
@@ -164,7 +159,6 @@ class SalaryService implements SalaryServiceInterface
             return $this->getAllCollection;
         }
         $filter = $this->filter;
-        $filter['ngay'] = ['ngay', '<>', null];
         $this->getAllCollection = Salary::orderBy('nam', 'DESC')
             ->orderBy('thang', 'DESC')
             ->orderBy('ngay', 'ASC')

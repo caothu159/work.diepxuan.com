@@ -1,3 +1,4 @@
+<?php $users = $service->getUserOptions() ?>
 <div class="row row-cols-sm-auto g-3 align-items-center printhidden">
     <form method="GET" class="col-sm-6 col-auto">
         @method('GET')
@@ -22,7 +23,7 @@
             <label for="ten">Tên</label>
             <select class="form-control" id="ten" name="ten" onchange="this.form.submit()">
                 <option value="false">Chọn Tên</option>
-                @foreach ($service->getUserOptions() as $user)
+                @foreach ($users as $user)
                 @if ($user->ten==$service->getName())
                 <option value="{{ $user->ten }}" selected>{{ $user->ten }}</option>
                 @else
@@ -35,15 +36,16 @@
 </div>
 @include('salary.new')
 @include('salary.user')
+<?php \Debugbar::startMeasure('bangluong', 'Thoi gian tinh luong'); ?>
 <table class="table table-hover table-condensed table-sm text-center">
     <tr>
         <th></th>
         @if (empty($service->getName()))
         <th>Tên</th>
         @endif
-        <th>Công<b class="text-danger border-start border-danger"> {{ $service->getAll()->sum('chamcong') }}</b></th>
+        <th>Công<b class="text-danger border-start border-danger"> {{ $service->getName()?$service->getAll()->sum('chamcong'):'' }}</b></th>
         <th></th>
-        <th>Doanh số<b class="text-danger border-start border-danger"> {{ number_format($service->getAll()->sum('doanhso')) }}</b></th>
+        <th>Doanh số<b class="text-danger border-start border-danger"> {{ $service->getName()?number_format($service->getAll()->sum('doanhso')):'' }}</b></th>
         <th>Cho nợ</th>
         <th>Thu nợ</th>
         <th>Tỉ lệ</th>
@@ -83,3 +85,4 @@
     </tr>
     @endforeach
 </table>
+<?php \Debugbar::stopMeasure('bangluong'); ?>

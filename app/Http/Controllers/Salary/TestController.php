@@ -47,6 +47,7 @@ class TestController extends Controller
 
         $timePost = $request->input('thoigian') ?: $salaryService->getTime();
         if ($timePost && $timePost !== $time) {
+            $redirect['name'] = $name;
             $redirect['time'] = $timePost;
         }
 
