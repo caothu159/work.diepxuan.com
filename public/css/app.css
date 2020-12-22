@@ -13993,11 +13993,11 @@ body {
     width: 100%;
   }
 
-  #accordionSalary > .table {
+  #accordionSalary form {
     display: none;
   }
 
-  #accordionSalary .col-sm-12.collapse.show ~ div {
+  .printhidden {
     display: none;
   }
 }

@@ -1,16 +1,20 @@
 <?php
 
-/*
- * Copyright © 2019 Dxvn, Inc. All rights reserved.
- */
+namespace App\Models;
 
-namespace App\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
-use Illuminate\Database\Eloquent\Model as Eloquent;
-use Illuminate\Support\Str;
-
-class Salary extends Eloquent
+class SalaryUser extends Model
 {
+    use HasFactory;
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'salaries';
+
     /**
      * The attributes that are mass assignable.
      *
@@ -19,14 +23,13 @@ class Salary extends Eloquent
     protected $fillable = [
         'nam',
         'thang',
-        'ngay',
 
         'ten',
-        'chamcong',
-        'diadiem',
-        'doanhso',
-        'chono',
-        'thuno',
+        'luongcoban',
+        'baohiem',
+        'chitieu',
+        'heso',
+        'tile',
     ];
 
     /**

@@ -59,17 +59,9 @@ class DatafileService
      */
     private function __initialize(string $year, string $month)
     {
-        if (\App::runningInConsole() || false !== strpos(php_sapi_name(), 'cli')) {
-            echo 'bat dau';
-        }
-
         $this->year = $year;
         $this->month = $month;
         $this->data->initialize($year, $month);
-
-        if (\App::runningInConsole() || false !== strpos(php_sapi_name(), 'cli')) {
-            echo 'bat dau';
-        }
 
         $dt = sprintf('%s-%s', $this->year, $this->month);
 
@@ -95,8 +87,7 @@ class DatafileService
             ->join('salaries', 'presences.salary_id', '=', 'salaries.id')
             ->where('salaries.month', '=', $this->timemonth)
             ->whereNotBetween('presences.date', [$this->timestart, $this->timeend])
-            ->delete()
-        ;
+            ->delete();
     }
 
     /**
@@ -106,16 +97,11 @@ class DatafileService
      */
     public function salaryImport(string $year, string $month)
     {
-        $this->_initialize($year, $month);
+        $this->__initialize($year, $month);
 
         // $this->beforeImport();
-        $this->startImport();
+        $this->_startImport();
         // $this->serializeImport();
-    }
-
-    public static function import(string $year, string $month)
-    {
-        # code...
     }
 
     /**
@@ -208,8 +194,7 @@ class DatafileService
         Presence::whereBetween('date', [$this->timestart, $this->timeend])->forceDelete();
         SalaryType::leftJoin('salaries', 'salary_types.salary_id', '=', 'salaries.id')
             ->where('salaries.month', '=', $this->timemonth)
-            ->delete()
-        ;
+            ->delete();
         Salary::where('month', $this->timemonth)->forceDelete();
     }
 
@@ -220,10 +205,10 @@ class DatafileService
      */
     protected function _startImport()
     {
-        $this->employeeImport();
-        // $this->presenceImport();
-        // $this->divisionImport();
-        // $this->productivityImport();
+        $this->_employeeImport();
+        // $this->_presenceImport();
+        // $this->_divisionImport();
+        // $this->_productivityImport();
     }
 
     /**
@@ -235,20 +220,30 @@ class DatafileService
     protected function _employeeImport()
     {
         foreach ($this->data->loadFromFile('nhanvien.xlsx') as $name => $val) {
+
+            $salaryArray = array_replace([
+                'ten' => '',
+                'luongcoban' => 0,
+                'baohiem' => 0,
+                'chitieu' => 0,
+                'heso' => 0,
+                'tile' => 0,
+            ], $val);
+
+            dd($name, $val["Luong co ban"], $val);
+            die;
+
             // Bang luong nhan vien hang thang
             $salary = Salary::firstOrCreate([
-                'name' => $name,
-                'month' => $this->timemonth,
-            ], []);
-
-            foreach ($val as $type => $value) {
-                SalaryType::updateOrCreate([
-                    'salary_id' => $salary->id,
-                    'name' => "{$type}",
-                ], [
-                    'value' => $value,
-                ]);
-            }
+                'nam' => $this->year,
+                'thang' => $this->month,
+                'ten' => $name,
+            ], [
+                'nam' => $this->year,
+                'thang' => $this->month,
+                'ten' => $name,
+                'luongcoban' => $val["Luong co ban"],
+            ]);
         }
     }
 

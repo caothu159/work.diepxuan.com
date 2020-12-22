@@ -4,9 +4,10 @@ namespace App\Services;
 
 use App\Car;
 use App\Data;
+// use App\Models\SalaryUser as ModelsSalaryUser;
 use App\Presence;
 use App\Salary;
-use App\SalaryType;
+use App\SalaryUser;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -16,8 +17,17 @@ use PhpOffice\PhpSpreadsheet\Shared\Date;
  * Class DatafileService
  * @package App\Services
  */
-class SalaryService
+class SalaryService implements SalaryServiceInterface
 {
+
+    private $year;
+    private $month;
+    private $name;
+
+    private $users;
+
+    private $filter;
+    private $getAllCollection;
 
     /**
      * DatafileService constructor.
@@ -26,6 +36,73 @@ class SalaryService
      */
     public function __construct()
     {
+        $this->year = $this->year ?: date('Y');
+        $this->month = $this->month ?: date('m');
+        $this->filter = [
+            'thang' => ['thang', '=', $this->month],
+            'nam' => ['nam', '=', $this->year]
+        ];
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @return void
+     * @deprecated
+     */
+    private function __initialize()
+    {
+        $filter = $this->filter;
+        $filter['luongcoban'] = ['luongcoban', '<>', null];
+        $salary = Salary::where(array_values($filter))->first();
+        if ($salary) {
+            $this->heso = $salary->heso ?: 0;
+            $this->luongcoban = $salary->luongcoban ?: 0;
+            $this->chitieu = $salary->chitieu ?: 0;
+        } else {
+            $this->heso = 0;
+            $this->luongcoban = 0;
+            $this->chitieu = 0;
+        }
+    }
+
+    public function setTime($time)
+    {
+        $time = trim($time);
+        $time = $time ?: $this->getTime();
+        $time = explode('-', $time);
+        $time = array_replace([$this->month, $this->year], $time);
+        $this->year = $time[1];
+        $this->month = $time[0];
+
+        $this->filter['thang'] = ['thang', '=', $this->month];
+        $this->filter['nam'] = ['nam', '=', $this->year];
+
+        return $this;
+    }
+
+    public function getTime()
+    {
+        return implode('-', [$this->month, $this->year]);
+    }
+
+    public function setName($name)
+    {
+        $name = trim($name);
+        $this->name = $name ? $name : false;
+
+        if ($this->name) {
+            $this->filter['ten'] = ['ten', "$this->name"];
+        }
+
+        // $this->__initialize();
+
+        return $this;
+    }
+
+    public function getName()
+    {
+        return $this->name;
     }
 
     public function getTimeOptions()
@@ -37,8 +114,63 @@ class SalaryService
             ->get();
     }
 
+    public function getUserOptions()
+    {
+        $filter = $this->filter;
+        $filter['ten1'] = ['ten', 'not like', '%*%'];
+        $filter['ten2'] = ['ten', '<>', 'duc'];
+        unset($filter['ten']);
+        return Salary::orderBy('ten', 'ASC')
+            ->groupBy('ten')
+            ->select('ten')
+            ->where(array_values($filter))
+            ->get();
+    }
+
+    public function getUser(string $name = null)
+    {
+        if ($this->users == null) {
+            $filter = [
+                'thang' => ['thang', '<=', $this->month],
+                'nam' => ['nam', '<=', $this->year],
+            ];
+            $this->users = SalaryUser::orderBy('nam', 'DESC')
+                ->orderBy('thang', 'DESC')
+                ->where(array_values($filter))->get();
+        }
+        $name = $name ?: $this->getName();
+        if ($name) {
+            $user = $this->users->first(function ($user) use ($name) {
+                return $user->ten == $name;
+            });
+            if ($user)
+                return $user;
+            $this->users = null;
+            return SalaryUser::create([
+                'thang' =>  $this->month,
+                'nam' =>  $this->year,
+                'ten' =>  $name,
+            ]);
+        }
+        if (count($this->users)) {
+            return $this->users->first();
+        }
+        return new SalaryUser();
+    }
+
     public function getAll()
     {
-        return Salary::orderBy('created_at', 'asc')->get();
+        if ($this->getAllCollection) {
+            return $this->getAllCollection;
+        }
+        $filter = $this->filter;
+        $filter['ngay'] = ['ngay', '<>', null];
+        $this->getAllCollection = Salary::orderBy('nam', 'DESC')
+            ->orderBy('thang', 'DESC')
+            ->orderBy('ngay', 'ASC')
+            ->orderBy('ten', 'ASC')
+            ->where(array_values($filter))
+            ->get();
+        return $this->getAllCollection;
     }
 }

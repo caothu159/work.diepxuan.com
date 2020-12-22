@@ -12,12 +12,20 @@
     }
 
     #accordionSalary {
-        > .table {
-            display: none;
-        }
+        // > .table {
+        //     display: none;
+        // }
 
-        .col-sm-12.collapse.show ~ div {
+        // .col-sm-12.collapse.show ~ div {
+        //     display: none;
+        // }
+
+        form {
             display: none;
         }
+    }
+
+    .printhidden {
+        display: none;
     }
 }

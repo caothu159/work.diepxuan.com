@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Salary\TestController;
+use App\Http\Controllers\SalaryUserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -19,9 +20,14 @@ Auth::routes([
 ]);
 
 Route::domain('luong.diepxuan.com')->group(function () {
-    Route::get('/', [TestController::class, 'index'])->name('home');
-    Route::get('home', [TestController::class, 'index']);
+    Route::get('/{time?}/{name?}', [TestController::class, 'index'])
+        ->name('luong.home')
+        ->where([
+            'time' => '[0-9]+\-[0-9]+',
+        ]);
+    Route::get('/home', [TestController::class, 'index']);
     Route::resource('salary', TestController::class);
+    Route::resource('salaryuser', SalaryUserController::class);
 
     Route::resource('users', 'UsersController');
 });
