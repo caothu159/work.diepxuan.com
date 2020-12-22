@@ -128,6 +128,8 @@ class SalaryService implements SalaryServiceInterface
 
     public function getUser(string $name = null)
     {
+        if ($this->user)
+            return $this->user;
         $name = $name ?: $this->getName();
         if ($name) {
             $this->user = SalaryUser::orderBy('nam', 'DESC')
