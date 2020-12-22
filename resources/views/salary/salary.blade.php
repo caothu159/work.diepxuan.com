@@ -1,81 +1,85 @@
-<form action="{{-- route('salary.thoigian', $time) --}}">
-    @method('POST')
-    @csrf
-    <div class="form-group">
-        <label for="exampleFormControlSelect1">Thời gian</label>
-        <select class="form-control" id="exampleFormControlSelect1">
-            @foreach ($service->getTimeOptions() as $time)
-            <option>{{ $time->thang }}/{{ $time->nam }}</option>
-            @endforeach
-        </select>
-    </div>
-</form>
-
-<form method="post" action="{{ route('salary.store') }}">
-    @method('POST')
-    @csrf
-    <div class="form-group">
-        <input type="number" class="form-control form-control-sm" name="ngay" placeholder="{{ __('default.day') }}" />
-        <input type="number" class="form-control form-control-sm" name="thang"
-            placeholder="{{ __('default.month') }}" />
-        <input type="number" class="form-control form-control-sm" name="nam" placeholder="{{ __('default.year') }}" />
-    </div>
-    <div class="form-group">
-        <input type="text" class="form-control form-control-sm" name="ten" placeholder="tên" />
-    </div>
-    <div class="form-group">
-        <input type="number" class="form-control form-control-sm" name="chamcong" placeholder="chấm công" />
-    </div>
-    <div class="form-group">
-        <input type="text" class="form-control form-control-sm" name="diadiem" placeholder="địa điểm" />
-    </div>
-    <div class="form-group">
-        <input type="number" class="form-control form-control-sm" name="doanhso" placeholder="doanh số" />
-    </div>
-    <div class="form-group">
-        <input type="number" class="form-control form-control-sm" name="chono" placeholder="cho nợ" />
-    </div>
-    <div class="form-group">
-        <input type="number" class="form-control form-control-sm" name="thuno" placeholder="thu nợ" />
-    </div>
-    <button type="submit" class="btn btn-primary">{{ __('default.add') }}</button>
-</form>
-
+<div class="row row-cols-sm-auto g-3 align-items-center printhidden">
+    <form method="GET" class="col-sm-6 col-auto">
+        @method('GET')
+        @csrf
+        <div class="form-group">
+            <label for="thoigian">Thời gian</label>
+            <select class="form-control" id="thoigian" name="thoigian" onchange="this.form.submit()">
+                @foreach ($service->getTimeOptions() as $time)
+                @if ("$time->thang-$time->nam"==$service->getTime())
+                <option value="{{ $time->thang }}-{{ $time->nam }}" selected>{{ $time->thang }}/{{ $time->nam }}</option>
+                @else
+                <option value="{{ $time->thang }}-{{ $time->nam }}">{{ $time->thang }}/{{ $time->nam }}</option>
+                @endif
+                @endforeach
+            </select>
+        </div>
+    </form>
+    <form method="GET" class="col-sm-6 col-auto">
+        @method('GET')
+        @csrf
+        <div class="form-group">
+            <label for="ten">Tên</label>
+            <select class="form-control" id="ten" name="ten" onchange="this.form.submit()">
+                <option value="false">Chọn Tên</option>
+                @foreach ($service->getUserOptions() as $user)
+                @if ($user->ten==$service->getName())
+                <option value="{{ $user->ten }}" selected>{{ $user->ten }}</option>
+                @else
+                <option value="{{ $user->ten }}">{{ $user->ten }}</option>
+                @endif
+                @endforeach
+            </select>
+        </div>
+    </form>
+</div>
+@include('salary.new')
+@include('salary.user')
 <table class="table table-hover table-condensed table-sm text-center">
     <tr>
         <th></th>
+        @if (empty($service->getName()))
         <th>Tên</th>
-        <th>Công</th>
-        <th>Địa điểm</th>
-        <th>Doanh số</th>
+        @endif
+        <th>Công<b class="text-danger border-start border-danger"> {{ $service->getAll()->sum('chamcong') }}</b></th>
+        <th></th>
+        <th>Doanh số<b class="text-danger border-start border-danger"> {{ number_format($service->getAll()->sum('doanhso')) }}</b></th>
         <th>Cho nợ</th>
         <th>Thu nợ</th>
-        <th>Hệ số</th>
-        <th>Năng suất</th>
         <th>Tỉ lệ</th>
-        <th>Lương</th>
+        @if($service->getUser())
+        <th>Năng suất<b class="text-danger border-start border-danger"> {{ number_format($service->getAll()->sum('nangsuat'),1) }}</b></th>
+        <th>Hệ số</th>
+        <th>Lương<b class="text-danger border-start border-danger"> {{ number_format($service->getAll()->sum('luong')) }}</b></th>
+        @endif
     </tr>
     @foreach ($service->getAll() as $salary)
     <tr>
         <td>
+            @auth
             <form class="d-inline" action="{{ route('salary.destroy', ['salary' => $salary->id]) }}" method="POST">
                 @method('DELETE')
                 @csrf
                 <input type="hidden" value="{{ $salary->id }}" name="id">
-                <button type="submit" class="btn btn-link">xóa</button>
+                <button type="submit" class="btn btn-link">x</button>
             </form>
+            @endauth
             <span class="d-inline">{{ $salary->thoigian }}</span>
         </td>
+        @if (empty($service->getName()))
         <td>{{ $salary->ten }}</td>
+        @endif
         <td>{{ $salary->chamcong }}</td>
         <td>{{ $salary->diadiem }}</td>
-        <td>{{ $salary->doanhso }}</td>
-        <td>{{ $salary->chono }}</td>
-        <td>{{ $salary->thuno }}</td>
-        <td>{{ $salary->heso }}</td>
-        <td>{{ $salary->nangsuat?:'-' }}</td>
+        <td>{{ $salary->doanhso?number_format($salary->doanhso):'-' }}</td>
+        <td>{{ $salary->chono?:'-' }}</td>
+        <td>{{ $salary->thuno?:'-' }}</td>
         <td>{{ $salary->tile }}</td>
+        @if($service->getUser())
+        <td>{{ $salary->nangsuat?number_format($salary->nangsuat,1):'-' }}</td>
+        <td>{{ $salary->heso?:'-' }}</td>
         <td>{{ number_format($salary->luong?:0, 3) }}</td>
+        @endif
     </tr>
     @endforeach
 </table>

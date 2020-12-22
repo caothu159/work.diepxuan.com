@@ -7,7 +7,7 @@
 namespace App\Http\Controllers\Salary;
 
 use App\Salary;
-use App\Services\SalaryService;
+use App\Services\SalaryServiceInterface as SalaryService;
 use Exception;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\Request;
@@ -40,8 +40,27 @@ class TestController extends Controller
      *
      * @return Factory|\Illuminate\View\View
      */
-    public function index(SalaryService $salaryService, string $year = null, string $month = null)
+    public function index(SalaryService $salaryService, Request $request, string $time = null, string $name = null)
     {
+        $redirect = array();
+        $salaryService->setTime($time)->setName($name);
+
+        $timePost = $request->input('thoigian') ?: $salaryService->getTime();
+        if ($timePost && $timePost !== $time) {
+            $redirect['time'] = $timePost;
+        }
+
+        $namePost = $request->input('ten');
+        if ($namePost == 'false') {
+            $redirect['time'] = array_key_exists('time', $redirect) ? $redirect['time'] : $salaryService->getTime();
+        } elseif ($namePost && $namePost !== $name) {
+            $redirect['name'] = $namePost;
+            $redirect['time'] = array_key_exists('time', $redirect) ? $redirect['time'] : $salaryService->getTime();
+        }
+        if (count($redirect) >= 1) {
+            return redirect()->route('luong.home', $redirect);
+        }
+
         $viewData = [
             'controller' => $this,
             'service' => $salaryService,
@@ -84,6 +103,7 @@ class TestController extends Controller
                 'thang' => $request->input('thang'),
                 'nam' => $request->input('nam'),
                 'ten' => $ten,
+
                 'chamcong' => $request->input('chamcong'),
                 'diadiem' => $request->input('diadiem'),
                 'doanhso' => $request->input('doanhso'),
@@ -93,7 +113,12 @@ class TestController extends Controller
             ]);
         }
 
-        return redirect()->route('salary.index')->with(
+        $redirect = [
+            'thoigian' => implode('-', [$request->input('thang'), $request->input('nam')]),
+            'ten' => count($tenLst) == 1 ? $tenLst[0] : false
+        ];
+
+        return redirect()->route('luong.home', $redirect)->with(
             'thành công',
             "Đã thêm chấm công của <strong>{$request->input}('ten')</strong>."
         );
@@ -147,6 +172,7 @@ class TestController extends Controller
             'thang' => $request->input('thang'),
             'nam' => $request->input('nam'),
             'ten' => $request->input('ten'),
+
             'chamcong' => $request->input('chamcong'),
             'diadiem' => $request->input('diadiem'),
             'doanhso' => $request->input('doanhso'),
@@ -155,7 +181,12 @@ class TestController extends Controller
             'tile' => $request->input('tile'),
         ]);
 
-        return redirect()->route('salary.index')->with(
+        $redirect = [
+            'thoigian' => implode('-', [$request->input('thang'), $request->input('nam')]),
+            'ten' => $request->input('ten') ?: false
+        ];
+
+        return redirect()->route('salary.index', $redirect)->with(
             'thành công',
             "Đã thêm chấm công của <strong>{$request->input}('ten')</strong>."
         );

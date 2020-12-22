@@ -44,7 +44,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $casts = [
-        'role' => 'tinyint',
+        'role' => 'int',
         'username' => 'string',
         'salary_name' => 'string',
         'email_verified_at' => 'datetime',
