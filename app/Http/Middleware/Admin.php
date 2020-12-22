@@ -20,8 +20,10 @@ class Admin
     public function handle($request, Closure $next)
     {
         if (auth()->user()->isAdmin()) {
+            \Debugbar::enable();
             return $next($request);
         }
+        \Debugbar::disable();
 
         return redirect('/home')->with('error', 'You have not admin access');
     }
