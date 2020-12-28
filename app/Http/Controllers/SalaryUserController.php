@@ -8,6 +8,22 @@ use Illuminate\Http\Request;
 class SalaryUserController extends Controller
 {
     /**
+     * Create a new controller instance.
+     */
+    public function __construct()
+    {
+        $this->middleware([
+            'clearcache',
+        ]);
+
+        $this->middleware([
+            'auth',
+        ])->except([
+            'index', 'show'
+        ]);
+    }
+
+    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response

@@ -23,10 +23,16 @@ class TestController extends Controller
      */
     public function __construct()
     {
-        $middleware = [
+        $this->middleware([
             'clearcache',
-        ];
-        $this->middleware($middleware);
+        ]);
+
+        $this->middleware([
+            'auth',
+        ])
+            ->except([
+                'index', 'show'
+            ]);
     }
 
     /**
@@ -202,8 +208,13 @@ class TestController extends Controller
      */
     public function destroy($id)
     {
+        $salary = Salary::find($id);
+        $redirect = [
+            'thoigian' => implode('-', [$salary->thang, $salary->nam]),
+            'ten' => $salary->ten,
+        ];
         Salary::destroy($id);
 
-        return redirect()->route('salary.index');
+        return redirect()->route('salary.index', $redirect);
     }
 }

@@ -43,28 +43,6 @@ class SalaryService implements SalaryServiceInterface
         ];
     }
 
-    /**
-     * Undocumented function
-     *
-     * @return void
-     * @deprecated
-     */
-    private function __initialize()
-    {
-        $filter = $this->filter;
-        $filter['luongcoban'] = ['luongcoban', '<>', null];
-        $salary = Salary::where(array_values($filter))->first();
-        if ($salary) {
-            $this->heso = $salary->heso ?: 0;
-            $this->luongcoban = $salary->luongcoban ?: 0;
-            $this->chitieu = $salary->chitieu ?: 0;
-        } else {
-            $this->heso = 0;
-            $this->luongcoban = 0;
-            $this->chitieu = 0;
-        }
-    }
-
     public function setTime($time)
     {
         $time = trim($time);
@@ -93,8 +71,6 @@ class SalaryService implements SalaryServiceInterface
         if ($this->name) {
             $this->filter['ten'] = ['ten', "$this->name"];
         }
-
-        // $this->__initialize();
 
         return $this;
     }

@@ -21,6 +21,11 @@ class ClearCache extends Middleware
             Artisan::call('view:clear');
         }
 
+        if (auth()->check() && auth()->user()->isAdmin()) {
+            \Debugbar::enable();
+        } else
+            \Debugbar::disable();
+
         return $next($request);
     }
 }

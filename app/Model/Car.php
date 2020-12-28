@@ -9,7 +9,11 @@ namespace App\Model;
 //use Jenssegers\Mongodb\Eloquent\Model as Eloquent;
 use Illuminate\Database\Eloquent\Model as Eloquent;
 
-class Car extends Eloquent {
+/**
+ * @deprecated from 12/2020
+ */
+class Car extends Eloquent
+{
     /**
      * The attributes that are mass assignable.
      *
@@ -56,8 +60,8 @@ class Car extends Eloquent {
     /**
      * @return mixed
      */
-    public function presences() {
-        return $this->hasMany( \App\Presence::class );
+    public function presences()
+    {
+        return $this->hasMany(\App\Presence::class);
     }
-
 }

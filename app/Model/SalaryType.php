@@ -5,7 +5,11 @@ namespace App\Model;
 //use Jenssegers\Mongodb\Eloquent\Model as Eloquent;
 use Illuminate\Database\Eloquent\Model as Eloquent;
 
-class SalaryType extends Eloquent {
+/**
+ * @deprecated from 12/2020
+ */
+class SalaryType extends Eloquent
+{
     /**
      * The attributes that are mass assignable.
      *
@@ -42,11 +46,13 @@ class SalaryType extends Eloquent {
      */
     public $timestamps = true;
 
-    public function salary() {
-        return $this->belongsTo( \App\Salary::class );
+    public function salary()
+    {
+        return $this->belongsTo(\App\Salary::class);
     }
 
-    public function employee() {
-        return $this->belongsTo( \App\Employee::class );
+    public function employee()
+    {
+        return $this->belongsTo(\App\Employee::class);
     }
 }

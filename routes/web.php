@@ -3,6 +3,7 @@
 use App\Http\Controllers\Salary\TestController;
 use App\Http\Controllers\SalaryUserController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Middleware\ClearCache;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,16 +21,19 @@ Auth::routes([
 ]);
 
 Route::domain('luong.diepxuan.com')->group(function () {
-    Route::get('/{time?}/{name?}', [TestController::class, 'index'])
-        ->name('luong.home')
-        ->where([
-            'time' => '[0-9]+\-[0-9]+',
-        ]);
-    Route::get('/home', [TestController::class, 'index']);
-    Route::resource('salary', TestController::class);
-    Route::resource('salaryuser', SalaryUserController::class);
+    Route::middleware([ClearCache::class])->group(function () {
+        Route::get('/{time?}/{name?}', [TestController::class, 'index'])
+            ->name('luong.home')
+            ->where([
+                'time' => '[0-9]+\-[0-9]+',
+                'name' => '[a-zA-Z]+\-?[a-zA-Z]*',
+            ]);
+        Route::get('/home', [TestController::class, 'index']);
+        Route::resource('salary', TestController::class);
+        Route::resource('salaryuser', SalaryUserController::class);
 
-    Route::resource('users', 'UsersController');
+        Route::resource('users', 'UsersController');
+    });
 });
 
 Route::get('/debug-sentry', function () {

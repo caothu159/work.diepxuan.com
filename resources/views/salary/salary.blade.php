@@ -63,7 +63,7 @@
                 @method('DELETE')
                 @csrf
                 <input type="hidden" value="{{ $salary->id }}" name="id">
-                <button type="submit" class="btn btn-link">x</button>
+                <button type="submit" class="btn btn-link">xóa</button>
             </form>
             @endauth
             <span class="d-inline">{{ $salary->thoigian }}</span>
@@ -76,7 +76,7 @@
         <td>{{ $salary->doanhso?number_format($salary->doanhso):'-' }}</td>
         <td>{{ $salary->chono?:'-' }}</td>
         <td>{{ $salary->thuno?:'-' }}</td>
-        <td>{{ $salary->tile }}</td>
+        <td>{{ number_format($salary->tile,2) }}</td>
         @if($service->getUser())
         <td>{{ $salary->nangsuat?number_format($salary->nangsuat,1):'-' }}</td>
         <td>{{ $salary->heso?:'-' }}</td>

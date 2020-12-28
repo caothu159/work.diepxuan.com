@@ -1,9 +1,5 @@
 <?php
 
-/*
- * Copyright © 2019 Dxvn, Inc. All rights reserved.
- */
-
 namespace App;
 
 use App\Model\Car as Model;
@@ -11,7 +7,9 @@ use App\Model\Car as Model;
 /**
  * Class Car xe
  * @package App
+ * @deprecated 12/2020
  */
-class Car extends Model {
+class Car extends Model
+{
     //
 }

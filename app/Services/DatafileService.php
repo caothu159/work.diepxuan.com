@@ -4,12 +4,14 @@ namespace App\Services;
 
 use App\Car;
 use App\Data;
+use App\SalaryUser;
 use App\Presence;
 use App\Salary;
 use App\SalaryType;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use PhpOffice\PhpSpreadsheet\Shared\Date;
+use Illuminate\Support\Collection;
 
 /**
  * Class DatafileService.
@@ -19,32 +21,22 @@ class DatafileService
     /**
      * @var mixed
      */
-    private $__data;
+    private $data;
 
     /**
      * @var mixed
      */
-    private $__year;
+    private $year;
 
     /**
      * @var mixed
      */
-    private $__month;
+    private $month;
 
-    /**
-     * @var mixed
-     */
-    private $__timemonth;
+    private $salaryUpsert;
+    private $salaryUserUpsert;
 
-    /**
-     * @var mixed
-     */
-    private $__timestart;
-
-    /**
-     * @var mixed
-     */
-    private $__timeend;
+    private $salaryDefault;
 
     /**
      * DatafileService constructor.
@@ -52,6 +44,21 @@ class DatafileService
     public function __construct(Data $data)
     {
         $this->data = $data;
+        $this->salaryUpsert = collect();
+        $this->salaryUserUpsert = collect();
+        $this->salaryDefault = [
+            'ngay' => null,
+            'thang' => null,
+            'nam' => null,
+            'ten' => null,
+
+            'chamcong' => null,
+            'tile' => null,
+            'diadiem' => null,
+            'doanhso' => null,
+            'chono' => null,
+            'thuno' => null,
+        ];
     }
 
     /**
@@ -60,34 +67,8 @@ class DatafileService
     private function __initialize(string $year, string $month)
     {
         $this->year = $year;
-        $this->month = $month;
-        $this->data->initialize($year, $month);
-
-        $dt = sprintf('%s-%s', $this->year, $this->month);
-
-        $this->timestart = date('Y-m-01', strtotime($dt));
-        $this->timestart = new \DateTime($this->timestart);
-        $this->timestart = Date::PHPToExcel($this->timestart);
-
-        $this->timeend = date('Y-m-t', strtotime($dt));
-        $this->timeend = new \DateTime($this->timeend);
-        $this->timeend = Date::PHPToExcel($this->timeend);
-
-        $this->timemonth = new \DateTime($dt);
-        $this->timemonth = Date::PHPToExcel($this->timemonth);
-    }
-
-    /**
-     * @deprecated from 17/12/2019
-     */
-    private function __presenceClean()
-    {
-        // clean all presence where date not in month
-        DB::table('presences')
-            ->join('salaries', 'presences.salary_id', '=', 'salaries.id')
-            ->where('salaries.month', '=', $this->timemonth)
-            ->whereNotBetween('presences.date', [$this->timestart, $this->timeend])
-            ->delete();
+        $this->month = sprintf("%02d", $month);
+        $this->data->initialize($this->year, $this->month);
     }
 
     /**
@@ -99,116 +80,11 @@ class DatafileService
     {
         $this->__initialize($year, $month);
 
-        // $this->beforeImport();
-        $this->_startImport();
-        // $this->serializeImport();
-    }
-
-    /**
-     * Serialize Salary
-     * Tinh luong.
-     *
-     * @throws Exception
-     */
-    public function serializeImport()
-    {
-        // @var Presence $presence - tinh luong hang ngay
-        Presence::whereBetween('date', [$this->timestart, $this->timeend])->get()->each(function ($presence) {
-            // khong di xe hoac khong lam kho
-            if (!$presence->car) {
-                // @var zero presence - Thuong 1 ngay chi tieu
-                //                $presence->presence = 0;
-                //                $presence->save();
-
-                return;
-            }
-
-            // lam o kho - chi tinh luong kho, huy cong nhat
-            if ('kho' == $presence->car->name) {
-                // @var float ratio - He so luong
-                $presence->ratio = 1;
-
-                // @var float presence_salary - luong kho bai hang ngay
-                $presence->presence_salary = $presence->presence * $presence->salary->khobai;
-
-                $presence->productivity_salary = 0;
-                $presence->save();
-
-                return;
-            }
-
-            // Khong ap chi tieu
-            if (0 == $presence->salary->chitieu) {
-                // @var float ratio - He so luong
-                $presence->ratio = $presence->ratioInitial();
-
-                // @var float productivity_salary - luong doanh so hang ngay
-                $presence->productivity_salary = $presence->productivity * $presence->ratio;
-
-                $presence->save();
-
-                return;
-            }
-
-            // Ap chi tieu
-
-            // @var float ratio - He so luong
-            $presence->ratio = $presence->ratioInitial();
-
-            // @var float productivity_salary - luong bu tru chenh lech chi tieu hang ngay
-            $presence->productivity_salary = $presence->productivity - $presence->chitieu;
-            $presence->productivity_salary *= $presence->ratio;
-
-            $presence->save();
-        });
-
-        Salary::where(['month' => $this->timemonth])->get()->each(function ($salary) {
-            // Cham cong
-            $salary->presence = $salary->presences->sum('presence');
-
-            // Tong doanh so trong thang
-            $salary->turnover = $salary->presences->sum('productivity');
-
-            // @var float salary_default - luong cong nhat
-            $salary->salary_default = $salary->presences->sum('presence_salary');
-
-            // @var float productivity - Luong doanh so
-            $salary->productivity = $salary->presences->sum('productivity_salary');
-
-            // @var float salary - Luong
-            $salary->salary = $salary->salary_default + $salary->productivity;
-
-            $salary->save();
-        });
-    }
-
-    /**
-     * xoa du lieu cu.
-     *
-     * @deprecated
-     *
-     * @throws Exception
-     */
-    protected function _beforeImport()
-    {
-        Presence::whereBetween('date', [$this->timestart, $this->timeend])->forceDelete();
-        SalaryType::leftJoin('salaries', 'salary_types.salary_id', '=', 'salaries.id')
-            ->where('salaries.month', '=', $this->timemonth)
-            ->delete();
-        Salary::where('month', $this->timemonth)->forceDelete();
-    }
-
-    /**
-     * Import du lieu tu stylesheet.
-     *
-     * @throws Exception
-     */
-    protected function _startImport()
-    {
         $this->_employeeImport();
-        // $this->_presenceImport();
-        // $this->_divisionImport();
-        // $this->_productivityImport();
+        $this->_presenceImport();
+        $this->_divisionImport();
+        $this->_productivityImport();
+        $this->saveImport();
     }
 
     /**
@@ -221,29 +97,25 @@ class DatafileService
     {
         foreach ($this->data->loadFromFile('nhanvien.xlsx') as $name => $val) {
 
-            $salaryArray = array_replace([
-                'ten' => '',
-                'luongcoban' => 0,
-                'baohiem' => 0,
-                'chitieu' => 0,
-                'heso' => 0,
-                'tile' => 0,
+            $val = array_replace([
+                'Luong co ban' => null,
+                'Bao Hiem' => null,
+                'Chi tieu' => null,
+                0 => null,
+                'Ti le' => null,
             ], $val);
-
-            dd($name, $val["Luong co ban"], $val);
-            die;
-
-            // Bang luong nhan vien hang thang
-            $salary = Salary::firstOrCreate([
-                'nam' => $this->year,
+            $salaryUser = [
                 'thang' => $this->month,
-                'ten' => $name,
-            ], [
                 'nam' => $this->year,
-                'thang' => $this->month,
                 'ten' => $name,
-                'luongcoban' => $val["Luong co ban"],
-            ]);
+
+                'luongcoban' => $val['Luong co ban'],
+                'baohiem' => $val['Bao Hiem'],
+                'chitieu' => $val['Chi tieu'],
+                'heso' => $val[0],
+                'tile' => $val['Ti le'],
+            ];
+            $this->salaryUserUpsert->push($salaryUser);
         }
     }
 
@@ -255,29 +127,23 @@ class DatafileService
      */
     protected function _presenceImport()
     {
-        $salaries = Salary::where('month', $this->timemonth)->get();
-
         foreach ($this->data->loadFromFile('chamcong.xlsx') as $date => $val) {
-            if (0 == $date || $date < $this->timestart || $date > $this->timeend) {
+            if (0 == $date) {
                 continue;
             }
 
+            $day = Date::excelToDateTimeObject($date)->format('d');
+
             foreach ($val as $name => $presence) {
-                $salary = $salaries->where('name', $name)->first();
-                if (null == $salary) {
-                    continue;
-                }
+                $salary = array_replace($this->salaryDefault, [
+                    'ngay' => $day,
+                    'thang' => $this->month,
+                    'nam' => $this->year,
+                    'ten' => $name,
 
-                $presenceSalary = $salary->presenceSalary * $presence;
-
-                // cham luong cong nhat tung nhan vien
-                Presence::updateOrCreate([
-                    'salary_id' => $salary->id,
-                    'date' => $date,
-                ], [
-                    'presence' => floatval($presence),
-                    'presence_salary' => $presenceSalary,
+                    'chamcong' => $presence,
                 ]);
+                $this->salaryUpsert->push($salary);
             }
         }
     }
@@ -291,9 +157,11 @@ class DatafileService
     protected function _divisionImport()
     {
         foreach ($this->data->loadFromFile('phancong.xlsx') as $date => $division) {
-            if (0 == $date || $date < $this->timestart || $date > $this->timeend) {
+            if (0 == $date) {
                 continue;
             }
+
+            $day = Date::excelToDateTimeObject($date)->format('d');
 
             // lap tung xe
             foreach ($division as $car_id => $salary_ids) {
@@ -301,36 +169,50 @@ class DatafileService
                     continue;
                 }
 
-                $car_id = str_replace('x', '', $car_id);
-                $car = Car::firstOrCreate(['name' => $car_id]);
-
                 if (0 === $salary_ids || empty($salary_ids)) {
                     continue;
                 }
 
+                $car_id = str_replace('x', '', $car_id);
                 $salary_ids = explode('-', $salary_ids);
 
                 // loop tung lai xe
-                foreach ($salary_ids as $salary_id) {
-                    $salary = Salary::where('name', $salary_id)
-                        ->where('month', $this->timemonth)->first();
+                foreach ($salary_ids as $name) {
 
-                    if (null == $salary) {
-                        continue;
+                    $salary =  [
+                        'ngay' => $day,
+                        'thang' => $this->month,
+                        'nam' => $this->year,
+                        'ten' => $name,
+
+                        'tile' => 1 / count($salary_ids),
+                        'diadiem' => $car_id,
+                    ];
+
+                    if ($this->salaryUpsert
+                        ->where('ngay', $day)
+                        ->where('thang', $this->month)
+                        ->where('nam', $this->year)
+                        ->where('ten', $name)
+                        ->count()
+                    ) {
+                        $this->salaryUpsert
+                            ->where('ngay', $day)
+                            ->where('thang', $this->month)
+                            ->where('nam', $this->year)
+                            ->where('ten', $name)
+                            ->map(function ($item, $key) use ($salary) {
+                                $item = array_replace($item, $salary);
+                                $this->salaryUpsert->put($key, $item);
+                                return $item;
+                            });
+                    } else {
+                        $this->salaryUpsert->push(array_replace($this->salaryDefault, $salary));
                     }
-
-                    // phan cong tung nhan vien lai xe | ban hang | kho bai
-                    Presence::updateOrCreate([
-                        'salary_id' => $salary->id,
-                        'date' => $date,
-                        'car_id' => null,
-                    ], [
-                        'car_id' => $car->id,
-                        'salary_count' => count($salary_ids),
-                    ]);
                 }
             }
         }
+        // dd($this->salaryUpsert);
     }
 
     /**
@@ -341,41 +223,69 @@ class DatafileService
      */
     protected function _productivityImport()
     {
-        $cars = Car::all();
+        $cars = collect();
 
         foreach ($this->data->loadFromFile('nangsuat.xlsx') as $date => $val) {
-            $val['date'] = $date;
+            $day = Date::excelToDateTimeObject($date)->format('d');
 
-            foreach ($cars as $car) {
-                if ('kho' == $car->name) {
-                    continue;
+            collect($val)->map(function ($item, $key) use ($cars) {
+                if (preg_match('/(\w+\s)+([0-9]+)/', $key, $matches)) {
+                    $name = $matches[2];
+                    if ($cars->search(function ($item) use ($name) {
+                        return $item['name'] == $name;
+                    }) === false) {
+                        $cars->put($name, ['name' => $name]);
+                    }
                 }
+            });
 
-                // Bang cham nang suat tung  xe
-                Presence::where([
-                    'date' => $date,
-                    'car_id' => $car->id,
-                ])->update([
-                    'turnover' => doubleval($val["ns {$car->name}"]),
-                    'in_debt' => doubleval($val["no {$car->name}"]),
-                    'take_debt' => doubleval($val["thu no {$car->name}"]),
-                ]);
+            foreach ($cars as $carname => $car) {
+                $salary =  [
+                    'ngay' => $day,
+                    'thang' => $this->month,
+                    'nam' => $this->year,
+                    'diadiem' => $carname,
+
+                    'doanhso' => doubleval($val["ns $carname"]),
+                    'chono' => doubleval($val["no $carname"]),
+                    'thuno' => doubleval($val["thu no $carname"]),
+                ];
+
+                if ($this->salaryUpsert
+                    ->where('ngay', $day)
+                    ->where('thang', $this->month)
+                    ->where('nam', $this->year)
+                    ->where('diadiem', $carname)
+                    ->count()
+                ) {
+                    $this->salaryUpsert
+                        ->where('ngay', $day)
+                        ->where('thang', $this->month)
+                        ->where('nam', $this->year)
+                        ->where('diadiem', $carname)
+                        ->map(function ($item, $key) use ($salary) {
+                            $item = array_replace($item, $salary);
+                            $this->salaryUpsert->put($key, $item);
+                            return $item;
+                        });
+                } else {
+                    $this->salaryUpsert->push(array_replace($this->salaryDefault, $salary));
+                }
             }
         }
     }
 
-    /**
-     * xoa du lieu cu.
-     *
-     * @deprecated from 17/12/2019
-     *
-     * @throws Exception
-     */
-    protected function _salaryClean()
+    protected function saveImport()
     {
-        Salary::where('month', $this->timemonth)->each(function ($salary) {
-            $salary->types()->delete();
-            $salary->presences()->delete();
-        });
+        SalaryUser::where([
+            ['thang', $this->month],
+            ['nam', $this->year],
+        ])->delete();
+        SalaryUser::upsert(array_values($this->salaryUserUpsert->all()), ['thang', 'nam', 'ten'], ['thang', 'nam', 'ten', 'luongcoban', 'baohiem', 'chitieu', 'heso', 'tile']);
+        Salary::where([
+            ['thang', $this->month],
+            ['nam', $this->year],
+        ])->delete();
+        Salary::upsert(array_values($this->salaryUpsert->where('ten', '<>', null)->all()), ['ngay', 'thang', 'nam', 'ten'], ['chamcong', 'tile', 'diadiem', 'doanhso', 'chono', 'thuno']);
     }
 }
