@@ -23,14 +23,9 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') . '?v=' . uniqid() }}" rel="stylesheet">
-    <style>
-        .dnone {
-            display: none;
-        }
-    </style>
 </head>
 
-<body class="dnone">
+<body class="d-none">
     <div id="app">
 
         <nav class="navbar navbar-expand-md">
@@ -74,7 +69,7 @@
                                     {{ __('Logout') }}
                                 </a>
 
-                                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                                     @csrf
                                 </form>
                             </div>

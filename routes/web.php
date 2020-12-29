@@ -1,6 +1,9 @@
 <?php
 
 use App\Http\Controllers\Salary\TestController;
+use App\Http\Controllers\Work\TonghopController;
+use App\Http\Controllers\Work\BanhangController;
+use App\Http\Controllers\Work\MuahangController;
 use App\Http\Controllers\SalaryUserController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\ClearCache;
@@ -41,18 +44,20 @@ Route::get('/debug-sentry', function () {
 });
 
 Route::domain('work.diepxuan.com')->group(function () {
-    Route::get('/', function () {
-        return redirect()->route('tonghop');
-    })->name('home');
+    Route::middleware([ClearCache::class])->group(function () {
+        Route::get('/', function () {
+            return redirect()->route('tonghop');
+        })->name('work.home');
 
-    Route::get('tonghop/{from?}/{to?}', 'Work\TonghopController@index')->name('tonghop');
-    Route::resource('tonghop', 'Work\TonghopController');
+        Route::get('tonghop/{from?}/{to?}', [TonghopController::class, 'index'])->name('tonghop');
+        Route::resource('tonghop', TonghopController::class);
 
-    Route::get('banhang/{from?}/{to?}', 'Work\BanhangController@index')->name('banhang');
-    Route::resource('banhang', 'Work\BanhangController');
+        Route::get('banhang/{from?}/{to?}', [BanhangController::class, 'index'])->name('banhang');
+        Route::resource('banhang', BanhangController::class);
 
-    Route::get('muahang/{from?}/{to?}', 'Work\MuahangController@index')->name('muahang');
-    Route::resource('muahang', 'Work\MuahangController');
+        Route::get('muahang/{from?}/{to?}', [MuahangController::class, 'index'])->name('muahang');
+        Route::resource('muahang', MuahangController::class);
+    });
 });
 
 // Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
