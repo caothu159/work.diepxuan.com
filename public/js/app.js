@@ -84019,8 +84019,8 @@ if (!Object.prototype.forEach) {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /mnt/c/Users/ductn/OneDrive/SourceCode/work.diepxuan.com/resources/js/app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! /mnt/c/Users/ductn/OneDrive/SourceCode/work.diepxuan.com/resources/sass/app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! /home/luong/public_html/resources/js/app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! /home/luong/public_html/resources/sass/app.scss */"./resources/sass/app.scss");
 
 
 /***/ }),

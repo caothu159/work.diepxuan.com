@@ -13976,7 +13976,7 @@ a.card:hover {
   border-color: #3490dc;
 }
 
-body {
+body.d-none {
   display: block !important;
 }
 
