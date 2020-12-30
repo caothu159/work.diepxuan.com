@@ -19,7 +19,7 @@ class SalaryUserController extends Controller
         $this->middleware([
             'auth',
         ])->except([
-            'index', 'show'
+            'index', 'show',
         ]);
     }
 
@@ -53,24 +53,24 @@ class SalaryUserController extends Controller
     {
         $this->validate($request, [
             'thang' => 'required',
-            'nam' => 'required',
-            'ten' => 'required',
+            'nam'   => 'required',
+            'ten'   => 'required',
         ]);
 
         SalaryUser::create([
-            'thang' => $request->input('thang'),
-            'nam' => $request->input('nam'),
-            'ten' => $request->input('ten'),
+            'thang'      => $request->input('thang'),
+            'nam'        => $request->input('nam'),
+            'ten'        => $request->input('ten'),
 
             'luongcoban' => $request->input('luongcoban'),
-            'heso' => $request->input('heso'),
-            'chitieu' => $request->input('chitieu'),
-            'baohiem' => $request->input('baohiem'),
+            'heso'       => $request->input('heso'),
+            'chitieu'    => $request->input('chitieu'),
+            'baohiem'    => $request->input('baohiem'),
         ]);
 
         $redirect = [
             'thoigian' => implode('-', [$request->input('thang'), $request->input('nam')]),
-            'ten' => $request->input('ten')
+            'ten'      => $request->input('ten'),
         ];
 
         return redirect()->route('luong.home', $redirect);
@@ -109,29 +109,29 @@ class SalaryUserController extends Controller
     {
         $this->validate($request, [
             'thang' => 'required',
-            'nam' => 'required',
-            'ten' => 'required',
+            'nam'   => 'required',
+            'ten'   => 'required',
         ]);
 
         SalaryUser::updateOrCreate([
-            'id' => $id,
+            'id'    => $id,
             'thang' => $request->input('thang'),
-            'nam' => $request->input('nam'),
-            'ten' => $request->input('ten'),
+            'nam'   => $request->input('nam'),
+            'ten'   => $request->input('ten'),
         ], [
-            'thang' => $request->input('thang'),
-            'nam' => $request->input('nam'),
-            'ten' => $request->input('ten'),
+            'thang'      => $request->input('thang'),
+            'nam'        => $request->input('nam'),
+            'ten'        => $request->input('ten'),
 
             'luongcoban' => $request->input('luongcoban'),
-            'heso' => $request->input('heso'),
-            'chitieu' => $request->input('chitieu'),
-            'baohiem' => $request->input('baohiem'),
+            'heso'       => $request->input('heso'),
+            'chitieu'    => $request->input('chitieu'),
+            'baohiem'    => $request->input('baohiem'),
         ]);
 
         $redirect = [
             'thoigian' => implode('-', [$request->input('thang'), $request->input('nam')]),
-            'ten' => $request->input('ten') ?: false,
+            'ten'      => $request->input('ten') ?: false,
         ];
 
         return redirect()->route('salary.index', $redirect);

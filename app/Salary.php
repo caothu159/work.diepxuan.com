@@ -34,7 +34,7 @@ class Salary extends Model
         $thoigian = array(
             $this->ngay,
             $this->thang,
-            $this->nam
+            $this->nam,
         );
         $thoigian = implode('/', $thoigian);
         return $thoigian;
@@ -55,10 +55,10 @@ class Salary extends Model
             $luong = $this->luongcoban / 30 * $this->chamcong;
         } elseif (in_array($this->diadiem, ['nghi khong phep'])) {
             $chitieu = $this->chitieu / 30;
-            $luong = ($this->nangsuat - $chitieu) * $this->heso;
+            $luong   = ($this->nangsuat - $chitieu) * $this->heso;
         } else {
             $chitieu = $this->chitieu / 30;
-            $luong = $this->luongcoban / 30 * $this->chamcong;
+            $luong   = $this->luongcoban / 30 * $this->chamcong;
             $luong += ($this->nangsuat - $chitieu) * $this->heso;
         }
         return $luong;

@@ -11,7 +11,9 @@ use App\Model\Presence as Model;
 /**
  * Class Presence chấm công
  * @package App
+ * @deprecated 12/2020
  */
-class Presence extends Model {
+class Presence extends Model
+{
     //
 }

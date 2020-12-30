@@ -9,7 +9,6 @@ namespace App;
 use App\Models\SalaryUser as Model;
 use App\Services\SalaryServiceInterface;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Facades\DB;
 
 /**
  * Class Salary công tháng

@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Work;
 
-use App\Http\Controllers\Work\Factory\DongBoDmsp;
 use App\Model\Work\Ctubanhang;
 use Illuminate\Http\Request;
 
@@ -28,7 +27,7 @@ class TonghopController extends Controller
         if ($this->isRedirect) {
             return redirect()->route('tonghop', [
                 'from' => $request->input('from'),
-                'to'   => $request->input('to')
+                'to'   => $request->input('to'),
             ]);
         }
 
@@ -41,7 +40,7 @@ class TonghopController extends Controller
         $this->data = Ctubanhang::syncChange();
 
         return view("work.tonghop.tonghop", [
-            'data' => $this->data
+            'data' => $this->data,
         ]);
     }
 

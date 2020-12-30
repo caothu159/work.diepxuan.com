@@ -2,16 +2,6 @@
 
 namespace App\Services;
 
-use App\Car;
-use App\Data;
-use App\Presence;
-use App\Salary;
-use App\SalaryType;
-use Exception;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
-use PhpOffice\PhpSpreadsheet\Shared\Date;
-
 interface SalaryServiceInterface
 {
 

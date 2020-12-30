@@ -9,7 +9,8 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\View\View;
 
-class MuahangController extends Controller {
+class MuahangController extends Controller
+{
 
     /**
      * Display a listing of the resource.
@@ -21,28 +22,29 @@ class MuahangController extends Controller {
      * @return Factory|View
      * @throws Exception
      */
-    public function index( Request $request, string $from = null, string $to = null ) {
-        if ( $this->isRedirect ) {
-            return redirect()->route( 'muahang', [
-                'from' => $request->input( 'from' ),
-                'to'   => $request->input( 'to' )
-            ] );
+    public function index(Request $request, string $from = null, string $to = null)
+    {
+        if ($this->isRedirect) {
+            return redirect()->route('muahang', [
+                'from' => $request->input('from'),
+                'to'   => $request->input('to'),
+            ]);
         }
 
-        $this->_updateDateInput( $from, $to );
-        $request->merge( [ 'from' => $from ] );
-        $request->merge( [ 'to' => $to ] );
-        $ctumuahangs = Ctumuahang::whereBetween( 'ngay_ct', [
-            \DateTime::createFromFormat( 'd-m-Y', $request->input( 'from' ) )->format( 'Y-m-d' ),
-            \DateTime::createFromFormat( 'd-m-Y', $request->input( 'to' ) )->format( 'Y-m-d' )
-        ] )->get();
+        $this->_updateDateInput($from, $to);
+        $request->merge(['from' => $from]);
+        $request->merge(['to' => $to]);
+        $ctumuahangs = Ctumuahang::whereBetween('ngay_ct', [
+            \DateTime::createFromFormat('d-m-Y', $request->input('from'))->format('Y-m-d'),
+            \DateTime::createFromFormat('d-m-Y', $request->input('to'))->format('Y-m-d'),
+        ])->get();
 
-        return view( 'work.muahang.chungtu', [
+        return view('work.muahang.chungtu', [
             'ctumuahangs' => $ctumuahangs,
             'from'        => $from,
             'to'          => $to,
             'router'      => 'muahang',
-        ] );
+        ]);
     }
 
     /**
@@ -50,7 +52,8 @@ class MuahangController extends Controller {
      *
      * @return Response
      */
-    public function create() {
+    public function create()
+    {
         //
     }
 
@@ -61,7 +64,8 @@ class MuahangController extends Controller {
      *
      * @return Response
      */
-    public function store( Request $request ) {
+    public function store(Request $request)
+    {
         //
     }
 
@@ -72,7 +76,8 @@ class MuahangController extends Controller {
      *
      * @return Response
      */
-    public function show( Ctumuahang $ctubanhang ) {
+    public function show(Ctumuahang $ctubanhang)
+    {
         //
     }
 
@@ -83,7 +88,8 @@ class MuahangController extends Controller {
      *
      * @return Response
      */
-    public function edit( Ctumuahang $ctubanhang ) {
+    public function edit(Ctumuahang $ctubanhang)
+    {
         //
     }
 
@@ -95,7 +101,8 @@ class MuahangController extends Controller {
      *
      * @return Response
      */
-    public function update( Request $request, Ctumuahang $ctubanhang ) {
+    public function update(Request $request, Ctumuahang $ctubanhang)
+    {
         //
     }
 
@@ -106,7 +113,8 @@ class MuahangController extends Controller {
      *
      * @return Response
      */
-    public function destroy( Ctumuahang $ctubanhang ) {
+    public function destroy(Ctumuahang $ctubanhang)
+    {
         //
     }
 }

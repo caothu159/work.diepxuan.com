@@ -1,4 +1,4 @@
-<?php $users = $service->getUserOptions() ?>
+<?php $users = $service->getUserOptions();?>
 <div class="row row-cols-sm-auto g-3 align-items-center printhidden">
     <form method="GET" class="col-sm-6 col-auto">
         @method('GET')

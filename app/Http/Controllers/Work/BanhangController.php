@@ -28,7 +28,7 @@ class BanhangController extends Controller
         if ($this->isRedirect) {
             return redirect()->route('banhang', [
                 'from' => $request->input('from'),
-                'to'   => $request->input('to')
+                'to'   => $request->input('to'),
             ]);
         }
 
@@ -37,7 +37,7 @@ class BanhangController extends Controller
         $request->merge(['to' => $to]);
         $ctubanhangs = Ctubanhang::whereBetween('ngay_ct', [
             \DateTime::createFromFormat('d-m-Y', $request->input('from'))->format('Y-m-d'),
-            \DateTime::createFromFormat('d-m-Y', $request->input('to'))->format('Y-m-d')
+            \DateTime::createFromFormat('d-m-Y', $request->input('to'))->format('Y-m-d'),
         ])->get();
 
         return view('work.banhang.chungtu', [
@@ -105,8 +105,7 @@ class BanhangController extends Controller
      *
      * @return Response
      */
-    public
-    function update(
+    public function update(
         Request $request,
         Ctubanhang $ctubanhang
     ) {
@@ -120,8 +119,7 @@ class BanhangController extends Controller
      *
      * @return Response
      */
-    public
-    function destroy(
+    public function destroy(
         Ctubanhang $ctubanhang
     ) {
         //

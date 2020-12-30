@@ -23,8 +23,9 @@ class ClearCache extends Middleware
 
         if (auth()->check() && auth()->user()->isAdmin()) {
             \Debugbar::enable();
-        } else
+        } else {
             \Debugbar::disable();
+        }
 
         return $next($request);
     }
