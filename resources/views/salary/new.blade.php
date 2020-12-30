@@ -1,5 +1,7 @@
 @auth
-<?php $user = $service->getUser(); ?>
+@php
+$user = $service->getUser();
+@endphp
 <form method="post" action="{{ route('salary.store') }}" class="row row-cols-lg-auto g-3 align-items-center">
     @method('POST')
     @csrf

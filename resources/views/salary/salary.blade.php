@@ -36,7 +36,9 @@
 </div>
 @include('salary.new')
 @include('salary.user')
-<?php \Debugbar::startMeasure('bangluong', 'Thoi gian tinh luong'); ?>
+@php
+Debugbar::startMeasure('bangluong', 'Hien thi bang luong');
+@endphp
 <table class="table table-hover table-condensed table-sm text-center">
     <tr>
         <th></th>
@@ -85,4 +87,6 @@
     </tr>
     @endforeach
 </table>
-<?php \Debugbar::stopMeasure('bangluong'); ?>
+@php
+Debugbar::stopMeasure('bangluong');
+@endphp

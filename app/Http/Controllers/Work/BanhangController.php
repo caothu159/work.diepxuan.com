@@ -7,7 +7,8 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
-class BanhangController extends Controller {
+class BanhangController extends Controller
+{
 
     /**
      * Display a listing of the resource.
@@ -19,33 +20,32 @@ class BanhangController extends Controller {
      * @return mixed
      * @throws Exception
      */
-    public
-    function index(
+    public function index(
         Request $request,
         string $from = null,
         string $to = null
     ) {
-        if ( $this->isRedirect ) {
-            return redirect()->route( 'banhang', [
-                'from' => $request->input( 'from' ),
-                'to'   => $request->input( 'to' )
-            ] );
+        if ($this->isRedirect) {
+            return redirect()->route('banhang', [
+                'from' => $request->input('from'),
+                'to'   => $request->input('to')
+            ]);
         }
 
-        $this->_updateDateInput( $from, $to );
-        $request->merge( [ 'from' => $from ] );
-        $request->merge( [ 'to' => $to ] );
-        $ctubanhangs = Ctubanhang::whereBetween( 'ngay_ct', [
-            \DateTime::createFromFormat( 'd-m-Y', $request->input( 'from' ) )->format( 'Y-m-d' ),
-            \DateTime::createFromFormat( 'd-m-Y', $request->input( 'to' ) )->format( 'Y-m-d' )
-        ] )->get();
+        $this->_updateDateInput($from, $to);
+        $request->merge(['from' => $from]);
+        $request->merge(['to' => $to]);
+        $ctubanhangs = Ctubanhang::whereBetween('ngay_ct', [
+            \DateTime::createFromFormat('d-m-Y', $request->input('from'))->format('Y-m-d'),
+            \DateTime::createFromFormat('d-m-Y', $request->input('to'))->format('Y-m-d')
+        ])->get();
 
-        return view( 'work.banhang.chungtu', [
+        return view('work.banhang.chungtu', [
             'ctubanhangs' => $ctubanhangs,
             'from'        => $from,
             'to'          => $to,
             'router'      => 'banhang',
-        ] );
+        ]);
     }
 
     /**
@@ -53,8 +53,8 @@ class BanhangController extends Controller {
      *
      * @return Response
      */
-    public
-    function create() {
+    public function create()
+    {
         //
     }
 
@@ -65,8 +65,7 @@ class BanhangController extends Controller {
      *
      * @return Response
      */
-    public
-    function store(
+    public function store(
         Request $request
     ) {
         //
@@ -79,8 +78,7 @@ class BanhangController extends Controller {
      *
      * @return Response
      */
-    public
-    function show(
+    public function show(
         Ctubanhang $ctubanhang
     ) {
         //
@@ -93,8 +91,7 @@ class BanhangController extends Controller {
      *
      * @return void
      */
-    public
-    function edit(
+    public function edit(
         Ctubanhang $ctubanhang
     ) {
         //

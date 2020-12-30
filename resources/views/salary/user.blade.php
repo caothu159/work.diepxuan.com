@@ -1,5 +1,7 @@
 @auth
-<?php $user = $service->getUser(); ?>
+@php
+$user = $service->getUser();
+@endphp
 <form method="post" action="{{ route('salaryuser.update', ['salaryuser' => $user->id?:0]) }}" class="row row-cols-lg-auto g-3 align-items-center">
     @method('PUT')
     @csrf

@@ -15,7 +15,7 @@
 
     <link rel="icon" href="favicon.ico" type="image/x-icon" />
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
-    <link rel="icon" style="image/png" href="favicon.png" />
+    <link rel="icon" type="image/png" href="favicon.png" />
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">

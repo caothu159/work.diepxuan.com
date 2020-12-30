@@ -6,8 +6,8 @@ use App\Http\Controllers\Work\Factory\DongBoDmsp;
 use App\Model\Work\Ctubanhang;
 use Illuminate\Http\Request;
 
-class TonghopController extends Controller {
-    use DongBoDmsp;
+class TonghopController extends Controller
+{
 
     protected $data = [];
     protected $from;
@@ -23,25 +23,26 @@ class TonghopController extends Controller {
      *
      * @return mixed
      */
-    public function index( Request $request, string $from = null, string $to = null ) {
-        if ( $this->isRedirect ) {
-            return redirect()->route( 'tonghop', [
-                'from' => $request->input( 'from' ),
-                'to'   => $request->input( 'to' )
-            ] );
+    public function index(Request $request, string $from = null, string $to = null)
+    {
+        if ($this->isRedirect) {
+            return redirect()->route('tonghop', [
+                'from' => $request->input('from'),
+                'to'   => $request->input('to')
+            ]);
         }
 
-        $this->_updateDateInput( $from, $to );
-        $request->merge( [ 'from' => $from ] );
-        $request->merge( [ 'to' => $to ] );
+        $this->_updateDateInput($from, $to);
+        $request->merge(['from' => $from]);
+        $request->merge(['to' => $to]);
         $this->from = $from;
         $this->to   = $to;
 
         $this->data = Ctubanhang::syncChange();
 
-        return view( "work.tonghop.tonghop", [
+        return view("work.tonghop.tonghop", [
             'data' => $this->data
-        ] );
+        ]);
     }
 
     /**
@@ -49,7 +50,8 @@ class TonghopController extends Controller {
      *
      * @return Response
      */
-    public function create() {
+    public function create()
+    {
         //
     }
 
@@ -63,9 +65,10 @@ class TonghopController extends Controller {
      *
      * @return Response
      */
-    public function store( Request $request, string $from = null, string $to = null ) {
+    public function store(Request $request, string $from = null, string $to = null)
+    {
         //
-        return $this->index( $request, $from, $to );
+        return $this->index($request, $from, $to);
     }
 
     /**
@@ -75,7 +78,8 @@ class TonghopController extends Controller {
      *
      * @return Response
      */
-    public function show( Ctumuahang $ctubanhang ) {
+    public function show(Ctumuahang $ctubanhang)
+    {
         //
     }
 
@@ -86,7 +90,8 @@ class TonghopController extends Controller {
      *
      * @return Response
      */
-    public function edit( Ctumuahang $ctubanhang ) {
+    public function edit(Ctumuahang $ctubanhang)
+    {
         //
     }
 
@@ -98,7 +103,8 @@ class TonghopController extends Controller {
      *
      * @return Response
      */
-    public function update( Request $request, Ctumuahang $ctubanhang ) {
+    public function update(Request $request, Ctumuahang $ctubanhang)
+    {
         //
     }
 
@@ -109,8 +115,8 @@ class TonghopController extends Controller {
      *
      * @return Response
      */
-    public function destroy( Ctumuahang $ctubanhang ) {
+    public function destroy(Ctumuahang $ctubanhang)
+    {
         //
     }
-
 }

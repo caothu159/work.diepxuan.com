@@ -7,6 +7,7 @@ use App\Http\Controllers\Work\MuahangController;
 use App\Http\Controllers\SalaryUserController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\ClearCache;
+use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
