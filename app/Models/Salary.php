@@ -1,4 +1,7 @@
 <?php
+/**
+ * Copyright © DiepXuan, Ltd. All rights reserved.
+ */
 
 namespace App\Models;
 
@@ -25,6 +28,7 @@ class Salary extends Model
         'doanhso',
         'chono',
         'thuno',
+        'tile',
     ];
 
     /**
@@ -33,7 +37,6 @@ class Salary extends Model
      * @var array
      */
     protected $appends = [
-        //
     ];
 
     /**

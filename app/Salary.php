@@ -1,7 +1,6 @@
 <?php
-
-/*
- * Copyright © 2019 Dxvn, Inc. All rights reserved.
+/**
+ * Copyright © DiepXuan, Ltd. All rights reserved.
  */
 
 namespace App;
@@ -12,17 +11,17 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
 
 /**
- * Class Salary công tháng
- * @package App
+ * Class Salary công tháng.
  */
 class Salary extends Model
 {
     /**
-     * Undocumented variable
+     * Undocumented variable.
      *
      * @var App\Services\SalaryService
      */
     private $salaryService;
+
     public function __construct(array $attributes = [])
     {
         $this->salaryService = app(SalaryServiceInterface::class);
@@ -31,12 +30,13 @@ class Salary extends Model
 
     public function getThoigianAttribute()
     {
-        $thoigian = array(
+        $thoigian = [
             $this->ngay,
             $this->thang,
             $this->nam,
-        );
+        ];
         $thoigian = implode('/', $thoigian);
+
         return $thoigian;
     }
 
@@ -46,22 +46,31 @@ class Salary extends Model
         $nangsuat += $this->chono * 0.7;
         $nangsuat -= $this->thuno * 0.7;
         $nangsuat *= $this->tile;
+
         return $nangsuat;
     }
 
     public function getLuongAttribute($luong)
     {
-        if (in_array($this->diadiem, ['kho', 'nha', 'dang kiem'])) {
-            $luong = $this->luongcoban / 30 * $this->chamcong;
-        } elseif (in_array($this->diadiem, ['nghi khong phep'])) {
-            $chitieu = $this->chitieu / 30;
-            $luong   = ($this->nangsuat - $chitieu) * $this->heso;
-        } else {
+        if (in_array($this->diadiem, ['01593', '05605', '03166'])) {
             $chitieu = $this->chitieu / 30;
             $luong   = $this->luongcoban / 30 * $this->chamcong;
             $luong += ($this->nangsuat - $chitieu) * $this->heso;
+        } elseif (0 == $this->doanhso) {
+            $luong = $this->luongcoban / 30 * $this->chamcong;
+        } else {
+            $chitieu = $this->chitieu / 30;
+            $luong   = ($this->nangsuat - $chitieu) * $this->heso;
         }
+
         return $luong;
+    }
+
+    public function getHesoStrAttribute($heso)
+    {
+        $heso = $this->heso * 100;
+
+        return $heso ? "$heso %" : '-';
     }
 
     /**
@@ -99,7 +108,13 @@ class Salary extends Model
                         and `salaries`.thang = `salaryuser`.thang
                         and `salaryuser`.ngay is null
                         and `salaries`.ten = `salaryuser`.ten
-                        limit 1) as `baohiem`'));
+                        limit 1) as `baohiem`,
+                    (select 1/COUNT(*) from `salaries` as `salaryuser`
+                        where `salaries`.nam = `salaryuser`.nam
+                        and `salaries`.thang = `salaryuser`.thang
+                        and `salaries`.ngay = `salaryuser`.ngay
+                        and `salaries`.doanhso = `salaryuser`.doanhso
+                        ) as `tile`'));
             }
             $builder->where('ngay', '<>', null);
         });

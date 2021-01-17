@@ -1,4 +1,4 @@
-<?php $users = $service->getUserOptions();?>
+<?php $users = $service->getUserOptions(); ?>
 <div class="row row-cols-sm-auto g-3 align-items-center printhidden">
     <form method="GET" class="col-sm-6 col-auto">
         @method('GET')
@@ -51,11 +51,9 @@ Debugbar::startMeasure('bangluong', 'Hien thi bang luong');
         <th>Cho nợ</th>
         <th>Thu nợ</th>
         <th>Tỉ lệ</th>
-        @if($service->getUser())
         <th>Năng suất<b class="text-danger border-start border-danger"> {{ number_format($service->getAll()->sum('nangsuat'),1) }}</b></th>
         <th>Hệ số</th>
         <th>Lương<b class="text-danger border-start border-danger"> {{ number_format($service->getAll()->sum('luong')) }}</b></th>
-        @endif
     </tr>
     @foreach ($service->getAll() as $salary)
     <tr>
@@ -78,15 +76,14 @@ Debugbar::startMeasure('bangluong', 'Hien thi bang luong');
         <td>{{ $salary->doanhso?number_format($salary->doanhso):'-' }}</td>
         <td>{{ $salary->chono?:'-' }}</td>
         <td>{{ $salary->thuno?:'-' }}</td>
-        <td>{{ number_format($salary->tile,2) }}</td>
-        @if($service->getUser())
+        <td>{{ number_format($salary->tile,1) }}</td>
         <td>{{ $salary->nangsuat?number_format($salary->nangsuat,1):'-' }}</td>
-        <td>{{ $salary->heso?:'-' }}</td>
+        <td>{{ $salary->hesoStr }}</td>
         <td>{{ number_format($salary->luong?:0, 3) }}</td>
-        @endif
     </tr>
     @endforeach
 </table>
+@include('salary.new')
 @php
 Debugbar::stopMeasure('bangluong');
 @endphp

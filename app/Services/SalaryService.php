@@ -1,20 +1,20 @@
 <?php
+/**
+ * Copyright © DiepXuan, Ltd. All rights reserved.
+ */
 
 namespace App\Services;
 
 use App\Data;
 use App\Salary;
 use App\SalaryUser;
-use Illuminate\Support\Str;
 use PhpOffice\PhpSpreadsheet\Shared\Date;
 
 /**
- * Class DatafileService
- * @package App\Services
+ * Class DatafileService.
  */
 class SalaryService implements SalaryServiceInterface
 {
-
     private $year;
     private $month;
     private $name;
@@ -91,6 +91,7 @@ class SalaryService implements SalaryServiceInterface
         $filter['ten1'] = ['ten', '<>', '*'];
         $filter['ten2'] = ['ten', '<>', 'duc'];
         unset($filter['ten']);
+
         return Salary::select('ten')
             ->groupBy('ten')
             ->orderBy('ten', 'ASC')
@@ -124,6 +125,7 @@ class SalaryService implements SalaryServiceInterface
                 'ten'   => $name,
             ]);
         }
+
         return new SalaryUser([
             'thang' => $this->month,
             'nam'   => $this->year,
@@ -140,9 +142,11 @@ class SalaryService implements SalaryServiceInterface
         $this->getAllCollection = Salary::orderBy('nam', 'DESC')
             ->orderBy('thang', 'DESC')
             ->orderBy('ngay', 'ASC')
+            ->orderBy('diadiem', 'ASC')
             ->orderBy('ten', 'ASC')
             ->where(array_values($filter))
             ->get();
+
         return $this->getAllCollection;
     }
 }

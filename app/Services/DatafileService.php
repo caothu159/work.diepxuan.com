@@ -1,4 +1,7 @@
 <?php
+/**
+ * Copyright © DiepXuan, Ltd. All rights reserved.
+ */
 
 namespace App\Services;
 
@@ -42,10 +45,10 @@ class DatafileService
         $this->salaryUpsert     = collect();
         $this->salaryUserUpsert = collect();
         $this->salaryDefault    = [
-            'ngay'     => null,
-            'thang'    => null,
-            'nam'      => null,
-            'ten'      => null,
+            'ngay'  => null,
+            'thang' => null,
+            'nam'   => null,
+            'ten'   => null,
 
             'chamcong' => null,
             'tile'     => null,
@@ -62,7 +65,7 @@ class DatafileService
     private function __initialize(string $year, string $month)
     {
         $this->year  = $year;
-        $this->month = sprintf("%02d", $month);
+        $this->month = sprintf('%02d', $month);
         $this->data->initialize($this->year, $this->month);
     }
 
@@ -91,7 +94,6 @@ class DatafileService
     protected function _employeeImport()
     {
         foreach ($this->data->loadFromFile('nhanvien.xlsx') as $name => $val) {
-
             $val = array_replace([
                 'Luong co ban' => null,
                 'Bao Hiem'     => null,
@@ -100,9 +102,9 @@ class DatafileService
                 'Ti le'        => null,
             ], $val);
             $salaryUser = [
-                'thang'      => $this->month,
-                'nam'        => $this->year,
-                'ten'        => $name,
+                'thang' => $this->month,
+                'nam'   => $this->year,
+                'ten'   => $name,
 
                 'luongcoban' => $val['Luong co ban'],
                 'baohiem'    => $val['Bao Hiem'],
@@ -131,10 +133,10 @@ class DatafileService
 
             foreach ($val as $name => $presence) {
                 $salary = array_replace($this->salaryDefault, [
-                    'ngay'     => $day,
-                    'thang'    => $this->month,
-                    'nam'      => $this->year,
-                    'ten'      => $name,
+                    'ngay'  => $day,
+                    'thang' => $this->month,
+                    'nam'   => $this->year,
+                    'ten'   => $name,
 
                     'chamcong' => $presence,
                 ]);
@@ -173,12 +175,11 @@ class DatafileService
 
                 // loop tung lai xe
                 foreach ($salary_ids as $name) {
-
                     $salary = [
-                        'ngay'    => $day,
-                        'thang'   => $this->month,
-                        'nam'     => $this->year,
-                        'ten'     => $name,
+                        'ngay'  => $day,
+                        'thang' => $this->month,
+                        'nam'   => $this->year,
+                        'ten'   => $name,
 
                         'tile'    => 1 / count($salary_ids),
                         'diadiem' => $car_id,
@@ -199,6 +200,7 @@ class DatafileService
                             ->map(function ($item, $key) use ($salary) {
                                 $item = array_replace($item, $salary);
                                 $this->salaryUpsert->put($key, $item);
+
                                 return $item;
                             });
                     } else {
@@ -226,9 +228,9 @@ class DatafileService
             collect($val)->map(function ($item, $key) use ($cars) {
                 if (preg_match('/(\w+\s)+([0-9]+)/', $key, $matches)) {
                     $name = $matches[2];
-                    if ($cars->search(function ($item) use ($name) {
+                    if (false === $cars->search(function ($item) use ($name) {
                         return $item['name'] == $name;
-                    }) === false) {
+                    })) {
                         $cars->put($name, ['name' => $name]);
                     }
                 }
@@ -241,9 +243,9 @@ class DatafileService
                     'nam'     => $this->year,
                     'diadiem' => $carname,
 
-                    'doanhso' => doubleval($val["ns $carname"]),
-                    'chono'   => doubleval($val["no $carname"]),
-                    'thuno'   => doubleval($val["thu no $carname"]),
+                    'doanhso' => doubleval($val["ns {$carname}"]),
+                    'chono'   => doubleval($val["no {$carname}"]),
+                    'thuno'   => doubleval($val["thu no {$carname}"]),
                 ];
 
                 if ($this->salaryUpsert
@@ -261,6 +263,7 @@ class DatafileService
                         ->map(function ($item, $key) use ($salary) {
                             $item = array_replace($item, $salary);
                             $this->salaryUpsert->put($key, $item);
+
                             return $item;
                         });
                 } else {
