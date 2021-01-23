@@ -31,7 +31,7 @@ $user = $service->getUser();
     <div class="form-group col-auto">
         <input type="number" class="form-control form-control-sm" name="thuno" placeholder="thu nợ" />
     </div>
-    <div class="col-12">
+    <div class="col-auto">
         <button type="submit" class="btn btn-primary">{{ __('default.add') }}</button>
     </div>
 </form>

@@ -39,6 +39,8 @@
 @php
 Debugbar::startMeasure('bangluong', 'Hien thi bang luong');
 @endphp
+<div class="clearfix"></div>
+<h1 class="text-primary clearfix">{{$service->getFullName()}}</h1>
 <table class="table table-hover table-condensed table-sm text-center">
     <tr>
         <th></th>
@@ -76,7 +78,7 @@ Debugbar::startMeasure('bangluong', 'Hien thi bang luong');
         <td>{{ $salary->doanhso?number_format($salary->doanhso):'-' }}</td>
         <td>{{ $salary->chono?:'-' }}</td>
         <td>{{ $salary->thuno?:'-' }}</td>
-        <td>{{ number_format($salary->tile,1) }}</td>
+        <td>{{ $salary->tile?number_format($salary->tile,1):'-' }}</td>
         <td>{{ $salary->nangsuat?number_format($salary->nangsuat,1):'-' }}</td>
         <td>{{ $salary->hesoStr }}</td>
         <td>{{ number_format($salary->luong?:0, 3) }}</td>

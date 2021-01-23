@@ -24,7 +24,7 @@ $user = $service->getUser();
     <div class="form-group col-auto">
         <input type="number" class="form-control form-control-sm" name="baohiem" placeholder="bảo hiểm" value="{{$user->baohiem?:''}}" />
     </div>
-    <div class="col-12">
+    <div class="col-auto">
         <button type="submit" class="btn btn-primary">{{ __('default.add') }}</button>
     </div>
 </form>
