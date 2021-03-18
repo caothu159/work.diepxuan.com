@@ -76,10 +76,6 @@ class SalaryService implements SalaryServiceInterface
         return $this->name;
     }
 
-    public function getFullName(){
-        return ucwords(strtolower($this->getName()));
-    }
-
     public function getTimeOptions()
     {
         return Salary::orderBy('nam', 'desc')
@@ -103,10 +99,7 @@ class SalaryService implements SalaryServiceInterface
             ->get();
     }
 
-         /**
-             * @SuppressWarnings(PHPMD)
-         */
-    public       function getUser(string $name = null)
+    public function getUser(string $name = null)
     {
         if ($this->user) {
             return $this->user;
@@ -126,15 +119,11 @@ class SalaryService implements SalaryServiceInterface
                 return $this->user;
             }
 
-            $user = new SalaryUser([
+            return SalaryUser::create([
                 'thang' => $this->month,
                 'nam'   => $this->year,
                 'ten'   => $name,
             ]);
-
-            \Debugbar::info($user);
-
-            return $user;
         }
 
         return new SalaryUser([

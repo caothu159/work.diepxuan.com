@@ -52,11 +52,11 @@ class Salary extends Model
 
     public function getLuongAttribute($luong)
     {
-            $chitieu = $this->chitieu / 30;
-            $luong   = ($this->nangsuat - $chitieu) * $this->heso;
+        $chitieu = $this->chitieu / 30;
+        $luong   = ($this->nangsuat - $chitieu) * $this->heso;
 
         if (in_array($this->diadiem, ['01593', '05605', '03166'])) {
-            $luong   += $this->luongcoban / 30 * $this->chamcong;
+            $luong += $this->luongcoban / 30 * $this->chamcong;
         } elseif (0 == $this->doanhso) {
             $luong = $this->luongcoban / 30 * $this->chamcong;
         }
@@ -112,7 +112,17 @@ class Salary extends Model
                         and `salaries`.thang = `salaryuser`.thang
                         and `salaries`.ngay = `salaryuser`.ngay
                         and `salaries`.doanhso = `salaryuser`.doanhso
-                        )) as `tile`'));
+                        )) as `tile`,
+                    (select (if(`salaries`.doanhso IS null,0,`salaries`.doanhso)
+                            + if(`salaries`.chono IS null,0,`salaries`.chono) * 0.7
+                            - if(`salaries`.thuno IS null,0,`salaries`.thuno) * 0.7
+                        )*1/COUNT(*) from `salaries` as `salaryuser`
+                        where `salaries`.nam = `salaryuser`.nam
+                        and `salaries`.thang = `salaryuser`.thang
+                        and `salaryuser`.ngay = `salaryuser`.ngay
+                        and `salaries`.diadiem = `salaryuser`.diadiem
+                        and `salaries`.doanhso = `salaryuser`.doanhso
+                        limit 1) as `nangsuat`'));
             }
             $builder->where('ngay', '<>', null);
         });

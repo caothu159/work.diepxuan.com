@@ -11,7 +11,8 @@ use Laravel\Sanctum\HasApiTokens;
 
 class Salary extends Model
 {
-    use HasFactory,  HasApiTokens;
+    use HasFactory;
+    use HasApiTokens;
 
     /**
      * The attributes that are mass assignable.

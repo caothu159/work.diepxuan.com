@@ -39,8 +39,6 @@
 @php
 Debugbar::startMeasure('bangluong', 'Hien thi bang luong');
 @endphp
-<div class="clearfix"></div>
-<h1 class="text-primary clearfix">{{$service->getFullName()}}</h1>
 <table class="table table-hover table-condensed table-sm text-center">
     <tr>
         <th></th>
@@ -53,9 +51,11 @@ Debugbar::startMeasure('bangluong', 'Hien thi bang luong');
         <th>Cho nợ</th>
         <th>Thu nợ</th>
         <th>Tỉ lệ</th>
+        @if($service->getUser())
         <th>Năng suất<b class="text-danger border-start border-danger"> {{ number_format($service->getAll()->sum('nangsuat'),1) }}</b></th>
         <th>Hệ số</th>
         <th>Lương<b class="text-danger border-start border-danger"> {{ number_format($service->getAll()->sum('luong')) }}</b></th>
+        @endif
     </tr>
     @foreach ($service->getAll() as $salary)
     <tr>
@@ -78,14 +78,15 @@ Debugbar::startMeasure('bangluong', 'Hien thi bang luong');
         <td>{{ $salary->doanhso?number_format($salary->doanhso):'-' }}</td>
         <td>{{ $salary->chono?:'-' }}</td>
         <td>{{ $salary->thuno?:'-' }}</td>
-        <td>{{ $salary->tile?number_format($salary->tile,1):'-' }}</td>
+        <td>{{ number_format($salary->tile,2) }}</td>
+        @if($service->getUser())
         <td>{{ $salary->nangsuat?number_format($salary->nangsuat,1):'-' }}</td>
-        <td>{{ $salary->hesoStr }}</td>
-        <td>{{ number_format($salary->luong?:0, 3) }}</td>
+        <td>{{ $salary->heso?:'-' }}</td>
+        <td>{{ number_format($salary->luong?:0, 1) }}</td>
+        @endif
     </tr>
     @endforeach
 </table>
-@include('salary.new')
 @php
 Debugbar::stopMeasure('bangluong');
 @endphp
