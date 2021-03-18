@@ -81,7 +81,7 @@ Debugbar::startMeasure('bangluong', 'Hien thi bang luong');
         <td>{{ $salary->tile?number_format($salary->tile,1):'-' }}</td>
         <td>{{ $salary->nangsuat?number_format($salary->nangsuat,1):'-' }}</td>
         <td>{{ $salary->hesoStr }}</td>
-        <td>{{ number_format($salary->luong?:0, 3) }}</td>
+        <td>{{ number_format($salary->luong?:0, 1) }}</td>
     </tr>
     @endforeach
 </table>

@@ -76,7 +76,8 @@ class SalaryService implements SalaryServiceInterface
         return $this->name;
     }
 
-    public function getFullName(){
+    public function getFullName()
+    {
         return ucwords(strtolower($this->getName()));
     }
 
@@ -103,10 +104,7 @@ class SalaryService implements SalaryServiceInterface
             ->get();
     }
 
-         /**
-             * @SuppressWarnings(PHPMD)
-         */
-    public       function getUser(string $name = null)
+    public function getUser(string $name = null)
     {
         if ($this->user) {
             return $this->user;
