@@ -44,3 +44,5 @@ yarn.lock
 .phpintel
 sftp-config.json
 .vscode
+.php_cs
+.php_cs.cache
