@@ -59,6 +59,8 @@ class Salary extends Model
             $luong += $this->luongcoban / 30 * $this->chamcong;
         } elseif (0 == $this->doanhso) {
             $luong = $this->luongcoban / 30 * $this->chamcong;
+        } else {
+            $luong = $this->luongcoban / 30 * $this->chamcong;
         }
 
         return $luong;
