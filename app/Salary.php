@@ -52,7 +52,7 @@ class Salary extends Model
 
     public function getLuongAttribute($luong)
     {
-        $chitieu = $this->chitieu / 30;
+        $chitieu = $this->chitieu / 30 * $this->chamcong;
         $luong   = ($this->nangsuat - $chitieu) * $this->heso;
 
         if (in_array($this->diadiem, ['01593', '05605', '03166'])) {
