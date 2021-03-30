@@ -6,11 +6,10 @@
     {{ session('status') }}
 </div>
 @endif
-<h1>Moi</h1>
 
 <div class="col-12">
     <div class="row align-items-stretch salary-container" id="accordionSalary">
-        @include('salary/salary')
+        @include('salary/salary0221')
     </div>
 </div>
 

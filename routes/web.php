@@ -1,13 +1,16 @@
 <?php
+/**
+ * Copyright © DiepXuan, Ltd. All rights reserved.
+ */
 
-use App\Http\Controllers\Salary\TestController;
-use App\Http\Controllers\Work\TonghopController;
+use App\Http\Controllers\Salary\SalaryController;
+use App\Http\Controllers\SalaryUserController;
 use App\Http\Controllers\Work\BanhangController;
 use App\Http\Controllers\Work\MuahangController;
-use App\Http\Controllers\SalaryUserController;
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Work\TonghopController;
 use App\Http\Middleware\ClearCache;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,14 +29,14 @@ Auth::routes([
 
 Route::domain('luong.diepxuan.com')->group(function () {
     Route::middleware([ClearCache::class])->group(function () {
-        Route::get('/{time?}/{name?}', [TestController::class, 'index'])
+        Route::get('/{time?}/{name?}', [SalaryController::class, 'index'])
             ->name('luong.home')
             ->where([
                 'time' => '[0-9]+\-[0-9]+',
                 'name' => '[a-zA-Z]+\-?[a-zA-Z]*',
             ]);
-        Route::get('/home', [TestController::class, 'index']);
-        Route::resource('salary', TestController::class);
+        Route::get('/home', [SalaryController::class, 'index']);
+        Route::resource('salary', SalaryController::class);
         Route::resource('salaryuser', SalaryUserController::class);
 
         Route::resource('users', 'UsersController');

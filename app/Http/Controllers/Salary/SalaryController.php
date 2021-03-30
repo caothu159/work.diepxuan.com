@@ -1,67 +1,86 @@
 <?php
-
-/*
- * Copyright © 2019 Dxvn, Inc. All rights reserved.
+/**
+ * Copyright © DiepXuan, Ltd. All rights reserved.
  */
 
 namespace App\Http\Controllers\Salary;
 
-use App\Model\Salary\Sheet;
+use App\Helpers\TimeHelper;
 use App\Salary;
-use App\Services\DatafileService;
+use App\Services\SalaryServiceInterface as SalaryService;
 use Exception;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
+/**
+ * Undocumented class.
+ */
 class SalaryController extends Controller
 {
+    use TimeHelper;
 
     /**
      * Create a new controller instance.
-     *
-     * @return void
      */
     public function __construct()
     {
         $this->middleware([
             'clearcache',
         ]);
+
+        $this->middleware([
+            'auth',
+        ])->except([
+                'index',
+                'show',
+            ]);
     }
 
     /**
      * Display a listing of the resource.
      *
-     * @param string|null $year
-     * @param string|null $month
+     * @param  $salaryService                  App\Services\SalaryService
+     * @param  $year                           string|null
+     * @param  $month                          string|null
+     *
+     * @throws Exception
      *
      * @return Factory|\Illuminate\View\View
-     * @throws Exception
      */
-    public function index(string $year = null, string $month = null)
+    public function index(SalaryService $salaryService, Request $request, string $time = null, string $name = null)
     {
-        return view('home', [
+        $redirect = [];
+        $salaryService->setTime($time)->setName($name);
+
+        $timePost = $request->input('thoigian') ?: $salaryService->getTime();
+        if ($timePost && $timePost !== $time) {
+            $redirect['name'] = $name;
+            $redirect['time'] = $timePost;
+        }
+
+        $namePost = $request->input('ten');
+        if ('false' == $namePost) {
+            $redirect['time'] = array_key_exists('time', $redirect) ? $redirect['time'] : $salaryService->getTime();
+        } elseif ($namePost && $namePost !== $name) {
+            $redirect['name'] = $namePost;
+            $redirect['time'] = array_key_exists('time', $redirect) ? $redirect['time'] : $salaryService->getTime();
+        }
+        if (count($redirect) >= 1) {
+            return redirect()->route('luong.home', $redirect);
+        }
+
+        $viewData = [
             'controller' => $this,
-            'time'       => [
-                'year'  => $year,
-                'month' => $month,
-            ],
-            'data'       => $this->_loadSalary($year, $month),
-        ]);
-    }
+            'service'    => $salaryService,
+        ];
 
-    /**
-     * [sheet description]
-     * @param  Request     $request [description]
-     * @param  string|null $year    [description]
-     * @param  string|null $month   [description]
-     * @return [type]               [description]
-     */
-    public function sheet(Request $request, string $year, string $month, string $filename)
-    {
-        $sheet = new Sheet($filename, $year, $month);
+        $_viewTemplate='salary0221';
+        if ($salaryService->getMonth() >= 3 && $salaryService->getYear() >= 2021) {
+            $_viewTemplate='salary';
+        }
 
-        return $sheet->download();
+        return view($_viewTemplate, $viewData);
     }
 
     /**
@@ -71,106 +90,138 @@ class SalaryController extends Controller
      */
     public function create()
     {
-        //
-    }
-
-    /**
-     * Import Data from file to database.
-     *
-     * @param DatafileService $datafileService
-     * @param string|null $year
-     * @param string|null $month
-     *
-     * @return \Illuminate\Http\RedirectResponse
-     * @throws Exception
-     */
-    public function import(DatafileService $datafileService, string $year = null, string $month = null)
-    {
-        $datafileService->salaryImport($year ?: date('Y'), $month ?: date('m'));
-
-        return redirect()->route('salary.index', [
-            'year'  => $year,
-            'month' => $month,
-        ]);
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param Request $request
+     * @param  $request   Request
      *
      * @return Response
      */
     public function store(Request $request)
     {
-        //
+        $this->validate($request, [
+            'thang' => 'required',
+            'nam'   => 'required',
+            'ten'   => 'required',
+        ]);
+
+        $tenLst = $request->input('ten');
+        $tenLst = trim($tenLst);
+        $tenLst = explode('-', $tenLst);
+        foreach ($tenLst as $_ten) {
+            $ten = trim($_ten);
+            Salary::create([
+                'ngay'  => $request->input('ngay'),
+                'thang' => $request->input('thang'),
+                'nam'   => $request->input('nam'),
+                'ten'   => $ten,
+
+                'chamcong' => $request->input('chamcong'),
+                'diadiem'  => $request->input('diadiem'),
+                'doanhso'  => $request->input('doanhso'),
+                'chono'    => $request->input('chono'),
+                'thuno'    => $request->input('thuno'),
+                'tile'     => 1 / count($tenLst),
+            ]);
+        }
+
+        $redirect = [
+            'thoigian' => implode('-', [$request->input('thang'), $request->input('nam')]),
+            'ten'      => 1 == count($tenLst) ? $tenLst[0] : false,
+        ];
+
+        return redirect()->route('luong.home', $redirect)->with(
+            'thành công',
+            "Đã thêm chấm công của <strong>{$request->input}('ten')</strong>."
+        );
     }
 
     /**
      * Display the specified resource.
      *
-     * @param int $id
+     * @param  $id        int
      *
      * @return Response
      */
     public function show($id)
     {
-        //
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param int $id
+     * @param  $id        int
      *
      * @return Response
      */
     public function edit($id)
     {
-        //
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
-     * @param int $id
+     * @param  $request   \Illuminate\Http\Request
+     * @param  $id        int
      *
      * @return Response
      */
     public function update(Request $request, $id)
     {
-        //
+        $this->validate($request, [
+            'thang' => 'required',
+            'nam'   => 'required',
+            'ten'   => 'required',
+        ]);
+
+        Salary::updateOrCreate([
+            'id'    => $id,
+            'thang' => $request->input('thang'),
+            'nam'   => $request->input('nam'),
+            'ten'   => $request->input('ten'),
+        ], [
+            'ngay'  => $request->input('ngay'),
+            'thang' => $request->input('thang'),
+            'nam'   => $request->input('nam'),
+            'ten'   => $request->input('ten'),
+
+            'chamcong' => $request->input('chamcong'),
+            'diadiem'  => $request->input('diadiem'),
+            'doanhso'  => $request->input('doanhso'),
+            'chono'    => $request->input('chono'),
+            'thuno'    => $request->input('thuno'),
+            'tile'     => $request->input('tile'),
+        ]);
+
+        $redirect = [
+            'thoigian' => implode('-', [$request->input('thang'), $request->input('nam')]),
+            'ten'      => $request->input('ten') ?: false,
+        ];
+
+        return redirect()->route('salary.index', $redirect)->with(
+            'thành công',
+            "Đã thêm chấm công của <strong>{$request->input}('ten')</strong>."
+        );
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param int $id
+     * @param  $id        int
      *
      * @return Response
      */
     public function destroy($id)
     {
-        //
-    }
+        $salary   = Salary::find($id);
+        $redirect = [
+            'thoigian' => implode('-', [$salary->thang, $salary->nam]),
+            'ten'      => $salary->ten,
+        ];
+        Salary::destroy($id);
 
-    /**
-     * Get salaries to show.
-     *
-     * @param string|null $year
-     * @param string|null $month
-     *
-     * @return Collection $collection
-     * @throws Exception
-     */
-    protected function _loadSalary(string $year = null, string $month = null)
-    {
-        $dt = sprintf('%s-%s', $year ?: date('Y'), $month ?: (date('m') . ' -1 month'));
-
-        $month = new \DateTime($dt);
-        $month = $month->getTimestamp() / (24 * 60 * 60) + 25569;
-
-        return Salary::where('month', $month)->orderBy('name', 'asc')->get();
+        return redirect()->route('salary.index', $redirect);
     }
 }

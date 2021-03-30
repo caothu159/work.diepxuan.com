@@ -158,4 +158,14 @@ class SalaryService implements SalaryServiceInterface
 
         return $this->getAllCollection;
     }
+
+    public function getYear()
+    {
+        return $this->year;
+    }
+
+    public function getMonth()
+    {
+        return $this->month;
+    }
 }
