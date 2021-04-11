@@ -13062,6 +13062,29 @@ body.d-none {
   display: block !important;
 }
 
+body {
+  -webkit-user-select: none;
+  -moz-user-select: -moz-none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+input,
+textarea {
+  -webkit-user-select: text;
+  -moz-user-select: -moz-text;
+  -ms-user-select: text;
+  user-select: text;
+}
+
+.disable-select {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
 @media print {
   nav.navbar {
     display: none;

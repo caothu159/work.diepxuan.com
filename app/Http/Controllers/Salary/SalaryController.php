@@ -73,9 +73,11 @@ class SalaryController extends Controller
         $viewData = [
             'controller' => $this,
             'service'    => $salaryService,
+            'users'      => $salaryService->getUserOptions(),
         ];
 
         $_viewTemplate='salary0221';
+
         if ($salaryService->getMonth() >= 3 && $salaryService->getYear() >= 2021) {
             $_viewTemplate='salary';
         }
@@ -110,20 +112,32 @@ class SalaryController extends Controller
         $tenLst = $request->input('ten');
         $tenLst = trim($tenLst);
         $tenLst = explode('-', $tenLst);
+        $salary = null;
         foreach ($tenLst as $_ten) {
-            $ten = trim($_ten);
-            Salary::create([
+            $ten    = trim($_ten);
+            $salary = Salary::updateOrCreate([
+                'ngay'      => $request->input('ngay'),
+                'thang'     => $request->input('thang'),
+                'nam'       => $request->input('nam'),
+                'ten'       => $ten,
+            ], [
                 'ngay'  => $request->input('ngay'),
                 'thang' => $request->input('thang'),
                 'nam'   => $request->input('nam'),
-                'ten'   => $ten,
+                'ten'   => strtolower($ten),
 
                 'chamcong' => $request->input('chamcong'),
                 'diadiem'  => $request->input('diadiem'),
                 'doanhso'  => $request->input('doanhso'),
                 'chono'    => $request->input('chono'),
                 'thuno'    => $request->input('thuno'),
-                'tile'     => 1 / count($tenLst),
+                'tile'     => $request->input('tile') ?: (1 / count($tenLst)),
+            ]);
+        }
+
+        if ($request->input('isJsonResponse')) {
+            return response()->json([
+                'salary' => $salary,
             ]);
         }
 
@@ -176,7 +190,7 @@ class SalaryController extends Controller
             'ten'   => 'required',
         ]);
 
-        Salary::updateOrCreate([
+        $salary = Salary::updateOrCreate([
             'id'    => $id,
             'thang' => $request->input('thang'),
             'nam'   => $request->input('nam'),
@@ -193,7 +207,15 @@ class SalaryController extends Controller
             'chono'    => $request->input('chono'),
             'thuno'    => $request->input('thuno'),
             'tile'     => $request->input('tile'),
-        ]);
+            ]);
+
+        if ($request->input('isJsonResponse')) {
+            return response()->json(
+            [
+                'Salary' => $salary,
+            ]
+            );
+        }
 
         $redirect = [
             'thoigian' => implode('-', [$request->input('thang'), $request->input('nam')]),

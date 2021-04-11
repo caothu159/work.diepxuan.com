@@ -6,8 +6,10 @@
 
 require('./bootstrap');
 
-window.Vue = require('vue');
+window.Vue = require('vue').default;
 // import datepicker from 'vuejs-datepicker';
+
+import { Form, HasError, AlertError } from 'vform'
 
 /**
  * The following block of code may be used to automatically register your
@@ -20,8 +22,16 @@ window.Vue = require('vue');
 // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
+
+window.Form = Form;
+Vue.component(HasError.name, HasError)
+Vue.component(AlertError.name, AlertError)
+
 // Vue.component('example-component', require('./components/ExampleComponent.vue').default);
 // Vue.component('salary-component', require('./components/SalaryComponent.vue').default);
+Vue.component('salary', require('./components/SalaryComponent.vue').default);
+Vue.component('salaryitem', require('./components/SalaryitemComponent.vue').default);
+Vue.component('salaryuser', require('./components/SalaryuseritemComponent.vue').default);
 // Vue.component('datepicker', datepicker);
 
 /**

@@ -6,11 +6,14 @@
     {{ session('status') }}
 </div>
 @endif
-<h1>Moi</h1>
 
 <div class="col-12">
     <div class="row align-items-stretch salary-container" id="accordionSalary">
+        @if(isset($controller) && $controller->isAdmin())
+        @include('salary/admin')
+        @else
         @include('salary/salary')
+        @endif
     </div>
 </div>
 

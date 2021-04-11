@@ -33,7 +33,9 @@
                 <a class="navbar-brand" href="{{ url('/') }}">
                     {{ "Bảng Lương" }}
                 </a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
+                <button class="navbar-toggler" type="button" data-toggle="collapse"
+                    data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                    aria-label="{{ __('Toggle navigation') }}">
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
@@ -60,12 +62,15 @@
                         @endif
                         @else
                         <li class="nav-item dropdown">
-                            <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                {{ Auth::user()->name ? Auth::user()->name : Auth::user()->username }} <span class="caret"></span>
+                            <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                {{ Auth::user()->name ? Auth::user()->name : Auth::user()->username }} <span
+                                    class="caret"></span>
                             </a>
 
                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                <a class="dropdown-item" href="{{ route('logout') }}"
+                                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                                     {{ __('Logout') }}
                                 </a>
 
@@ -86,13 +91,15 @@
             <div class="row">
                 <ul id="sidebar" class="sidebar col-md-2">
                     <li>
-                        <a class="text-decoration-none{{ Request()->is('salary*')?' font-weight-bold':'' }}" href="{{ route('salary.index') }}">
+                        <a class="text-decoration-none{{ Request()->is('salary*')?' font-weight-bold':'' }}"
+                            href="{{ route('salary.index') }}">
                             {{ __('salary.salary') }}
                         </a>
                         @yield('sidebar.salary')
                     </li>
                     <li>
-                        <a class="text-decoration-none{{ Request()->is('users*')?' font-weight-bold':'' }}" href="{{ route('users.index') }}">
+                        <a class="text-decoration-none{{ Request()->is('users*')?' font-weight-bold':'' }}"
+                            href="{{ route('users.index') }}">
                             {{ __('user.manager') }}
                         </a>
                         @yield('sidebar.user')
@@ -113,6 +120,14 @@
 
         @endif
     </div>
+
+    @if(isset($controller) && $controller->isAdmin())
+    @php
+    $renderer = Debugbar::getJavascriptRenderer();
+    @endphp
+    {!! $renderer->renderHead() !!}
+    {!! $renderer->render() !!}
+    @endif
 </body>
 
 </html>

@@ -1,4 +1,7 @@
 <?php
+/**
+ * Copyright © DiepXuan, Ltd. All rights reserved.
+ */
 
 namespace App\Http\Middleware;
 
@@ -19,12 +22,6 @@ class ClearCache extends Middleware
     {
         if (!in_array(config('app.env'), ['production', 'staging'])) {
             Artisan::call('view:clear');
-        }
-
-        if (auth()->check() && auth()->user()->isAdmin()) {
-            \Debugbar::enable();
-        } else {
-            \Debugbar::disable();
         }
 
         return $next($request);

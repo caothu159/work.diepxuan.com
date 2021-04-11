@@ -1,7 +1,6 @@
 <?php
-
-/*
- * Copyright © 2019 Dxvn, Inc. All rights reserved.
+/**
+ * Copyright © DiepXuan, Ltd. All rights reserved.
  */
 
 namespace App;
@@ -11,13 +10,12 @@ use App\Services\SalaryServiceInterface;
 use Illuminate\Database\Eloquent\Builder;
 
 /**
- * Class Salary công tháng
- * @package App
+ * Class Salary công tháng.
  */
 class SalaryUser extends Model
 {
     /**
-     * Undocumented variable
+     * Undocumented variable.
      *
      * @var App\Services\SalaryService
      */
@@ -27,6 +25,11 @@ class SalaryUser extends Model
     {
         $this->salaryService = app(SalaryServiceInterface::class);
         parent::__construct($attributes);
+    }
+
+    public function salaries()
+    {
+        return $this->belongsTo(App\Salary::class, ['nam', 'thang', 'ten'], ['nam', 'thang', 'ten']);
     }
 
     /**

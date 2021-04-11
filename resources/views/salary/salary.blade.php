@@ -1,6 +1,6 @@
 <?php $users = $service->getUserOptions(); ?>
-<div class="row row-cols-sm-auto g-3 align-items-center printhidden">
-    <form method="GET" class="col-sm-6 col-auto">
+<div class="col-12 printhidden clearfix d-block">
+    <form method="GET" class="col-sm-3 col-auto">
         @method('GET')
         @csrf
         <div class="form-group">
@@ -8,7 +8,8 @@
             <select class="form-control" id="thoigian" name="thoigian" onchange="this.form.submit()">
                 @foreach ($service->getTimeOptions() as $time)
                 @if ("$time->thang-$time->nam"==$service->getTime())
-                <option value="{{ $time->thang }}-{{ $time->nam }}" selected>{{ $time->thang }}/{{ $time->nam }}</option>
+                <option value="{{ $time->thang }}-{{ $time->nam }}" selected>{{ $time->thang }}/{{ $time->nam }}
+                </option>
                 @else
                 <option value="{{ $time->thang }}-{{ $time->nam }}">{{ $time->thang }}/{{ $time->nam }}</option>
                 @endif
@@ -16,7 +17,7 @@
             </select>
         </div>
     </form>
-    <form method="GET" class="col-sm-6 col-auto">
+    <form method="GET" class="col-sm-3 col-auto">
         @method('GET')
         @csrf
         <div class="form-group">
@@ -34,28 +35,44 @@
         </div>
     </form>
 </div>
-@include('salary.new')
-@include('salary.user')
 @php
 Debugbar::startMeasure('bangluong', 'Hien thi bang luong');
 @endphp
 <div class="clearfix"></div>
-<h1 class="text-primary clearfix">{{$service->getFullName()}}</h1>
+<h1 class="text-primary clearfix d-block col-6">{{$service->getFullName()}}</h1>
+<div class="col-12">
+    <table class="table table-condensed table-sm col-sm-6 col-md-2 text-left">
+        <tr>
+            <td class="text-right">Công</td>
+            <th>{{ number_format($service->getAll()->sum('chamcong')) }}</th>
+        </tr>
+        <tr>
+            <td class="text-right">Doanh số</td>
+            <th>{{ number_format($service->getAll()->sum('doanhso')) }}</th>
+        </tr>
+        <tr>
+            <td class="text-right">Năng suất</td>
+            <th>{{ number_format($service->getAll()->sum('nangsuat')) }}</th>
+        </tr>
+        <tr>
+            <td class="text-right">Lương</td>
+            <th>{{ number_format($service->getAll()->sum('luong')) }}</th>
+        </tr>
+    </table>
+</div>
 <table class="table table-hover table-condensed table-sm text-center">
     <tr>
         <th></th>
         @if (empty($service->getName()))
         <th>Tên</th>
         @endif
-        <th>Công<b class="text-danger border-start border-danger"> {{ $service->getName()?$service->getAll()->sum('chamcong'):'' }}</b></th>
+        <th>Công</th>
         <th></th>
-        <th>Doanh số<b class="text-danger border-start border-danger"> {{ $service->getName()?number_format($service->getAll()->sum('doanhso')):'' }}</b></th>
+        <th>Doanh số</th>
         <th>Cho nợ</th>
         <th>Thu nợ</th>
         <th>Tỉ lệ</th>
-        <th>Năng suất<b class="text-danger border-start border-danger"> {{ number_format($service->getAll()->sum('nangsuat'),1) }}</b></th>
-        <th>Hệ số</th>
-        <th>Lương<b class="text-danger border-start border-danger"> {{ number_format($service->getAll()->sum('luong')) }}</b></th>
+        <th>Năng suất</th>
     </tr>
     @foreach ($service->getAll() as $salary)
     <tr>
@@ -78,14 +95,11 @@ Debugbar::startMeasure('bangluong', 'Hien thi bang luong');
         <td>{{ $salary->doanhso?number_format($salary->doanhso):'-' }}</td>
         <td>{{ $salary->chono?:'-' }}</td>
         <td>{{ $salary->thuno?:'-' }}</td>
-        <td>{{ $salary->tile?number_format($salary->tile,1):'-' }}</td>
+        <td>{{ $salary->tile?number_format($salary->tile*100,0):'-' }}%</td>
         <td>{{ $salary->nangsuat?number_format($salary->nangsuat,1):'-' }}</td>
-        <td>{{ $salary->hesoStr }}</td>
-        <td>{{ number_format($salary->luong?:0, 1) }}</td>
     </tr>
     @endforeach
 </table>
-@include('salary.new')
 @php
 Debugbar::stopMeasure('bangluong');
 @endphp

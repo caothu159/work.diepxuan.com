@@ -30,14 +30,11 @@ class Salary extends Model
 
     public function getThoigianAttribute()
     {
-        $thoigian = [
+        return implode('/', [
             $this->ngay,
             $this->thang,
             $this->nam,
-        ];
-        $thoigian = implode('/', $thoigian);
-
-        return $thoigian;
+        ]);
     }
 
     public function getNangsuatAttribute($nangsuat)
@@ -71,6 +68,14 @@ class Salary extends Model
         $heso = $this->heso * 100;
 
         return $heso ? "$heso %" : '-';
+    }
+
+    /**
+     * @return mixed
+     */
+    public function salaryuser()
+    {
+        return $this->hasOne(\App\SalaryUser::class, ['nam', 'thang', 'ten'], ['nam', 'thang', 'ten']);
     }
 
     /**

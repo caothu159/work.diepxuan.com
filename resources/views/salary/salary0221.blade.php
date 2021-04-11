@@ -8,7 +8,8 @@
             <select class="form-control" id="thoigian" name="thoigian" onchange="this.form.submit()">
                 @foreach ($service->getTimeOptions() as $time)
                 @if ("$time->thang-$time->nam"==$service->getTime())
-                <option value="{{ $time->thang }}-{{ $time->nam }}" selected>{{ $time->thang }}/{{ $time->nam }}</option>
+                <option value="{{ $time->thang }}-{{ $time->nam }}" selected>{{ $time->thang }}/{{ $time->nam }}
+                </option>
                 @else
                 <option value="{{ $time->thang }}-{{ $time->nam }}">{{ $time->thang }}/{{ $time->nam }}</option>
                 @endif
@@ -47,15 +48,19 @@ Debugbar::startMeasure('bangluong', 'Hien thi bang luong');
         @if (empty($service->getName()))
         <th>Tên</th>
         @endif
-        <th>Công<b class="text-danger border-start border-danger"> {{ $service->getName()?$service->getAll()->sum('chamcong'):'' }}</b></th>
+        <th>Công<b class="text-danger border-start border-danger">
+                {{ $service->getName()?$service->getAll()->sum('chamcong'):'' }}</b></th>
         <th></th>
-        <th>Doanh số<b class="text-danger border-start border-danger"> {{ $service->getName()?number_format($service->getAll()->sum('doanhso')):'' }}</b></th>
+        <th>Doanh số<b class="text-danger border-start border-danger">
+                {{ $service->getName()?number_format($service->getAll()->sum('doanhso')):'' }}</b></th>
         <th>Cho nợ</th>
         <th>Thu nợ</th>
         <th>Tỉ lệ</th>
-        <th>Năng suất<b class="text-danger border-start border-danger"> {{ number_format($service->getAll()->sum('nangsuat'),1) }}</b></th>
-        <th>Hệ số</th>
-        <th>Lương<b class="text-danger border-start border-danger"> {{ number_format($service->getAll()->sum('luong')) }}</b></th>
+        <th>Năng suất<b class="text-danger border-start border-danger">
+                {{ number_format($service->getAll()->sum('nangsuat'),1) }}</b></th>
+        <th class="printhidden">Hệ số</th>
+        <th class="printhidden">Lương<b class="text-danger border-start border-danger">
+                {{ number_format($service->getAll()->sum('luong')) }}</b></th>
     </tr>
     @foreach ($service->getAll() as $salary)
     <tr>
@@ -78,10 +83,10 @@ Debugbar::startMeasure('bangluong', 'Hien thi bang luong');
         <td>{{ $salary->doanhso?number_format($salary->doanhso):'-' }}</td>
         <td>{{ $salary->chono?:'-' }}</td>
         <td>{{ $salary->thuno?:'-' }}</td>
-        <td>{{ $salary->tile?number_format($salary->tile,1):'-' }}</td>
+        <td>{{ $salary->tile?number_format($salary->tile*100,0):'-' }}%</td>
         <td>{{ $salary->nangsuat?number_format($salary->nangsuat,1):'-' }}</td>
-        <td>{{ $salary->hesoStr }}</td>
-        <td>{{ number_format($salary->luong?:0, 1) }}</td>
+        <td class="printhidden">{{ $salary->hesoStr }}</td>
+        <td class="printhidden">{{ number_format($salary->luong?:0, 1) }}</td>
     </tr>
     @endforeach
 </table>

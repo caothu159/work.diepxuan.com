@@ -31,8 +31,22 @@ class SalaryUserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request, string $time = null)
     {
+        $salaryUsers = SalaryUser::select('ten', 'luongcoban', 'baohiem', 'chitieu', 'heso', 'tile')
+            ->groupBy('ten')
+            ->orderBy('nam', 'DESC')
+            ->orderBy('thang', 'DESC')
+            ->orderBy('ngay', 'ASC')
+            ->where([
+                ['ten', '<>', '*'],
+                ['ten', '<>', 'duc'],
+            ])
+            ->get();
+
+        return response()->json([
+            'users' => $salaryUsers,
+        ]);
     }
 
     /**
@@ -57,16 +71,27 @@ class SalaryUserController extends Controller
             'ten'   => 'required',
         ]);
 
-        SalaryUser::create([
+        $user = SalaryUser::updateOrCreate([
             'thang'      => $request->input('thang'),
             'nam'        => $request->input('nam'),
-            'ten'        => $request->input('ten'),
+            'ten'        => strtolower($request->input('ten')),
+        ], [
+            'thang'      => $request->input('thang'),
+            'nam'        => $request->input('nam'),
+            'ten'        => strtolower($request->input('ten')),
 
             'luongcoban' => $request->input('luongcoban'),
             'heso'       => $request->input('heso'),
             'chitieu'    => $request->input('chitieu'),
             'baohiem'    => $request->input('baohiem'),
+            'tile'       => $request->input('tile'),
         ]);
+
+        if ($request->input('isJsonResponse')) {
+            return response()->json([
+                'user' => $user,
+            ]);
+        }
 
         $redirect = [
             'thoigian' => implode('-', [$request->input('thang'), $request->input('nam')]),

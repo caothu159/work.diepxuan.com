@@ -97,8 +97,7 @@ class SalaryService implements SalaryServiceInterface
         $filter['ten2'] = ['ten', '<>', 'duc'];
         unset($filter['ten']);
 
-        return Salary::select('ten')
-            ->groupBy('ten')
+        return SalaryUser::groupBy('ten')
             ->orderBy('ten', 'ASC')
             ->where(array_values($filter))
             ->get();

@@ -1,4 +1,7 @@
 <?php
+/**
+ * Copyright © DiepXuan, Ltd. All rights reserved.
+ */
 
 namespace App\Http\Controllers;
 
@@ -18,10 +21,6 @@ class Controller extends BaseController
      */
     public function isAdmin()
     {
-        if (auth()->check()) {
-            return auth()->user()->isAdmin();
-        }
-
-        return false;
+        return auth()->check() && auth()->user()->isAdmin();
     }
 }

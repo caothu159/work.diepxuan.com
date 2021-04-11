@@ -14,7 +14,7 @@ trait TimeHelper
         for ($d=1; $d <= 31; ++$d) {
             $time=mktime(12, 0, 0, $month, $d, $year);
             if (date('m', $time) == $month) {
-                $days[]=date('Y-m-d-D', $time);
+                $days[]=date('d', $time);
             }
         }
 

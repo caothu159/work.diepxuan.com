@@ -1,7 +1,6 @@
 <?php
-
-/*
- * Copyright © 2019 Dxvn, Inc. All rights reserved.
+/**
+ * Copyright © DiepXuan, Ltd. All rights reserved.
  */
 
 namespace App\Http\Middleware;
@@ -13,17 +12,15 @@ class Admin
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
+     * @param \Illuminate\Http\Request $request
+     *
      * @return mixed
      */
     public function handle($request, Closure $next)
     {
-        if (auth()->user()->isAdmin()) {
-            \Debugbar::enable();
+        if (auth()->check() && auth()->user()->isAdmin()) {
             return $next($request);
         }
-        \Debugbar::disable();
 
         return redirect('/home')->with('error', 'You have not admin access');
     }

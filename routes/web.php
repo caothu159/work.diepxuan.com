@@ -4,7 +4,7 @@
  */
 
 use App\Http\Controllers\Salary\SalaryController;
-use App\Http\Controllers\SalaryUserController;
+use App\Http\Controllers\Salary\SalaryUserController;
 use App\Http\Controllers\Work\BanhangController;
 use App\Http\Controllers\Work\MuahangController;
 use App\Http\Controllers\Work\TonghopController;
@@ -37,6 +37,12 @@ Route::domain('luong.diepxuan.com')->group(function () {
             ]);
         Route::get('/home', [SalaryController::class, 'index']);
         Route::resource('salary', SalaryController::class);
+
+        Route::get('salaryuser/{time?}/{name?}', [SalaryUserController::class, 'index'])
+            ->where([
+                'time' => '[0-9]+\-[0-9]+',
+                'name' => '[a-zA-Z]+\-?[a-zA-Z]*',
+            ]);
         Route::resource('salaryuser', SalaryUserController::class);
 
         Route::resource('users', 'UsersController');
