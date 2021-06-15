@@ -73,7 +73,6 @@ class SalaryController extends Controller
         $viewData = [
             'controller' => $this,
             'service'    => $salaryService,
-            'users'      => $salaryService->getUserOptions(),
         ];
 
         $_viewTemplate='salary0221';

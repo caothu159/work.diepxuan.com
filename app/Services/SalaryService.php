@@ -6,6 +6,7 @@
 namespace App\Services;
 
 use App\Data;
+use App\Helpers\TimeHelper as TimeHelper;
 use App\Salary;
 use App\SalaryUser;
 use PhpOffice\PhpSpreadsheet\Shared\Date;
@@ -15,11 +16,15 @@ use PhpOffice\PhpSpreadsheet\Shared\Date;
  */
 class SalaryService implements SalaryServiceInterface
 {
+    use TimeHelper;
+
     private $year;
     private $month;
     private $name;
 
     private $user;
+
+    private $isSingle;
 
     private $filter;
     private $getAllCollection;
@@ -31,12 +36,22 @@ class SalaryService implements SalaryServiceInterface
      */
     public function __construct()
     {
-        $this->year   = $this->year ?: date('Y');
-        $this->month  = $this->month ?: date('m');
-        $this->filter = [
+        $this->isSingle(false);
+        $this->year     = $this->year ?: date('Y');
+        $this->month    = $this->month ?: date('m');
+        $this->filter   = [
             'thang' => ['thang', '=', $this->month],
             'nam'   => ['nam', '=', $this->year],
         ];
+    }
+
+    public function isSingle($isSingle = null)
+    {
+        if (null != $isSingle && 'boolean' == gettype($isSingle)) {
+            $this->isSingle = $isSingle;
+        }
+
+        return $this->isSingle;
     }
 
     public function setTime($time)
@@ -56,7 +71,7 @@ class SalaryService implements SalaryServiceInterface
 
     public function getTime()
     {
-        return implode('-', [$this->month, $this->year]);
+        return $this->timeformat($this->month, $this->year);
     }
 
     public function setName($name)
@@ -66,6 +81,7 @@ class SalaryService implements SalaryServiceInterface
 
         if ($this->name) {
             $this->filter['ten'] = ['ten', "$this->name"];
+            $this->isSingle(true);
         }
 
         return $this;
@@ -73,21 +89,28 @@ class SalaryService implements SalaryServiceInterface
 
     public function getName()
     {
-        return $this->name;
+        return [
+            $this->isSingle() => $this->name,
+            !$this->isSingle  => null,
+        ][$this->isSingle()];
     }
 
     public function getFullName()
     {
-        return ucwords(strtolower($this->getName()));
+        return [
+            $this->isSingle() => ucwords(strtolower($this->getName())),
+            !$this->isSingle  => null,
+        ][$this->isSingle()];
     }
 
     public function getTimeOptions()
     {
-        return Salary::orderBy('nam', 'desc')
-            ->orderBy('thang', 'desc')
-            ->groupBy('thang', 'nam')
-            ->select('thang', 'nam')
-            ->get();
+        return $this->getMonths();
+        // return Salary::orderBy('nam', 'desc')
+        //     ->orderBy('thang', 'desc')
+        //     ->groupBy('thang', 'nam')
+        //     ->select('thang', 'nam')
+        //     ->get();
     }
 
     public function getUserOptions()

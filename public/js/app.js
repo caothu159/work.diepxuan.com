@@ -1882,12 +1882,16 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   mounted: function mounted() {
+    var self = this;
+
     try {
-      var self = this;
       self.renderComponent = false;
-      axios("/salaryuser/" + self.data.month + "-" + self.data.year, {
+      axios("/salaryuser/" + self.month + "-" + self.year, {
         // responseType: "arraybuffer",
         headers: {
           "Cache-Control": "no-cache"
@@ -1902,27 +1906,33 @@ __webpack_require__.r(__webpack_exports__);
       })["catch"](function (err) {
         /* error in getting data */
         console.log(err);
+        self.forceRerender();
       }).then(function (res) {
         /* parse the data when it is received */
         var salaryusers = res.data.users;
+        self.forceRerender();
         return salaryusers;
       })["catch"](function (err) {
         /* error in parsing */
         console.log(err);
+        self.forceRerender();
       }).then(function (salaryusers) {
-        self.data.users.forEach(function (user, index) {
+        self.users.forEach(function (user, index) {
           var salaryuser = salaryusers.filter(function (elem) {
             if (elem.ten == user.ten) return elem;
           })[0];
-          self.data.users[index] = salaryuser || user;
+          self.users[index] = salaryuser || user;
           self.forceRerender();
         });
+        self.forceRerender();
       })["catch"](function (err) {
         /* error in parsing */
         console.log(err);
+        self.forceRerender();
       });
     } catch (e) {
       console.log(e);
+      self.forceRerender();
     }
   },
 
@@ -1934,27 +1944,21 @@ __webpack_require__.r(__webpack_exports__);
     return {
       renderComponent: true,
       componentKey: 0,
-      data: {
-        salaries: JSON.parse(this.salaries),
-        users: JSON.parse(this.users),
-        days: parseInt(this.days),
-        month: parseInt(this.month),
-        year: parseInt(this.year)
-      }
+      salaries: JSON.parse(this.salariesdata),
+      users: JSON.parse(this.usersdata),
+      days: parseInt(this.daysdata),
+      month: parseInt(this.monthdata),
+      year: parseInt(this.yeardata)
     };
   },
-  watch: {
-    data: function data(newData, oldData) {
-      this.forceRerender();
-    }
-  },
+  watch: {},
   methods: {
     getSalary: function getSalary(ngay, ten) {
       var $return = {
         ten: ten,
         ngay: ngay,
-        thang: this.data.month,
-        nam: this.data.year,
+        thang: this.month,
+        nam: this.year,
         diadiem: null,
         chamcong: 0,
         doanhso: null,
@@ -1963,7 +1967,7 @@ __webpack_require__.r(__webpack_exports__);
       };
 
       try {
-        var $_return = this.data.salaries.filter(function (elem) {
+        var $_return = this.salaries.filter(function (elem) {
           if (elem.ten == ten && elem.ngay == ngay) return elem;
         })[0];
         return $_return ? $_return : $return;
@@ -1977,8 +1981,8 @@ __webpack_require__.r(__webpack_exports__);
       var $return = {
         ten: ten,
         ngay: ngay,
-        thang: this.data.month,
-        nam: this.data.year,
+        thang: this.month,
+        nam: this.year,
         diadiem: null,
         chamcong: 0,
         doanhso: null,
@@ -1987,7 +1991,7 @@ __webpack_require__.r(__webpack_exports__);
       };
 
       try {
-        var $_return = this.data.salaries.filter(function (elem) {
+        var $_return = this.salaries.filter(function (elem) {
           if (elem.ten == ten && elem.ngay == ngay) return elem;
         })[0];
         return $_return ? $_return : $return;
@@ -2007,14 +2011,45 @@ __webpack_require__.r(__webpack_exports__);
         _this.renderComponent = true;
       });
       this.componentKey += 1;
+    },
+    updateUser: function updateUser(user) {
+      var self = this;
+      var foundIndex = self.users.findIndex(function (x) {
+        return x.ten == user.ten;
+      });
+
+      if (foundIndex == -1) {
+        self.users.push(user);
+        this.forceRerender();
+      }
+    },
+    updateItem: function updateItem($_salaryA) {
+      var self = this;
+      var foundIndexA = self.salaries.findIndex(function (elem) {
+        return elem.ten == $_salaryA.ten && elem.ngay == $_salaryA.ngay;
+      });
+      self.salaries[foundIndexA] = $_salaryA;
+      console.log($_salaryA);
+      var foundIndexB = self.salaries.findIndex(function (elem) {
+        return elem.diadiem == $_salaryA.diadiem && elem.ngay == $_salaryA.ngay && elem.ten !== $_salaryA.ten;
+      });
+
+      if (foundIndexB !== -1) {
+        self.salaries[foundIndexB].chamcong = $_salaryA.chamcong;
+        self.salaries[foundIndexB].diadiem = $_salaryA.diadiem;
+        self.salaries[foundIndexB].doanhso = $_salaryA.doanhso;
+        self.salaries[foundIndexB].chono = $_salaryA.chono;
+        self.salaries[foundIndexB].thuno = $_salaryA.thuno;
+        self.salaries[foundIndexB].tile = $_salaryA.tile;
+      }
     }
   },
   props: {
-    users: String,
-    salaries: String,
-    days: [String, Number],
-    month: [String, Number],
-    year: [String, Number],
+    usersdata: String,
+    salariesdata: String,
+    daysdata: [String, Number],
+    monthdata: [String, Number],
+    yeardata: [String, Number],
     routersalary: String,
     routeruser: String
   }
@@ -2033,6 +2068,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+//
 //
 //
 //
@@ -2125,12 +2161,24 @@ __webpack_require__.r(__webpack_exports__);
       isChanged: false
     };
   },
-  created: function created() {},
-  watch: {},
+  created: function created() {// this.$watch("salary", this.formUpdated, {
+    //     deep: true
+    // });
+  },
+  watch: {// salary() {
+    //     this.change();
+    // }
+  },
   methods: {
+    // formUpdated: function(newV, oldV) {
+    //     if (newV != oldV) {
+    //         this.change();
+    //     }
+    // },
     update: function update() {
       var _this = this;
 
+      var self = this;
       this.salary.post(this.router).then(function (response) {
         _this.isChanged = false;
         var salaryResponse = response.data.salary;
@@ -2144,15 +2192,129 @@ __webpack_require__.r(__webpack_exports__);
         _this.salary.chono = salaryResponse.chono;
         _this.salary.thuno = salaryResponse.thuno;
         _this.salary.tile = salaryResponse.tile;
+        self.$emit("updateItem", _this.salary);
       });
     },
     change: function change() {
+      var self = this;
       this.isChanged = true;
-    }
+      self.$emit("updateItem", this.salary);
+    } // getAutocompleteArray() {
+    //     console.log(salaries);
+    //     return [];
+    // }
+    // autocomplete(inp) {
+    //     let arr = this.getAutocompleteArray();
+    //     /*the autocomplete function takes two arguments, the text field element and an array of possible autocompleted values:*/
+    //     var currentFocus;
+    //     /*execute a function when someone writes in the text field:*/
+    //     inp.addEventListener("input", function(e) {
+    //         var a,
+    //             b,
+    //             i,
+    //             val = this.value;
+    //         /*close any already open lists of autocompleted values*/
+    //         closeAllLists();
+    //         if (!val) {
+    //             return false;
+    //         }
+    //         currentFocus = -1;
+    //         /*create a DIV element that will contain the items (values):*/
+    //         a = document.createElement("DIV");
+    //         a.setAttribute("id", this.id + "autocomplete-list");
+    //         a.setAttribute("class", "autocomplete-items");
+    //         /*append the DIV element as a child of the autocomplete container:*/
+    //         this.parentNode.appendChild(a);
+    //         /*for each item in the array...*/
+    //         for (i = 0; i < arr.length; i++) {
+    //             /*check if the item starts with the same letters as the text field value:*/
+    //             if (
+    //                 arr[i].substr(0, val.length).toUpperCase() ==
+    //                 val.toUpperCase()
+    //             ) {
+    //                 /*create a DIV element for each matching element:*/
+    //                 b = document.createElement("DIV");
+    //                 /*make the matching letters bold:*/
+    //                 b.innerHTML =
+    //                     "<strong>" +
+    //                     arr[i].substr(0, val.length) +
+    //                     "</strong>";
+    //                 b.innerHTML += arr[i].substr(val.length);
+    //                 /*insert a input field that will hold the current array item's value:*/
+    //                 b.innerHTML +=
+    //                     "<input type='hidden' value='" + arr[i] + "'>";
+    //                 /*execute a function when someone clicks on the item value (DIV element):*/
+    //                 b.addEventListener("click", function(e) {
+    //                     /*insert the value for the autocomplete text field:*/
+    //                     inp.value = this.getElementsByTagName(
+    //                         "input"
+    //                     )[0].value;
+    //                     /*close the list of autocompleted values, (or any other open lists of autocompleted values:*/
+    //                     closeAllLists();
+    //                 });
+    //                 a.appendChild(b);
+    //             }
+    //         }
+    //     });
+    //     /*execute a function presses a key on the keyboard:*/
+    //     inp.addEventListener("keydown", function(e) {
+    //         var x = document.getElementById(this.id + "autocomplete-list");
+    //         if (x) x = x.getElementsByTagName("div");
+    //         if (e.keyCode == 40) {
+    //             /*If the arrow DOWN key is pressed, increase the currentFocus variable:*/
+    //             currentFocus++;
+    //             /*and and make the current item more visible:*/
+    //             addActive(x);
+    //         } else if (e.keyCode == 38) {
+    //             //up
+    //             /*If the arrow UP key is pressed, decrease the currentFocus variable:*/
+    //             currentFocus--;
+    //             /*and and make the current item more visible:*/
+    //             addActive(x);
+    //         } else if (e.keyCode == 13) {
+    //             /*If the ENTER key is pressed, prevent the form from being submitted,*/
+    //             e.preventDefault();
+    //             if (currentFocus > -1) {
+    //                 /*and simulate a click on the "active" item:*/
+    //                 if (x) x[currentFocus].click();
+    //             }
+    //         }
+    //     });
+    //     function addActive(x) {
+    //         /*a function to classify an item as "active":*/
+    //         if (!x) return false;
+    //         /*start by removing the "active" class on all items:*/
+    //         removeActive(x);
+    //         if (currentFocus >= x.length) currentFocus = 0;
+    //         if (currentFocus < 0) currentFocus = x.length - 1;
+    //         /*add class "autocomplete-active":*/
+    //         x[currentFocus].classList.add("autocomplete-active");
+    //     }
+    //     function removeActive(x) {
+    //         /* a function to remove the "active" class from all autocomplete items: */
+    //         for (var i = 0; i < x.length; i++) {
+    //             x[i].classList.remove("autocomplete-active");
+    //         }
+    //     }
+    //     function closeAllLists(elmnt) {
+    //         /* close all autocomplete lists in the document, except the one passed as an argument: */
+    //         var x = document.getElementsByClassName("autocomplete-items");
+    //         for (var i = 0; i < x.length; i++) {
+    //             if (elmnt != x[i] && elmnt != inp) {
+    //                 x[i].parentNode.removeChild(x[i]);
+    //             }
+    //         }
+    //     }
+    //     document.addEventListener("click", function(e) {
+    //         closeAllLists(e.target);
+    //     });
+    // }
+
   },
   props: {
     salaryitem: Object,
-    router: String
+    router: String // salaries: Array
+
   }
 });
 
@@ -2266,6 +2428,7 @@ __webpack_require__.r(__webpack_exports__);
     update: function update() {
       var _this = this;
 
+      var self = this;
       this.salary.post(this.router).then(function (response) {
         _this.isChanged = false;
         var salaryResponse = response.data.user;
@@ -2279,6 +2442,7 @@ __webpack_require__.r(__webpack_exports__);
         _this.salary.chono = salaryResponse.chono;
         _this.salary.thuno = salaryResponse.thuno;
         _this.salary.tile = salaryResponse.tile;
+        self.$emit("updateUser", _this.salary);
       });
     },
     change: function change() {
@@ -7020,7 +7184,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.salary-item .salary-name {\n    text-indent: 10px;\n    display: inline-block;\n}\n.salary-item label {\n    text-indent: 10px;\n}\n.salary-item input:-moz-placeholder-shown {\n}\n.salary-item input:-ms-input-placeholder {\n}\n.salary-item input:placeholder-shown {\n}\n.check {\n    display: inline-block;\n    transform: rotate(45deg);\n    height: 22px;\n    width: 10px;\n    border-bottom: 4px solid #78b13f;\n    border-right: 4px solid #78b13f;\n    margin-left: 15px;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.salary-item .salary-name {\n    text-indent: 10px;\n    display: inline-block;\n}\n.salary-item label {\n    text-indent: 10px;\n}\n.salary-item input:-moz-placeholder-shown {\n}\n.salary-item input:-ms-input-placeholder {\n}\n.salary-item input:placeholder-shown {\n}\n.check {\n    display: inline-block;\n    transform: rotate(45deg);\n    height: 22px;\n    width: 10px;\n    border-bottom: 4px solid #78b13f;\n    border-right: 4px solid #78b13f;\n    margin-left: 15px;\n}\n.autocomplete-items {\n    position: absolute;\n    border: 1px solid #d4d4d4;\n    border-bottom: none;\n    border-top: none;\n    z-index: 99;\n    /*position the autocomplete items to be the same width as the container:*/\n    top: 100%;\n    left: 0;\n    right: 0;\n}\n.autocomplete-items div {\n    padding: 10px;\n    cursor: pointer;\n    background-color: #fff;\n    border-bottom: 1px solid #d4d4d4;\n}\n.autocomplete-items div:hover {\n    /*when hovering an item:*/\n    background-color: #e9e9e9;\n}\n.autocomplete-active {\n    /*when navigating through the items using the arrow keys:*/\n    background-color: DodgerBlue !important;\n    color: #ffffff;\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -39705,11 +39869,9 @@ var render = function() {
             _c(
               "tr",
               [
-                _c("td", [
-                  _vm._v(_vm._s(_vm.data.month) + "/" + _vm._s(_vm.data.year))
-                ]),
+                _c("td", [_vm._v(_vm._s(_vm.month) + "/" + _vm._s(_vm.year))]),
                 _vm._v(" "),
-                _vm._l(_vm.data.users, function(user) {
+                _vm._l(_vm.users, function(user) {
                   return _vm.renderComponent
                     ? _c(
                         "td",
@@ -39718,9 +39880,10 @@ var render = function() {
                             attrs: {
                               salaryuser: user,
                               router: _vm.routeruser,
-                              thang: _vm.data.month,
-                              nam: _vm.data.year
-                            }
+                              thang: _vm.month,
+                              nam: _vm.year
+                            },
+                            on: { updateUser: _vm.updateUser }
                           })
                         ],
                         1
@@ -39735,9 +39898,10 @@ var render = function() {
                         _c("salaryuser", {
                           attrs: {
                             router: _vm.routeruser,
-                            thang: _vm.data.month,
-                            nam: _vm.data.year
-                          }
+                            thang: _vm.month,
+                            nam: _vm.year
+                          },
+                          on: { updateUser: _vm.updateUser }
                         })
                       ],
                       1
@@ -39747,7 +39911,7 @@ var render = function() {
               2
             ),
             _vm._v(" "),
-            _vm._l(_vm.data.days, function(index) {
+            _vm._l(_vm.days, function(index) {
               return _vm.renderComponent
                 ? _c(
                     "tr",
@@ -39757,13 +39921,13 @@ var render = function() {
                         _vm._v(
                           _vm._s(index) +
                             "/" +
-                            _vm._s(_vm.data.month) +
+                            _vm._s(_vm.month) +
                             "/" +
-                            _vm._s(_vm.data.year)
+                            _vm._s(_vm.year)
                         )
                       ]),
                       _vm._v(" "),
-                      _vm._l(_vm.data.users, function(user) {
+                      _vm._l(_vm.users, function(user) {
                         return _vm.renderComponent
                           ? _c(
                               "td",
@@ -39772,7 +39936,8 @@ var render = function() {
                                   attrs: {
                                     salaryitem: _vm.getSalary(index, user.ten),
                                     router: _vm.routersalary
-                                  }
+                                  },
+                                  on: { updateItem: _vm.updateItem }
                                 })
                               ],
                               1
@@ -39929,50 +40094,48 @@ var render = function() {
           [_vm._v("\n            update\n        ")]
         ),
         _vm._v(" "),
-        _c("label", [
-          _c(
-            "select",
-            {
-              directives: [
-                {
-                  name: "model",
-                  rawName: "v-model",
-                  value: _vm.salary.chamcong,
-                  expression: "salary.chamcong"
-                }
-              ],
-              staticClass: "form-control",
-              on: {
-                change: function($event) {
-                  var $$selectedVal = Array.prototype.filter
-                    .call($event.target.options, function(o) {
-                      return o.selected
-                    })
-                    .map(function(o) {
-                      var val = "_value" in o ? o._value : o.value
-                      return val
-                    })
-                  _vm.$set(
-                    _vm.salary,
-                    "chamcong",
-                    $event.target.multiple ? $$selectedVal : $$selectedVal[0]
-                  )
-                }
+        _c(
+          "select",
+          {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.salary.chamcong,
+                expression: "salary.chamcong"
               }
-            },
-            [
-              _c("option", { attrs: { value: "0" } }, [_vm._v("nghỉ")]),
-              _vm._v(" "),
-              _c("option", { attrs: { value: "0.5" } }, [_vm._v("1/2 ngày")]),
-              _vm._v(" "),
-              _c("option", { attrs: { value: "1" } }, [_vm._v("1 ngày")]),
-              _vm._v(" "),
-              _c("option", { attrs: { value: "1.5" } }, [_vm._v("về muộn")]),
-              _vm._v(" "),
-              _c("option", { attrs: { value: "2" } }, [_vm._v("công đêm")])
-            ]
-          )
-        ]),
+            ],
+            staticClass: "form-control form-control-sm",
+            on: {
+              change: function($event) {
+                var $$selectedVal = Array.prototype.filter
+                  .call($event.target.options, function(o) {
+                    return o.selected
+                  })
+                  .map(function(o) {
+                    var val = "_value" in o ? o._value : o.value
+                    return val
+                  })
+                _vm.$set(
+                  _vm.salary,
+                  "chamcong",
+                  $event.target.multiple ? $$selectedVal : $$selectedVal[0]
+                )
+              }
+            }
+          },
+          [
+            _c("option", { attrs: { value: "0" } }, [_vm._v("nghỉ")]),
+            _vm._v(" "),
+            _c("option", { attrs: { value: "0.5" } }, [_vm._v("1/2 ngày")]),
+            _vm._v(" "),
+            _c("option", { attrs: { value: "1" } }, [_vm._v("1 ngày")]),
+            _vm._v(" "),
+            _c("option", { attrs: { value: "1.5" } }, [_vm._v("về muộn")]),
+            _vm._v(" "),
+            _c("option", { attrs: { value: "2" } }, [_vm._v("công đêm")])
+          ]
+        ),
         _vm._v(" "),
         _c("input", {
           directives: [

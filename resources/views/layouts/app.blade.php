@@ -89,7 +89,7 @@
 
         <div class="container-fluid">
             <div class="row">
-                <ul id="sidebar" class="sidebar col-md-2">
+                <ul id="sidebar" class="sidebar col-md-2 col-lg-1">
                     <li>
                         <a class="text-decoration-none{{ Request()->is('salary*')?' font-weight-bold':'' }}"
                             href="{{ route('salary.index') }}">
@@ -106,7 +106,7 @@
                     </li>
                 </ul>
 
-                <main class="col-md-10">
+                <main class="col-md-10 col-lg-11">
                     @yield('content')
                 </main>
             </div>

@@ -50,12 +50,15 @@ class Salary extends Model
     public function getLuongAttribute($luong)
     {
         $chitieu = $this->chitieu / 30 * $this->chamcong;
-        $luong   = ($this->nangsuat - $chitieu) * $this->heso;
 
         if (in_array($this->diadiem, ['01593', '05605', '03166'])) {
+            $luong = ($this->nangsuat - $chitieu) * $this->heso;
             $luong += $this->luongcoban / 30 * $this->chamcong;
         } elseif (0 == $this->doanhso) {
             $luong = $this->luongcoban / 30 * $this->chamcong;
+        } elseif (in_array($this->diadiem, ['cua hang', 'showroom']) && (0 == $this->chitieu || null == $this->chitieu)) {
+            $luong = ($this->nangsuat - $chitieu) * ($this->heso ?: 0.01);
+            $luong += $this->luongcoban / 30 * $this->chamcong;
         } else {
             $luong = $this->luongcoban / 30 * $this->chamcong;
         }

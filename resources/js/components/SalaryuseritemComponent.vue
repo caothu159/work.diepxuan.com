@@ -93,6 +93,7 @@ export default {
     watch: {},
     methods: {
         update() {
+            let self = this;
             this.salary.post(this.router).then(response => {
                 this.isChanged = false;
                 let salaryResponse = response.data.user;
@@ -106,6 +107,7 @@ export default {
                 this.salary.chono = salaryResponse.chono;
                 this.salary.thuno = salaryResponse.thuno;
                 this.salary.tile = salaryResponse.tile;
+                self.$emit("updateUser", this.salary);
             });
         },
         change() {
