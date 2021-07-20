@@ -1992,7 +1992,7 @@ __webpack_require__.r(__webpack_exports__);
 
       try {
         var $_return = this.salaries.filter(function (elem) {
-          if (elem.ten == ten && elem.ngay == ngay) return elem;
+          if (elem.ten == ten) return elem;
         })[0];
         return $_return ? $_return : $return;
       } catch (e) {
@@ -2393,6 +2393,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   mounted: function mounted() {
     try {
@@ -2405,6 +2407,7 @@ __webpack_require__.r(__webpack_exports__);
    * @return {[type]} [description]
    */
   data: function data() {
+    if (this.salaryuser.ten == "tu") console.log(this.salaryuser);
     return {
       componentKey: 0,
       salary: new Form({
@@ -40448,10 +40451,10 @@ var render = function() {
         _c("input", {
           staticClass: "form-control form-control-sm",
           attrs: { type: "number", placeholder: "hệ số" },
-          domProps: { value: _vm.salary.heso * 100 },
+          domProps: { value: Math.round(_vm.salary.heso * 10000) },
           on: {
             input: function(e) {
-              return (_vm.salary.heso = e.target.value * 0.01)
+              return (_vm.salary.heso = Math.round(e.target.value) * 0.0001)
             }
           }
         }),
@@ -40459,10 +40462,10 @@ var render = function() {
         _c("input", {
           staticClass: "form-control form-control-sm",
           attrs: { placeholder: "tile" },
-          domProps: { value: _vm.salary.tile * 100 },
+          domProps: { value: Math.round(_vm.salary.tile * 100) },
           on: {
             input: function(e) {
-              return (_vm.salary.tile = e.target.value * 0.01)
+              return (_vm.salary.tile = Math.round(e.target.value) * 0.01)
             }
           }
         })

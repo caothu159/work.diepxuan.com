@@ -47,14 +47,16 @@
                 type="number"
                 class="form-control form-control-sm"
                 placeholder="hệ số"
-                :value="salary.heso * 100"
-                @input="e => (salary.heso = e.target.value * 0.01)"
+                :value="Math.round(salary.heso * 10000)"
+                @input="
+                    e => (salary.heso = Math.round(e.target.value) * 0.0001)
+                "
             />
             <input
                 class="form-control form-control-sm"
                 placeholder="tile"
-                :value="salary.tile * 100"
-                @input="e => (salary.tile = e.target.value * 0.01)"
+                :value="Math.round(salary.tile * 100)"
+                @input="e => (salary.tile = Math.round(e.target.value) * 0.01)"
             />
         </form>
     </div>
@@ -72,6 +74,7 @@ export default {
      * @return {[type]} [description]
      */
     data() {
+        if (this.salaryuser.ten == "tu") console.log(this.salaryuser);
         return {
             componentKey: 0,
             salary: new Form({

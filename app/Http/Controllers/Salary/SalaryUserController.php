@@ -22,7 +22,8 @@ class SalaryUserController extends Controller
         $this->middleware([
             'auth',
         ])->except([
-            'index', 'show',
+            'index',
+            'show',
         ]);
     }
 
@@ -37,12 +38,12 @@ class SalaryUserController extends Controller
             ->groupBy('ten')
             ->orderBy('nam', 'DESC')
             ->orderBy('thang', 'DESC')
-            ->orderBy('ngay', 'ASC')
             ->where([
                 ['ten', '<>', '*'],
                 ['ten', '<>', 'duc'],
             ])
-            ->get();
+            ->get()
+        ;
 
         return response()->json([
             'users' => $salaryUsers,
@@ -72,18 +73,18 @@ class SalaryUserController extends Controller
         ]);
 
         $user = SalaryUser::updateOrCreate([
-            'thang'      => $request->input('thang'),
-            'nam'        => $request->input('nam'),
-            'ten'        => strtolower($request->input('ten')),
+            'thang' => $request->input('thang'),
+            'nam'   => $request->input('nam'),
+            'ten'   => strtolower($request->input('ten')),
         ], [
-            'thang'      => $request->input('thang'),
-            'nam'        => $request->input('nam'),
-            'ten'        => strtolower($request->input('ten')),
+            'thang' => $request->input('thang'),
+            'nam'   => $request->input('nam'),
+            'ten'   => strtolower($request->input('ten')),
 
             'luongcoban' => $request->input('luongcoban'),
-            'heso'       => $request->input('heso'),
-            'chitieu'    => $request->input('chitieu'),
             'baohiem'    => $request->input('baohiem'),
+            'chitieu'    => $request->input('chitieu'),
+            'heso'       => $request->input('heso'),
             'tile'       => $request->input('tile'),
         ]);
 
@@ -144,14 +145,15 @@ class SalaryUserController extends Controller
             'nam'   => $request->input('nam'),
             'ten'   => $request->input('ten'),
         ], [
-            'thang'      => $request->input('thang'),
-            'nam'        => $request->input('nam'),
-            'ten'        => $request->input('ten'),
+            'thang' => $request->input('thang'),
+            'nam'   => $request->input('nam'),
+            'ten'   => $request->input('ten'),
 
             'luongcoban' => $request->input('luongcoban'),
-            'heso'       => $request->input('heso'),
-            'chitieu'    => $request->input('chitieu'),
             'baohiem'    => $request->input('baohiem'),
+            'chitieu'    => $request->input('chitieu'),
+            'heso'       => $request->input('heso'),
+            'tile'       => $request->input('tile'),
         ]);
 
         $redirect = [

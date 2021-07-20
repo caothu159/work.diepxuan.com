@@ -22,6 +22,18 @@ Debugbar::startMeasure('bangluong', 'Hien thi bang luong');
             <td class="text-right">Lương</td>
             <th>{{ number_format($service->getAll()->sum('luong')) }}</th>
         </tr>
+        @php
+        $thuong = $service->getAll()->sum('chamcong');
+        $thuong = $thuong - 28;
+        $thuong = $thuong * $service->getUser()->luongcoban / 30;
+        @endphp
+        @if ($thuong>0)
+        <tr class="printhidden">
+            <td class="text-right">Thưởng</td>
+            <th>{{ number_format($thuong) }}</th>
+        </tr>
+        @endif
+
         @endif
     </table>
 </div>
@@ -69,6 +81,43 @@ Debugbar::startMeasure('bangluong', 'Hien thi bang luong');
         <td>{{ $salary->nangsuat?number_format($salary->nangsuat,1):'-' }}</td>
         @if(isset($controller) && $controller->isAdmin())
         <td class="printhidden">{{ $salary->hesoStr }}</td>
+        <td class="printhidden">{{ number_format($salary->luong?:0, 1) }}</td>
+        @endif
+    </tr>
+    @endforeach
+</table>
+@else
+<table class="table table-hover table-condensed table-sm text-center">
+    <tr>
+        <th></th>
+        @if (empty($service->getName()))
+        <th>Tên</th>
+        @endif
+        <th>Công</th>
+        <th></th>
+        @if(isset($controller) && $controller->isAdmin())
+        <th class="printhidden">Lương</th>
+        @endif
+    </tr>
+    @foreach ($service->getAll() as $salary)
+    <tr>
+        <td>
+            @auth
+            <form class="d-inline" action="{{ route('salary.destroy', ['salary' => $salary->id]) }}" method="POST">
+                @method('DELETE')
+                @csrf
+                <input type="hidden" value="{{ $salary->id }}" name="id">
+                <button type="submit" class="btn btn-link">xóa</button>
+            </form>
+            @endauth
+            <span class="d-inline">{{ $salary->thoigian }}</span>
+        </td>
+        @if (empty($service->getName()))
+        <td>{{ $salary->ten }}</td>
+        @endif
+        <td>{{ $salary->chamcong }}</td>
+        <td>{{ $salary->diadiem }}</td>
+        @if(isset($controller) && $controller->isAdmin())
         <td class="printhidden">{{ number_format($salary->luong?:0, 1) }}</td>
         @endif
     </tr>

@@ -32,9 +32,9 @@ class SalaryController extends Controller
         $this->middleware([
             'auth',
         ])->except([
-                'index',
-                'show',
-            ]);
+            'index',
+            'show',
+        ]);
     }
 
     /**
@@ -75,10 +75,10 @@ class SalaryController extends Controller
             'service'    => $salaryService,
         ];
 
-        $_viewTemplate='salary0221';
+        $_viewTemplate = 'salary0221';
 
         if ($salaryService->getMonth() >= 3 && $salaryService->getYear() >= 2021) {
-            $_viewTemplate='salary';
+            $_viewTemplate = 'salary';
         }
 
         return view($_viewTemplate, $viewData);
@@ -115,10 +115,10 @@ class SalaryController extends Controller
         foreach ($tenLst as $_ten) {
             $ten    = trim($_ten);
             $salary = Salary::updateOrCreate([
-                'ngay'      => $request->input('ngay'),
-                'thang'     => $request->input('thang'),
-                'nam'       => $request->input('nam'),
-                'ten'       => $ten,
+                'ngay'  => $request->input('ngay'),
+                'thang' => $request->input('thang'),
+                'nam'   => $request->input('nam'),
+                'ten'   => $ten,
             ], [
                 'ngay'  => $request->input('ngay'),
                 'thang' => $request->input('thang'),
@@ -132,6 +132,10 @@ class SalaryController extends Controller
                 'thuno'    => $request->input('thuno'),
                 'tile'     => $request->input('tile') ?: (1 / count($tenLst)),
             ]);
+
+            if ($salary->chamcong == 0 || $salary->chamcong == '0' || $request->input('chamcong') == 0 || $request->input('chamcong') == '0') {
+                $salary->delete();
+            }
         }
 
         if ($request->input('isJsonResponse')) {
@@ -206,13 +210,17 @@ class SalaryController extends Controller
             'chono'    => $request->input('chono'),
             'thuno'    => $request->input('thuno'),
             'tile'     => $request->input('tile'),
-            ]);
+        ]);
+
+        if ($salary->chamcong == 0 || $salary->chamcong == '0' || $request->input('chamcong') == 0 || $request->input('chamcong') == '0') {
+            $salary->delete();
+        }
 
         if ($request->input('isJsonResponse')) {
             return response()->json(
-            [
-                'Salary' => $salary,
-            ]
+                [
+                    'Salary' => $salary,
+                ]
             );
         }
 

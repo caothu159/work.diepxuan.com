@@ -150,7 +150,7 @@ export default {
             };
             try {
                 let $_return = this.salaries.filter(function(elem) {
-                    if (elem.ten == ten && elem.ngay == ngay) return elem;
+                    if (elem.ten == ten) return elem;
                 })[0];
                 return $_return ? $_return : $return;
             } catch (e) {
