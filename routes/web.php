@@ -24,49 +24,71 @@ use Illuminate\Support\Facades\Route;
 */
 
 Auth::routes([
-    'register' => false,
+    "register" => false,
 ]);
 
-Route::domain('luong.diepxuan.com')->group(function () {
+Route::domain("luong.diepxuan.com")->group(function () {
     Route::middleware([ClearCache::class])->group(function () {
-        Route::get('/{time?}/{name?}', [SalaryController::class, 'index'])
-            ->name('luong.home')
+        Route::get("/{time?}/{name?}", [SalaryController::class, "index"])
+            ->name("luong.home")
             ->where([
-                'time' => '[0-9]+\-[0-9]+',
-                'name' => '[a-zA-Z]+\-?[a-zA-Z]*',
+                "time" => "[0-9]+\-[0-9]+",
+                "name" => "[a-zA-Z]+\-?[a-zA-Z]*",
             ]);
-        Route::get('/home', [SalaryController::class, 'index']);
-        Route::resource('salary', SalaryController::class);
 
-        Route::get('salaryuser/{time?}/{name?}', [SalaryUserController::class, 'index'])
+        Route::get("salary/{time?}/{name?}", [
+            SalaryController::class,
+            "indexJson",
+        ])
+            ->name("luong.json")
             ->where([
-                'time' => '[0-9]+\-[0-9]+',
-                'name' => '[a-zA-Z]+\-?[a-zA-Z]*',
+                "time" => "[0-9]+\-[0-9]+",
+                "name" => "[a-zA-Z]+\-?[a-zA-Z]*",
             ]);
-        Route::resource('salaryuser', SalaryUserController::class);
 
-        Route::resource('users', 'UsersController');
+        Route::get("/home", [SalaryController::class, "index"]);
+        Route::resource("salary", SalaryController::class);
+
+        Route::get("salaryuser/{time?}/{name?}", [
+            SalaryUserController::class,
+            "index",
+        ])->where([
+            "time" => "[0-9]+\-[0-9]+",
+            "name" => "[a-zA-Z]+\-?[a-zA-Z]*",
+        ]);
+        Route::resource("salaryuser", SalaryUserController::class);
+
+        Route::resource("users", "UsersController");
     });
 });
 
-Route::get('/debug-sentry', function () {
-    throw new Exception('debug Sentry error!');
+Route::get("/debug-sentry", function () {
+    throw new Exception("debug Sentry error!");
 });
 
-Route::domain('work.diepxuan.com')->group(function () {
+Route::domain("work.diepxuan.com")->group(function () {
     Route::middleware([ClearCache::class])->group(function () {
-        Route::get('/', function () {
-            return redirect()->route('tonghop');
-        })->name('work.home');
+        Route::get("/", function () {
+            return redirect()->route("tonghop");
+        })->name("work.home");
 
-        Route::get('tonghop/{from?}/{to?}', [TonghopController::class, 'index'])->name('tonghop');
-        Route::resource('tonghop', TonghopController::class);
+        Route::get("tonghop/{from?}/{to?}", [
+            TonghopController::class,
+            "index",
+        ])->name("tonghop");
+        Route::resource("tonghop", TonghopController::class);
 
-        Route::get('banhang/{from?}/{to?}', [BanhangController::class, 'index'])->name('banhang');
-        Route::resource('banhang', BanhangController::class);
+        Route::get("banhang/{from?}/{to?}", [
+            BanhangController::class,
+            "index",
+        ])->name("banhang");
+        Route::resource("banhang", BanhangController::class);
 
-        Route::get('muahang/{from?}/{to?}', [MuahangController::class, 'index'])->name('muahang');
-        Route::resource('muahang', MuahangController::class);
+        Route::get("muahang/{from?}/{to?}", [
+            MuahangController::class,
+            "index",
+        ])->name("muahang");
+        Route::resource("muahang", MuahangController::class);
     });
 });
 

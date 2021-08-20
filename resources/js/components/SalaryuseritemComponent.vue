@@ -10,7 +10,11 @@
             <input type="hidden" v-model="thang" />
             <input type="hidden" v-model="nam" />
             <input type="hidden" v-model="salary.ten" />
-            <b class="salary-name">{{ salary.ten }}</b>
+
+            <a :href="thang + '-' + nam + '/' + salary.ten" class="salary-name">
+                <b class="salary-name">{{ salary.ten }}</b>
+            </a>
+
             <button
                 type="submit"
                 class="btn btn-sm btn-primary"
@@ -32,7 +36,13 @@
                 v-model="salary.luongcoban"
             />
             <input
-                type="number"
+                type="text"
+                class="form-control form-control-sm"
+                placeholder="công tháng"
+                v-model="salary.congthang"
+            />
+            <input
+                type="text"
                 class="form-control form-control-sm"
                 placeholder="bảo hiểm"
                 v-model="salary.baohiem"
@@ -49,14 +59,16 @@
                 placeholder="hệ số"
                 :value="Math.round(salary.heso * 10000)"
                 @input="
-                    e => (salary.heso = Math.round(e.target.value) * 0.0001)
+                    (e) => (salary.heso = Math.round(e.target.value) * 0.0001)
                 "
             />
             <input
                 class="form-control form-control-sm"
                 placeholder="tile"
                 :value="Math.round(salary.tile * 100)"
-                @input="e => (salary.tile = Math.round(e.target.value) * 0.01)"
+                @input="
+                    (e) => (salary.tile = Math.round(e.target.value) * 0.01)
+                "
             />
         </form>
     </div>
@@ -74,53 +86,55 @@ export default {
      * @return {[type]} [description]
      */
     data() {
-        if (this.salaryuser.ten == "tu") console.log(this.salaryuser);
+        // if (this.salaryuser.ten == "hai") console.log(this.salaryuser.tile);
         return {
             componentKey: 0,
             salary: new Form({
                 isJsonResponse: true,
                 isNew: this.salaryuser.new ? this.salaryuser.new : false,
+
                 thang: this.thang,
                 nam: this.nam,
                 ten: this.salaryuser.ten,
                 luongcoban: this.salaryuser.luongcoban,
+                congthang: this.salaryuser.congthang,
                 baohiem: this.salaryuser.baohiem,
                 chitieu: this.salaryuser.chitieu,
                 heso: this.salaryuser.heso,
-                tile: this.salaryuser.tile
+                tile: this.salaryuser.tile,
             }),
-            isChanged: false
+            isChanged: false,
         };
     },
-    created: function() {},
+    created: function () {},
     watch: {},
     methods: {
         update() {
             let self = this;
-            this.salary.post(this.router).then(response => {
+            this.salary.post(this.router).then((response) => {
                 this.isChanged = false;
                 let salaryResponse = response.data.user;
-                this.salary.ngay = salaryResponse.ngay;
+
                 this.salary.thang = salaryResponse.thang;
                 this.salary.nam = salaryResponse.nam;
                 this.salary.ten = salaryResponse.ten;
-                this.salary.chamcong = salaryResponse.chamcong;
-                this.salary.diadiem = salaryResponse.diadiem;
-                this.salary.doanhso = salaryResponse.doanhso;
-                this.salary.chono = salaryResponse.chono;
-                this.salary.thuno = salaryResponse.thuno;
+                this.salary.luongcoban = salaryResponse.luongcoban;
+                this.salary.congthang = salaryResponse.congthang;
+                this.salary.baohiem = salaryResponse.baohiem;
+                this.salary.chitieu = salaryResponse.chitieu;
+                this.salary.heso = salaryResponse.heso;
                 this.salary.tile = salaryResponse.tile;
-                self.$emit("updateUser", this.salary);
+                // self.$emit("updateUser", this.salary);
             });
         },
         change() {
             this.isChanged = true;
-        }
+        },
     },
     props: {
         salaryuser: {
             type: Object,
-            default: function() {
+            default: function () {
                 return {
                     ten: null,
                     luongcoban: null,
@@ -128,20 +142,23 @@ export default {
                     chitieu: null,
                     heso: null,
                     tile: null,
-                    new: true
+                    new: true,
                 };
-            }
+            },
         },
         router: String,
         thang: Number,
-        nam: Number
-    }
+        nam: Number,
+    },
 };
 </script>
 
 <style>
 .salary-item .salary-name {
-    text-indent: 10px;
+    color: black;
     display: inline-block;
+    font-size: 1.1em;
+    text-indent: 10px;
+    text-decoration: none;
 }
 </style>

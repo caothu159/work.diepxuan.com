@@ -7,7 +7,6 @@ use Illuminate\Http\Request;
 
 class TonghopController extends Controller
 {
-
     protected $data = [];
     protected $from;
     protected $to;
@@ -22,25 +21,28 @@ class TonghopController extends Controller
      *
      * @return mixed
      */
-    public function index(Request $request, string $from = null, string $to = null)
-    {
+    public function index(
+        Request $request,
+        string $from = null,
+        string $to = null
+    ) {
         if ($this->isRedirect) {
-            return redirect()->route('tonghop', [
-                'from' => $request->input('from'),
-                'to'   => $request->input('to'),
+            return redirect()->route("tonghop", [
+                "from" => $request->input("from"),
+                "to" => $request->input("to"),
             ]);
         }
 
         $this->_updateDateInput($from, $to);
-        $request->merge(['from' => $from]);
-        $request->merge(['to' => $to]);
+        $request->merge(["from" => $from]);
+        $request->merge(["to" => $to]);
         $this->from = $from;
-        $this->to   = $to;
+        $this->to = $to;
 
         $this->data = Ctubanhang::syncChange();
 
         return view("work.tonghop.tonghop", [
-            'data' => $this->data,
+            "data" => $this->data,
         ]);
     }
 
@@ -64,8 +66,11 @@ class TonghopController extends Controller
      *
      * @return Response
      */
-    public function store(Request $request, string $from = null, string $to = null)
-    {
+    public function store(
+        Request $request,
+        string $from = null,
+        string $to = null
+    ) {
         //
         return $this->index($request, $from, $to);
     }

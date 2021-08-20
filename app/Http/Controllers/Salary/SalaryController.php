@@ -25,16 +25,9 @@ class SalaryController extends Controller
      */
     public function __construct()
     {
-        $this->middleware([
-            'clearcache',
-        ]);
+        $this->middleware(["clearcache"]);
 
-        $this->middleware([
-            'auth',
-        ])->except([
-            'index',
-            'show',
-        ]);
+        $this->middleware(["auth"])->except(["index", "show"]);
     }
 
     /**
@@ -48,40 +41,97 @@ class SalaryController extends Controller
      *
      * @return Factory|\Illuminate\View\View
      */
-    public function index(SalaryService $salaryService, Request $request, string $time = null, string $name = null)
-    {
+    public function index(
+        SalaryService $salaryService,
+        Request $request,
+        string $time = null,
+        string $name = null
+    ) {
         $redirect = [];
         $salaryService->setTime($time)->setName($name);
 
-        $timePost = $request->input('thoigian') ?: $salaryService->getTime();
+        $timePost = $request->input("thoigian") ?: $salaryService->getTime();
         if ($timePost && $timePost !== $time) {
-            $redirect['name'] = $name;
-            $redirect['time'] = $timePost;
+            $redirect["name"] = $name;
+            $redirect["time"] = $timePost;
         }
 
-        $namePost = $request->input('ten');
-        if ('false' == $namePost) {
-            $redirect['time'] = array_key_exists('time', $redirect) ? $redirect['time'] : $salaryService->getTime();
+        $namePost = $request->input("ten");
+        if ("false" == $namePost) {
+            $redirect["time"] = array_key_exists("time", $redirect)
+                ? $redirect["time"]
+                : $salaryService->getTime();
         } elseif ($namePost && $namePost !== $name) {
-            $redirect['name'] = $namePost;
-            $redirect['time'] = array_key_exists('time', $redirect) ? $redirect['time'] : $salaryService->getTime();
+            $redirect["name"] = $namePost;
+            $redirect["time"] = array_key_exists("time", $redirect)
+                ? $redirect["time"]
+                : $salaryService->getTime();
         }
         if (count($redirect) >= 1) {
-            return redirect()->route('luong.home', $redirect);
+            return redirect()->route("luong.home", $redirect);
         }
 
         $viewData = [
-            'controller' => $this,
-            'service'    => $salaryService,
+            "controller" => $this,
+            "service" => $salaryService,
         ];
 
-        $_viewTemplate = 'salary0221';
+        $_viewTemplate = "salary0221";
 
-        if ($salaryService->getMonth() >= 3 && $salaryService->getYear() >= 2021) {
-            $_viewTemplate = 'salary';
+        if (
+            $salaryService->getMonth() >= 3 &&
+            $salaryService->getYear() >= 2021
+        ) {
+            $_viewTemplate = "salary";
         }
 
         return view($_viewTemplate, $viewData);
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @param  $salaryService                  App\Services\SalaryService
+     * @param  $year                           string|null
+     * @param  $month                          string|null
+     *
+     * @throws Exception
+     *
+     * @return Factory|\Illuminate\View\View
+     */
+    public function indexJson(
+        SalaryService $salaryService,
+        Request $request,
+        string $time = null,
+        string $name = null
+    ) {
+        $redirect = [];
+        $salaryService->setTime($time)->setName($name);
+
+        $timePost = $request->input("thoigian") ?: $salaryService->getTime();
+        if ($timePost && $timePost !== $time) {
+            $redirect["name"] = $name;
+            $redirect["time"] = $timePost;
+        }
+
+        $namePost = $request->input("ten");
+        if ("false" == $namePost) {
+            $redirect["time"] = array_key_exists("time", $redirect)
+                ? $redirect["time"]
+                : $salaryService->getTime();
+        } elseif ($namePost && $namePost !== $name) {
+            $redirect["name"] = $namePost;
+            $redirect["time"] = array_key_exists("time", $redirect)
+                ? $redirect["time"]
+                : $salaryService->getTime();
+        }
+        if (count($redirect) >= 1) {
+            return redirect()->route("luong.json", $redirect);
+        }
+
+        return response()->json([
+            "salaries" => $salaryService->getAll(),
+        ]);
     }
 
     /**
@@ -103,56 +153,69 @@ class SalaryController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'thang' => 'required',
-            'nam'   => 'required',
-            'ten'   => 'required',
+            "thang" => "required",
+            "nam" => "required",
+            "ten" => "required",
         ]);
 
-        $tenLst = $request->input('ten');
+        $tenLst = $request->input("ten");
         $tenLst = trim($tenLst);
-        $tenLst = explode('-', $tenLst);
+        $tenLst = explode("-", $tenLst);
         $salary = null;
         foreach ($tenLst as $_ten) {
-            $ten    = trim($_ten);
-            $salary = Salary::updateOrCreate([
-                'ngay'  => $request->input('ngay'),
-                'thang' => $request->input('thang'),
-                'nam'   => $request->input('nam'),
-                'ten'   => $ten,
-            ], [
-                'ngay'  => $request->input('ngay'),
-                'thang' => $request->input('thang'),
-                'nam'   => $request->input('nam'),
-                'ten'   => strtolower($ten),
+            $ten = trim($_ten);
+            $salary = Salary::updateOrCreate(
+                [
+                    "ngay" => $request->input("ngay"),
+                    "thang" => $request->input("thang"),
+                    "nam" => $request->input("nam"),
+                    "ten" => $ten,
+                ],
+                [
+                    "ngay" => $request->input("ngay"),
+                    "thang" => $request->input("thang"),
+                    "nam" => $request->input("nam"),
+                    "ten" => strtolower($ten),
 
-                'chamcong' => $request->input('chamcong'),
-                'diadiem'  => $request->input('diadiem'),
-                'doanhso'  => $request->input('doanhso'),
-                'chono'    => $request->input('chono'),
-                'thuno'    => $request->input('thuno'),
-                'tile'     => $request->input('tile') ?: (1 / count($tenLst)),
-            ]);
+                    "chamcong" => $request->input("chamcong"),
+                    "diadiem" => $request->input("diadiem"),
+                    "doanhso" => $request->input("doanhso"),
+                    "chono" => $request->input("chono"),
+                    "thuno" => $request->input("thuno"),
+                    "tile" => $request->input("tile") ?: 1 / count($tenLst),
+                ]
+            );
 
-            if ($salary->chamcong == 0 || $salary->chamcong == '0' || $request->input('chamcong') == 0 || $request->input('chamcong') == '0') {
+            if (
+                $salary->chamcong == 0 ||
+                $salary->chamcong == "0" ||
+                $request->input("chamcong") == 0 ||
+                $request->input("chamcong") == "0"
+            ) {
                 $salary->delete();
             }
         }
 
-        if ($request->input('isJsonResponse')) {
+        if ($request->input("isJsonResponse")) {
             return response()->json([
-                'salary' => $salary,
+                "salary" => $salary,
             ]);
         }
 
         $redirect = [
-            'thoigian' => implode('-', [$request->input('thang'), $request->input('nam')]),
-            'ten'      => 1 == count($tenLst) ? $tenLst[0] : false,
+            "thoigian" => implode("-", [
+                $request->input("thang"),
+                $request->input("nam"),
+            ]),
+            "ten" => 1 == count($tenLst) ? $tenLst[0] : false,
         ];
 
-        return redirect()->route('luong.home', $redirect)->with(
-            'thành công',
-            "Đã thêm chấm công của <strong>{$request->input}('ten')</strong>."
-        );
+        return redirect()
+            ->route("luong.home", $redirect)
+            ->with(
+                "thành công",
+                "Đã thêm chấm công của <strong>{$request->input}('ten')</strong>."
+            );
     }
 
     /**
@@ -188,51 +251,62 @@ class SalaryController extends Controller
     public function update(Request $request, $id)
     {
         $this->validate($request, [
-            'thang' => 'required',
-            'nam'   => 'required',
-            'ten'   => 'required',
+            "thang" => "required",
+            "nam" => "required",
+            "ten" => "required",
         ]);
 
-        $salary = Salary::updateOrCreate([
-            'id'    => $id,
-            'thang' => $request->input('thang'),
-            'nam'   => $request->input('nam'),
-            'ten'   => $request->input('ten'),
-        ], [
-            'ngay'  => $request->input('ngay'),
-            'thang' => $request->input('thang'),
-            'nam'   => $request->input('nam'),
-            'ten'   => $request->input('ten'),
+        $salary = Salary::updateOrCreate(
+            [
+                "id" => $id,
+                "thang" => $request->input("thang"),
+                "nam" => $request->input("nam"),
+                "ten" => $request->input("ten"),
+            ],
+            [
+                "ngay" => $request->input("ngay"),
+                "thang" => $request->input("thang"),
+                "nam" => $request->input("nam"),
+                "ten" => $request->input("ten"),
 
-            'chamcong' => $request->input('chamcong'),
-            'diadiem'  => $request->input('diadiem'),
-            'doanhso'  => $request->input('doanhso'),
-            'chono'    => $request->input('chono'),
-            'thuno'    => $request->input('thuno'),
-            'tile'     => $request->input('tile'),
-        ]);
+                "chamcong" => $request->input("chamcong"),
+                "diadiem" => $request->input("diadiem"),
+                "doanhso" => $request->input("doanhso"),
+                "chono" => $request->input("chono"),
+                "thuno" => $request->input("thuno"),
+                "tile" => $request->input("tile"),
+            ]
+        );
 
-        if ($salary->chamcong == 0 || $salary->chamcong == '0' || $request->input('chamcong') == 0 || $request->input('chamcong') == '0') {
+        if (
+            $salary->chamcong == 0 ||
+            $salary->chamcong == "0" ||
+            $request->input("chamcong") == 0 ||
+            $request->input("chamcong") == "0"
+        ) {
             $salary->delete();
         }
 
-        if ($request->input('isJsonResponse')) {
-            return response()->json(
-                [
-                    'Salary' => $salary,
-                ]
-            );
+        if ($request->input("isJsonResponse")) {
+            return response()->json([
+                "Salary" => $salary,
+            ]);
         }
 
         $redirect = [
-            'thoigian' => implode('-', [$request->input('thang'), $request->input('nam')]),
-            'ten'      => $request->input('ten') ?: false,
+            "thoigian" => implode("-", [
+                $request->input("thang"),
+                $request->input("nam"),
+            ]),
+            "ten" => $request->input("ten") ?: false,
         ];
 
-        return redirect()->route('salary.index', $redirect)->with(
-            'thành công',
-            "Đã thêm chấm công của <strong>{$request->input}('ten')</strong>."
-        );
+        return redirect()
+            ->route("salary.index", $redirect)
+            ->with(
+                "thành công",
+                "Đã thêm chấm công của <strong>{$request->input}('ten')</strong>."
+            );
     }
 
     /**
@@ -244,13 +318,13 @@ class SalaryController extends Controller
      */
     public function destroy($id)
     {
-        $salary   = Salary::find($id);
+        $salary = Salary::find($id);
         $redirect = [
-            'thoigian' => implode('-', [$salary->thang, $salary->nam]),
-            'ten'      => $salary->ten,
+            "thoigian" => implode("-", [$salary->thang, $salary->nam]),
+            "ten" => $salary->ten,
         ];
         Salary::destroy($id);
 
-        return redirect()->route('salary.index', $redirect);
+        return redirect()->route("salary.index", $redirect);
     }
 }

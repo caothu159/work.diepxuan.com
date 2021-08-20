@@ -4,7 +4,6 @@ namespace App\Services;
 
 interface SalaryServiceInterface
 {
-
     public function setTime($time);
 
     public function getTime();
@@ -18,4 +17,8 @@ interface SalaryServiceInterface
     public function getUserOptions();
 
     public function getAll();
+
+    public function getMonth();
+
+    public function getYear();
 }

@@ -13,25 +13,28 @@
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') . '?v=' . uniqid() }}" defer></script>
 
-    <link rel="icon" href="favicon.ico" type="image/x-icon" />
-    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
-    <link rel="icon" type="image/png" href="favicon.png" />
+    <link rel="icon" href="{{ asset('favicon.ico') }}" type="image/x-icon" />
+    <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" type="image/x-icon" />
+    <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}" />
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet" type="text/css">
+    {{-- <link href="https://fonts.googleapis.com/css?family=Arimo&family=Poppins" rel="stylesheet" type="text/css"> --}}
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') . '?v=' . uniqid() }}" rel="stylesheet">
 </head>
 
 <body class="d-none">
+    @php
+        $isAdmin = isset($controller) && $controller->isAdmin();
+    @endphp
     <div id="app">
 
         <nav class="navbar navbar-expand-md">
             <div class="container-fluid">
                 <a class="navbar-brand" href="{{ url('/') }}">
-                    {{ "Bảng Lương" }}
+                    {{ 'Bảng Lương' }}
                 </a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse"
                     data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
@@ -52,81 +55,81 @@
                     <ul class="navbar-nav ml-auto">
                         <!-- Authentication Links -->
                         @guest
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
-                        </li>
-                        @if (Route::has('register'))
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
-                        </li>
-                        @endif
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
+                            </li>
+                            @if (Route::has('register'))
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
+                                </li>
+                            @endif
                         @else
-                        <li class="nav-item dropdown">
-                            <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                {{ Auth::user()->name ? Auth::user()->name : Auth::user()->username }} <span
-                                    class="caret"></span>
-                            </a>
-
-                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item" href="{{ route('logout') }}"
-                                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                                    {{ __('Logout') }}
+                            <li class="nav-item dropdown">
+                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
+                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                    {{ Auth::user()->name ? Auth::user()->name : Auth::user()->username }} <span
+                                        class="caret"></span>
                                 </a>
 
-                                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                                    @csrf
-                                </form>
-                            </div>
-                        </li>
+                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                                    <a class="dropdown-item" href="{{ route('logout') }}"
+                                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                        {{ __('Logout') }}
+                                    </a>
+
+                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                        @csrf
+                                    </form>
+                                </div>
+                            </li>
                         @endguest
                     </ul>
                 </div>
             </div>
         </nav>
 
-        @if(isset($controller) && $controller->isAdmin())
+        @if (isset($controller) && $isAdmin)
 
-        <div class="container-fluid">
-            <div class="row">
-                <ul id="sidebar" class="sidebar col-md-2 col-lg-1">
-                    <li>
-                        <a class="text-decoration-none{{ Request()->is('salary*')?' font-weight-bold':'' }}"
-                            href="{{ route('salary.index') }}">
-                            {{ __('salary.salary') }}
-                        </a>
-                        @yield('sidebar.salary')
-                    </li>
-                    <li>
-                        <a class="text-decoration-none{{ Request()->is('users*')?' font-weight-bold':'' }}"
-                            href="{{ route('users.index') }}">
-                            {{ __('user.manager') }}
-                        </a>
-                        @yield('sidebar.user')
-                    </li>
-                </ul>
+            <div class="container-fluid">
+                <div class="row">
+                    <ul id="sidebar" class="sidebar col-md-2 col-lg-1">
+                        <li>
+                            <a class="text-decoration-none{{ Request()->is('salary*') ? ' font-weight-bold' : '' }}"
+                                href="{{ route('salary.index') }}">
+                                {{ __('salary.salary') }}
+                            </a>
+                            @yield('sidebar.salary')
+                        </li>
+                        <li>
+                            <a class="text-decoration-none{{ Request()->is('users*') ? ' font-weight-bold' : '' }}"
+                                href="{{ route('users.index') }}">
+                                {{ __('user.manager') }}
+                            </a>
+                            @yield('sidebar.user')
+                        </li>
+                    </ul>
 
-                <main class="col-md-10 col-lg-11">
-                    @yield('content')
-                </main>
+                    <main class="col-md-10 col-lg-11">
+                        @yield('content')
+                    </main>
+                </div>
             </div>
-        </div>
 
         @else
 
-        <main class="container-fluid">
-            @yield('content')
-        </main>
+            <main class="container-fluid">
+                @yield('content')
+            </main>
 
         @endif
     </div>
 
-    @if(isset($controller) && $controller->isAdmin())
-    @php
-    $renderer = Debugbar::getJavascriptRenderer();
-    @endphp
-    {!! $renderer->renderHead() !!}
-    {!! $renderer->render() !!}
+    @if ($isAdmin || false)
+        @php
+            $renderer = Debugbar::getJavascriptRenderer();
+        @endphp
+        {!! $renderer->renderHead() !!}
+        {!! $renderer->render() !!}
     @endif
 </body>
 

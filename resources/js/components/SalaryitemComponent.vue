@@ -11,7 +11,20 @@
             <input type="hidden" v-model="salary.thang" />
             <input type="hidden" v-model="salary.nam" />
             <input type="hidden" v-model="salary.ten" />
-            <b class="salary-name">{{ salary.ten }}</b>
+
+            <input
+                class="form-check-input"
+                type="checkbox"
+                v-model="salary.chamcong"
+                v-on:change="update"
+            />
+            <a
+                class="salary-name"
+                :href="salary.thang + '-' + salary.nam + '/' + salary.ten"
+            >
+                <b class="salary-name">{{ salary.ten }}</b>
+            </a>
+
             <div class="check" v-on:click="update" v-if="isChanged"></div>
             <button type="submit" class="btn btn-sm btn-primary d-none">
                 update
@@ -54,8 +67,10 @@
                 type="number"
                 class="form-control form-control-sm"
                 placeholder="tile"
-                :value="salary.tile * 100"
-                @input="e => (salary.tile = e.target.value * 0.01)"
+                :value="Math.round(salary.tile * 100)"
+                @input="
+                    (e) => (salary.tile = Math.round(e.target.value) * 0.01)
+                "
             />
         </form>
     </div>
@@ -86,50 +101,47 @@ export default {
                 doanhso: this.salaryitem.doanhso,
                 chono: this.salaryitem.chono,
                 thuno: this.salaryitem.thuno,
-                tile: this.salaryitem.tile
+                tile: this.salaryitem.tile,
             }),
-            isChanged: false
+            isChanged: false,
         };
     },
-    created() {
-        // this.$watch("salary", this.formUpdated, {
-        //     deep: true
-        // });
-    },
-    watch: {
-        // salary() {
-        //     this.change();
-        // }
-    },
+    created() {},
+    watch: {},
     methods: {
-        // formUpdated: function(newV, oldV) {
-        //     if (newV != oldV) {
-        //         this.change();
-        //     }
-        // },
         update() {
             let self = this;
-            this.salary.post(this.router).then(response => {
-                this.isChanged = false;
+            if (self.salary.chamcong === true) {
+                self.salary.chamcong = 1;
+            }
+            this.salary.post(this.router).then((response) => {
+                self.isChanged = false;
                 let salaryResponse = response.data.salary;
-                this.salary.ngay = salaryResponse.ngay;
-                this.salary.thang = salaryResponse.thang;
-                this.salary.nam = salaryResponse.nam;
-                this.salary.ten = salaryResponse.ten;
-                this.salary.chamcong = salaryResponse.chamcong;
-                this.salary.diadiem = salaryResponse.diadiem;
-                this.salary.doanhso = salaryResponse.doanhso;
-                this.salary.chono = salaryResponse.chono;
-                this.salary.thuno = salaryResponse.thuno;
-                this.salary.tile = salaryResponse.tile;
-                self.$emit("updateItem", this.salary);
+                self.salary.ngay = salaryResponse.ngay;
+                self.salary.thang = salaryResponse.thang;
+                self.salary.nam = salaryResponse.nam;
+                self.salary.ten = salaryResponse.ten;
+                self.salary.chamcong = salaryResponse.chamcong;
+                self.salary.diadiem = salaryResponse.diadiem;
+                self.salary.doanhso = salaryResponse.doanhso;
+                self.salary.chono = salaryResponse.chono;
+                self.salary.thuno = salaryResponse.thuno;
+                self.salary.tile = salaryResponse.tile;
+                // self.$emit("updateItem", this.salary);
             });
         },
         change() {
             let self = this;
-            this.isChanged = true;
-            self.$emit("updateItem", this.salary);
-        }
+            self.isChanged = true;
+            if (
+                !self.salary.chamcong &&
+                self.salary.diadiem &&
+                self.salary.doanhso
+            ) {
+                self.salary.chamcong = 1;
+            }
+            // self.$emit("updateItem", this.salary);
+        },
         // getAutocompleteArray() {
         //     console.log(salaries);
         //     return [];
@@ -243,9 +255,8 @@ export default {
     },
     props: {
         salaryitem: Object,
-        router: String
-        // salaries: Array
-    }
+        router: String,
+    },
 };
 </script>
 
@@ -260,6 +271,16 @@ export default {
 }
 
 .salary-item input:placeholder-shown {
+}
+
+.salary-item input[type="radio"],
+.salary-item input[type="checkbox"] {
+    box-sizing: border-box;
+    padding: 0;
+    display: inline;
+    float: left;
+    margin-left: 0;
+    margin-top: 0.4rem;
 }
 
 .check {

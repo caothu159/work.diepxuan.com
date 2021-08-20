@@ -11,7 +11,6 @@ use Illuminate\Http\Request;
 
 class Controller extends \App\Http\Controllers\Controller
 {
-
     protected $isRedirect = false;
 
     /**
@@ -23,12 +22,8 @@ class Controller extends \App\Http\Controllers\Controller
      */
     public function __construct(Request $request)
     {
-        $this->middleware([
-            'auth',
-            'admin',
-            'clearcache',
-        ]);
-//        $this->middleware('log')->only('index');
+        $this->middleware(["auth", "admin", "clearcache"]);
+        //        $this->middleware('log')->only('index');
         //        $this->middleware('subscribed')->except('store');
 
         $this->_updateRequestInput($request);
@@ -41,12 +36,14 @@ class Controller extends \App\Http\Controllers\Controller
      */
     protected function _updateRequestInput(Request $request)
     {
-        if ('' != ($inputFrom = $request->input('from'))) {
-            $request->merge(['from' => $this->__updateDateInput($inputFrom)]);
+        if ("" != ($inputFrom = $request->input("from"))) {
+            $request->merge(["from" => $this->__updateDateInput($inputFrom)]);
             $this->isRedirect = true;
         }
-        if ('' != ($inputTo = $request->input('to'))) {
-            $request->merge(['to' => $this->__updateDateInput($inputTo, false)]);
+        if ("" != ($inputTo = $request->input("to"))) {
+            $request->merge([
+                "to" => $this->__updateDateInput($inputTo, false),
+            ]);
             $this->isRedirect = true;
         }
     }
@@ -55,10 +52,12 @@ class Controller extends \App\Http\Controllers\Controller
      * @param string|null $from
      * @param string|null $to
      */
-    protected function _updateDateInput(string &$from = null, string &$to = null)
-    {
+    protected function _updateDateInput(
+        string &$from = null,
+        string &$to = null
+    ) {
         $from = $this->__updateDateInput($from);
-        $to   = $this->__updateDateInput($to, false);
+        $to = $this->__updateDateInput($to, false);
     }
 
     /**
@@ -69,15 +68,16 @@ class Controller extends \App\Http\Controllers\Controller
      */
     private function __updateDateInput(string &$date = null, bool $start = true)
     {
-        $date = DateTime::createFromFormat('d-m-Y', $date);
-        $date = $date ?: DateTime::createFromFormat(
-            'd-m-Y',
-            date($start ? '01-m-Y' : 'd-m-Y')
-        );
+        $date = DateTime::createFromFormat("d-m-Y", $date);
+        $date =
+            $date ?:
+            DateTime::createFromFormat(
+                "d-m-Y",
+                date($start ? "01-m-Y" : "d-m-Y")
+            );
 
-        $date = $date->format('d-m-Y');
+        $date = $date->format("d-m-Y");
 
         return $date;
     }
-
 }

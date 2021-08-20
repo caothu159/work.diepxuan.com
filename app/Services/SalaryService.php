@@ -23,6 +23,7 @@ class SalaryService implements SalaryServiceInterface
     private $name;
 
     private $user;
+    private $userLst = false;
 
     private $isSingle;
 
@@ -37,17 +38,17 @@ class SalaryService implements SalaryServiceInterface
     public function __construct()
     {
         $this->isSingle(false);
-        $this->year     = $this->year ?: date('Y');
-        $this->month    = $this->month ?: date('m');
-        $this->filter   = [
-            'thang' => ['thang', '=', $this->month],
-            'nam'   => ['nam', '=', $this->year],
+        $this->year = $this->year ?: date("Y");
+        $this->month = $this->month ?: date("m");
+        $this->filter = [
+            "thang" => ["thang", "=", $this->month],
+            "nam" => ["nam", "=", $this->year],
         ];
     }
 
     public function isSingle($isSingle = null)
     {
-        if (null != $isSingle && 'boolean' == gettype($isSingle)) {
+        if (null != $isSingle && "boolean" == gettype($isSingle)) {
             $this->isSingle = $isSingle;
         }
 
@@ -56,15 +57,15 @@ class SalaryService implements SalaryServiceInterface
 
     public function setTime($time)
     {
-        $time        = trim($time);
-        $time        = $time ?: $this->getTime();
-        $time        = explode('-', $time);
-        $time        = array_replace([$this->month, $this->year], $time);
-        $this->year  = $time[1];
+        $time = trim($time);
+        $time = $time ?: $this->getTime();
+        $time = explode("-", $time);
+        $time = array_replace([$this->month, $this->year], $time);
+        $this->year = $time[1];
         $this->month = $time[0];
 
-        $this->filter['thang'] = ['thang', '=', $this->month];
-        $this->filter['nam']   = ['nam', '=', $this->year];
+        $this->filter["thang"] = ["thang", "=", $this->month];
+        $this->filter["nam"] = ["nam", "=", $this->year];
 
         return $this;
     }
@@ -76,11 +77,11 @@ class SalaryService implements SalaryServiceInterface
 
     public function setName($name)
     {
-        $name       = trim($name);
+        $name = trim($name);
         $this->name = $name ? $name : false;
 
         if ($this->name) {
-            $this->filter['ten'] = ['ten', "$this->name"];
+            $this->filter["ten"] = ["ten", "$this->name"];
             $this->isSingle(true);
         }
 
@@ -91,7 +92,7 @@ class SalaryService implements SalaryServiceInterface
     {
         return [
             $this->isSingle() => $this->name,
-            !$this->isSingle  => null,
+            !$this->isSingle => null,
         ][$this->isSingle()];
     }
 
@@ -99,7 +100,7 @@ class SalaryService implements SalaryServiceInterface
     {
         return [
             $this->isSingle() => ucwords(strtolower($this->getName())),
-            !$this->isSingle  => null,
+            !$this->isSingle => null,
         ][$this->isSingle()];
     }
 
@@ -113,17 +114,27 @@ class SalaryService implements SalaryServiceInterface
         //     ->get();
     }
 
-    public function getUserOptions()
+    public function getUserOptions($render = false)
     {
-        $filter         = $this->filter;
-        $filter['ten1'] = ['ten', '<>', '*'];
-        $filter['ten2'] = ['ten', '<>', 'duc'];
-        unset($filter['ten']);
+        if (!$render && !$this->userLst) {
+            return $this->getUserOptions(true);
+        }
+        if (!$render) {
+            return $this->userLst;
+        }
+        $filter = $this->filter;
+        $filter["ten1"] = ["ten", "<>", "*"];
+        $filter["ten2"] = ["ten", "<>", "duc"];
+        unset($filter["ten"]);
 
-        return SalaryUser::groupBy('ten')
-            ->orderBy('ten', 'ASC')
+        $this->userLst = SalaryUser::groupBy("ten")
+            ->orderBy("ten", "ASC")
             ->where(array_values($filter))
             ->get();
+
+        // \Debugbar::info($this->userLst);
+
+        return $this->userLst;
     }
 
     public function getUser(string $name = null)
@@ -134,22 +145,25 @@ class SalaryService implements SalaryServiceInterface
 
         $name = $name ?: $this->getName();
         if ($name) {
-            $this->user = SalaryUser::orderBy('nam', 'DESC')
-                ->orderBy('thang', 'DESC')
-                ->orderBy('ten', 'ASC')
-                ->where(array_values([
-                    'thang' => ['thang', '<=', $this->month],
-                    'nam'   => ['nam', '<=', $this->year],
-                    'ten'   => ['ten', '=', $name],
-                ]))->first();
+            $this->user = SalaryUser::orderBy("nam", "DESC")
+                ->orderBy("thang", "DESC")
+                ->orderBy("ten", "ASC")
+                ->where(
+                    array_values([
+                        "thang" => ["thang", "<=", $this->month],
+                        "nam" => ["nam", "<=", $this->year],
+                        "ten" => ["ten", "=", $name],
+                    ])
+                )
+                ->first();
             if ($this->user) {
                 return $this->user;
             }
 
             $user = new SalaryUser([
-                'thang' => $this->month,
-                'nam'   => $this->year,
-                'ten'   => $name,
+                "thang" => $this->month,
+                "nam" => $this->year,
+                "ten" => $name,
             ]);
 
             \Debugbar::info($user);
@@ -158,9 +172,9 @@ class SalaryService implements SalaryServiceInterface
         }
 
         return new SalaryUser([
-            'thang' => $this->month,
-            'nam'   => $this->year,
-            'ten'   => $this->getName(),
+            "thang" => $this->month,
+            "nam" => $this->year,
+            "ten" => $this->getName(),
         ]);
     }
 
@@ -169,12 +183,12 @@ class SalaryService implements SalaryServiceInterface
         if ($this->getAllCollection) {
             return $this->getAllCollection;
         }
-        $filter                 = $this->filter;
-        $this->getAllCollection = Salary::orderBy('nam', 'DESC')
-            ->orderBy('thang', 'DESC')
-            ->orderBy('ngay', 'ASC')
-            ->orderBy('diadiem', 'ASC')
-            ->orderBy('ten', 'ASC')
+        $filter = $this->filter;
+        $this->getAllCollection = Salary::orderBy("nam", "DESC")
+            ->orderBy("thang", "DESC")
+            ->orderBy("ngay", "ASC")
+            ->orderBy("diadiem", "ASC")
+            ->orderBy("ten", "ASC")
             ->where(array_values($filter))
             ->get();
 

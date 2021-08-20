@@ -16,7 +16,7 @@ class SalaryUser extends Model
      *
      * @var string
      */
-    protected $table = 'salaries';
+    protected $table = "salaries";
 
     /**
      * The attributes that are mass assignable.
@@ -24,15 +24,16 @@ class SalaryUser extends Model
      * @var array
      */
     protected $fillable = [
-        'nam',
-        'thang',
+        "nam",
+        "thang",
 
-        'ten',
-        'luongcoban',
-        'baohiem',
-        'chitieu',
-        'heso',
-        'tile',
+        "ten",
+        "luongcoban",
+        "congthang",
+        "baohiem",
+        "chitieu",
+        "heso",
+        "tile",
     ];
 
     /**

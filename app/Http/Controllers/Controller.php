@@ -21,6 +21,9 @@ class Controller extends BaseController
      */
     public function isAdmin()
     {
-        return auth()->check() && auth()->user()->isAdmin();
+        return auth()->check() &&
+            auth()
+                ->user()
+                ->isAdmin();
     }
 }

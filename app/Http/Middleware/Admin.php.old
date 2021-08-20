@@ -5,12 +5,9 @@
 
 namespace App\Http\Middleware;
 
-use Artisan;
 use Closure;
-use Illuminate\Auth\Middleware\Authenticate as Middleware;
-use Illuminate\Auth\AuthenticationException;
 
-class ClearCache
+class Admin
 {
     /**
      * Handle an incoming request.
@@ -21,10 +18,10 @@ class ClearCache
      */
     public function handle($request, Closure $next)
     {
-        if (!in_array(config("app.env"), ["production", "staging"])) {
-            Artisan::call("view:clear");
+        if (auth()->check() && auth()->user()->isAdmin()) {
+            return $next($request);
         }
 
-        return $next($request);
+        return redirect('/home')->with('error', 'You have not admin access');
     }
 }

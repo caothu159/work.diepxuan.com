@@ -1,12 +1,10 @@
 <?php
-/**
- * Copyright © DiepXuan, Ltd. All rights reserved.
- */
 
 namespace App\Http\Controllers\Salary;
 
 use App\SalaryUser;
 use Illuminate\Http\Request;
+use App\Services\SalaryServiceInterface as SalaryService;
 
 class SalaryUserController extends Controller
 {
@@ -15,16 +13,9 @@ class SalaryUserController extends Controller
      */
     public function __construct()
     {
-        $this->middleware([
-            'clearcache',
-        ]);
+        $this->middleware(["clearcache"]);
 
-        $this->middleware([
-            'auth',
-        ])->except([
-            'index',
-            'show',
-        ]);
+        $this->middleware(["auth"])->except(["index", "show"]);
     }
 
     /**
@@ -32,21 +23,36 @@ class SalaryUserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request, string $time = null)
-    {
-        $salaryUsers = SalaryUser::select('ten', 'luongcoban', 'baohiem', 'chitieu', 'heso', 'tile')
-            ->groupBy('ten')
-            ->orderBy('nam', 'DESC')
-            ->orderBy('thang', 'DESC')
-            ->where([
-                ['ten', '<>', '*'],
-                ['ten', '<>', 'duc'],
-            ])
-            ->get()
-        ;
+    public function index(
+        SalaryService $salaryService,
+        Request $request,
+        string $time = null,
+        string $name = null
+    ) {
+        if ($time) {
+            $salaryService->setTime($time)->setName($name);
+            return response()->json([
+                "users" => $salaryService->getUserOptions(),
+            ]);
+        }
+
+        $salaryUsers = SalaryUser::select(
+            "ten",
+            "luongcoban",
+            "congthang",
+            "baohiem",
+            "chitieu",
+            "heso",
+            "tile"
+        )
+            ->groupBy("ten")
+            ->orderBy("nam", "DESC")
+            ->orderBy("thang", "DESC")
+            ->where([["ten", "<>", "*"], ["ten", "<>", "duc"]])
+            ->get();
 
         return response()->json([
-            'users' => $salaryUsers,
+            "users" => $salaryUsers,
         ]);
     }
 
@@ -67,39 +73,46 @@ class SalaryUserController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'thang' => 'required',
-            'nam'   => 'required',
-            'ten'   => 'required',
+            "thang" => "required",
+            "nam" => "required",
+            "ten" => "required",
         ]);
 
-        $user = SalaryUser::updateOrCreate([
-            'thang' => $request->input('thang'),
-            'nam'   => $request->input('nam'),
-            'ten'   => strtolower($request->input('ten')),
-        ], [
-            'thang' => $request->input('thang'),
-            'nam'   => $request->input('nam'),
-            'ten'   => strtolower($request->input('ten')),
+        $user = SalaryUser::updateOrCreate(
+            [
+                "thang" => $request->input("thang"),
+                "nam" => $request->input("nam"),
+                "ten" => strtolower($request->input("ten")),
+            ],
+            [
+                "thang" => $request->input("thang"),
+                "nam" => $request->input("nam"),
+                "ten" => strtolower($request->input("ten")),
 
-            'luongcoban' => $request->input('luongcoban'),
-            'baohiem'    => $request->input('baohiem'),
-            'chitieu'    => $request->input('chitieu'),
-            'heso'       => $request->input('heso'),
-            'tile'       => $request->input('tile'),
-        ]);
+                "luongcoban" => $request->input("luongcoban"),
+                "congthang" => $request->input("congthang"),
+                "baohiem" => $request->input("baohiem"),
+                "chitieu" => $request->input("chitieu"),
+                "heso" => $request->input("heso"),
+                "tile" => $request->input("tile"),
+            ]
+        );
 
-        if ($request->input('isJsonResponse')) {
+        if ($request->input("isJsonResponse")) {
             return response()->json([
-                'user' => $user,
+                "user" => $user,
             ]);
         }
 
         $redirect = [
-            'thoigian' => implode('-', [$request->input('thang'), $request->input('nam')]),
-            'ten'      => $request->input('ten'),
+            "thoigian" => implode("-", [
+                $request->input("thang"),
+                $request->input("nam"),
+            ]),
+            "ten" => $request->input("ten"),
         ];
 
-        return redirect()->route('luong.home', $redirect);
+        return redirect()->route("luong.home", $redirect);
     }
 
     /**
@@ -134,34 +147,41 @@ class SalaryUserController extends Controller
     public function update(Request $request, $id)
     {
         $this->validate($request, [
-            'thang' => 'required',
-            'nam'   => 'required',
-            'ten'   => 'required',
+            "thang" => "required",
+            "nam" => "required",
+            "ten" => "required",
         ]);
 
-        SalaryUser::updateOrCreate([
-            'id'    => $id,
-            'thang' => $request->input('thang'),
-            'nam'   => $request->input('nam'),
-            'ten'   => $request->input('ten'),
-        ], [
-            'thang' => $request->input('thang'),
-            'nam'   => $request->input('nam'),
-            'ten'   => $request->input('ten'),
+        SalaryUser::updateOrCreate(
+            [
+                "id" => $id,
+                "thang" => $request->input("thang"),
+                "nam" => $request->input("nam"),
+                "ten" => $request->input("ten"),
+            ],
+            [
+                "thang" => $request->input("thang"),
+                "nam" => $request->input("nam"),
+                "ten" => $request->input("ten"),
 
-            'luongcoban' => $request->input('luongcoban'),
-            'baohiem'    => $request->input('baohiem'),
-            'chitieu'    => $request->input('chitieu'),
-            'heso'       => $request->input('heso'),
-            'tile'       => $request->input('tile'),
-        ]);
+                "luongcoban" => $request->input("luongcoban"),
+                "congthang" => $request->input("congthang"),
+                "baohiem" => $request->input("baohiem"),
+                "chitieu" => $request->input("chitieu"),
+                "heso" => $request->input("heso"),
+                "tile" => $request->input("tile"),
+            ]
+        );
 
         $redirect = [
-            'thoigian' => implode('-', [$request->input('thang'), $request->input('nam')]),
-            'ten'      => $request->input('ten') ?: false,
+            "thoigian" => implode("-", [
+                $request->input("thang"),
+                $request->input("nam"),
+            ]),
+            "ten" => $request->input("ten") ?: false,
         ];
 
-        return redirect()->route('salary.index', $redirect);
+        return redirect()->route("salary.index", $redirect);
     }
 
     /**

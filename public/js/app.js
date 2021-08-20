@@ -1885,55 +1885,14 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   mounted: function mounted() {
-    var self = this;
-
-    try {
-      self.renderComponent = false;
-      axios("/salaryuser/" + self.month + "-" + self.year, {
-        // responseType: "arraybuffer",
-        headers: {
-          "Cache-Control": "no-cache"
-        }
-      }, {
-        onDownloadProgress: function onDownloadProgress(progressEvent) {
-          self.renderComponent = false;
-        },
-        onUploadProgress: function onUploadProgress(evt) {
-          self.renderComponent = false;
-        }
-      })["catch"](function (err) {
-        /* error in getting data */
-        console.log(err);
-        self.forceRerender();
-      }).then(function (res) {
-        /* parse the data when it is received */
-        var salaryusers = res.data.users;
-        self.forceRerender();
-        return salaryusers;
-      })["catch"](function (err) {
-        /* error in parsing */
-        console.log(err);
-        self.forceRerender();
-      }).then(function (salaryusers) {
-        self.users.forEach(function (user, index) {
-          var salaryuser = salaryusers.filter(function (elem) {
-            if (elem.ten == user.ten) return elem;
-          })[0];
-          self.users[index] = salaryuser || user;
-          self.forceRerender();
-        });
-        self.forceRerender();
-      })["catch"](function (err) {
-        /* error in parsing */
-        console.log(err);
-        self.forceRerender();
-      });
-    } catch (e) {
-      console.log(e);
-      self.forceRerender();
-    }
+    this.loadUsers(false);
+    this.loadSalaries();
   },
 
   /**
@@ -1941,14 +1900,15 @@ __webpack_require__.r(__webpack_exports__);
    * @return {[type]} [description]
    */
   data: function data() {
+    var self = this;
     return {
-      renderComponent: true,
+      renderComponent: 1,
       componentKey: 0,
-      salaries: JSON.parse(this.salariesdata),
-      users: JSON.parse(this.usersdata),
-      days: parseInt(this.daysdata),
-      month: parseInt(this.monthdata),
-      year: parseInt(this.yeardata)
+      days: parseInt(self.daysdata),
+      month: parseInt(self.monthdata),
+      year: parseInt(self.yeardata),
+      salaries: [],
+      users: []
     };
   },
   watch: {},
@@ -1976,6 +1936,113 @@ __webpack_require__.r(__webpack_exports__);
       }
 
       return $return;
+    },
+    loadUsers: function loadUsers() {
+      var update = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
+      var self = this;
+
+      try {
+        self.renderComponent += 1;
+        axios(update ? self.routeruser : self.routeruser + "/" + self.month + "-" + self.year, {
+          headers: {
+            "Cache-Control": "no-cache"
+          }
+        }, {
+          onDownloadProgress: function onDownloadProgress(progressEvent) {// self.renderComponent += 1;
+          },
+          onUploadProgress: function onUploadProgress(evt) {// self.renderComponent += 1;
+          }
+        })["catch"](function (err) {
+          /* error in getting data */
+          console.log(err);
+          self.forceRerender();
+        }).then(function (res) {
+          /* parse the data when it is received */
+          var salaryusers = res.data.users;
+          self.forceRerender();
+          self.renderComponent -= 1;
+          return salaryusers;
+        })["catch"](function (err) {
+          /* error in parsing */
+          console.log(err);
+          self.forceRerender();
+          self.renderComponent -= 1;
+        }).then(function (salaryusers) {
+          if (!update) {
+            self.users = salaryusers;
+            self.forceRerender();
+            return self.loadUsers(true);
+          }
+
+          self.users.forEach(function (user, index) {
+            var salaryuser = salaryusers.filter(function (elem) {
+              if (elem.ten == user.ten) return elem;
+            })[0]; // self.users[index] = salaryuser;
+
+            user.luongcoban = user.luongcoban || salaryuser.luongcoban;
+            user.congthang = user.congthang || salaryuser.congthang;
+            user.baohiem = user.baohiem || salaryuser.baohiem;
+            user.chitieu = user.chitieu || salaryuser.chitieu;
+            user.heso = user.heso || salaryuser.heso;
+            user.tile = user.tile || salaryuser.tile;
+            self.users[index] = user;
+            self.forceRerender();
+          });
+        })["catch"](function (err) {
+          /* error in parsing */
+          console.log(err);
+          self.forceRerender();
+        });
+      } catch (e) {
+        console.log(e);
+        self.forceRerender();
+      }
+    },
+    loadSalaries: function loadSalaries() {
+      var self = this;
+
+      try {
+        self.renderComponent += 1;
+        axios(self.routersalary + "/" + self.month + "-" + self.year, {
+          headers: {
+            "Cache-Control": "no-cache"
+          }
+        }, {
+          onDownloadProgress: function onDownloadProgress(progressEvent) {// self.renderComponent = false;
+          },
+          onUploadProgress: function onUploadProgress(evt) {// self.renderComponent = false;
+          }
+        })["catch"](function (err) {
+          /* error in getting data */
+          console.log(err);
+          self.forceRerender();
+        }).then(function (res) {
+          /* parse the data when it is received */
+          var salaries = res.data.salaries;
+          self.forceRerender();
+          self.renderComponent -= 1;
+          return salaries;
+        })["catch"](function (err) {
+          /* error in parsing */
+          console.log(err);
+          self.forceRerender();
+          self.renderComponent -= 1;
+        }).then(function (salaries) {
+          salaries.forEach(function (salary, index) {
+            self.salaries[salary.ngay + salary.ten] = salary;
+            self.forceRerender();
+          });
+          console.log(self.salaries);
+          self.forceRerender();
+        })["catch"](function (err) {
+          /* error in parsing */
+          console.log(err);
+          self.forceRerender();
+        });
+      } catch (e) {
+        console.log(e);
+        self.forceRerender();
+      }
     },
     getUser: function getUser(ten) {
       var $return = {
@@ -2005,10 +2072,10 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       // Remove my-component from the DOM
-      this.renderComponent = false;
+      this.renderComponent += 1;
       this.$nextTick(function () {
         // Add the component back in
-        _this.renderComponent = true;
+        _this.renderComponent -= 1;
       });
       this.componentKey += 1;
     },
@@ -2023,30 +2090,33 @@ __webpack_require__.r(__webpack_exports__);
         this.forceRerender();
       }
     },
-    updateItem: function updateItem($_salaryA) {
-      var self = this;
-      var foundIndexA = self.salaries.findIndex(function (elem) {
-        return elem.ten == $_salaryA.ten && elem.ngay == $_salaryA.ngay;
-      });
-      self.salaries[foundIndexA] = $_salaryA;
-      console.log($_salaryA);
-      var foundIndexB = self.salaries.findIndex(function (elem) {
-        return elem.diadiem == $_salaryA.diadiem && elem.ngay == $_salaryA.ngay && elem.ten !== $_salaryA.ten;
-      });
-
-      if (foundIndexB !== -1) {
-        self.salaries[foundIndexB].chamcong = $_salaryA.chamcong;
-        self.salaries[foundIndexB].diadiem = $_salaryA.diadiem;
-        self.salaries[foundIndexB].doanhso = $_salaryA.doanhso;
-        self.salaries[foundIndexB].chono = $_salaryA.chono;
-        self.salaries[foundIndexB].thuno = $_salaryA.thuno;
-        self.salaries[foundIndexB].tile = $_salaryA.tile;
-      }
+    updateItem: function updateItem($_salaryA) {// let self = this;
+      // let foundIndexA = self.salaries.findIndex(
+      //     (elem) =>
+      //         elem.ten == $_salaryA.ten && elem.ngay == $_salaryA.ngay
+      // );
+      // self.salaries[foundIndexA] = $_salaryA;
+      // console.log($_salaryA);
+      //
+      //
+      // let foundIndexB = self.salaries.findIndex(
+      //     (elem) =>
+      //         elem.diadiem == $_salaryA.diadiem &&
+      //         elem.ngay == $_salaryA.ngay &&
+      //         elem.ten !== $_salaryA.ten
+      // );
+      // if (foundIndexB !== -1) {
+      //     self.salaries[foundIndexB].chamcong = $_salaryA.chamcong;
+      //     self.salaries[foundIndexB].diadiem = $_salaryA.diadiem;
+      //     self.salaries[foundIndexB].doanhso = $_salaryA.doanhso;
+      //     self.salaries[foundIndexB].chono = $_salaryA.chono;
+      //     self.salaries[foundIndexB].thuno = $_salaryA.thuno;
+      //     self.salaries[foundIndexB].tile = $_salaryA.tile;
+      // }
     }
   },
   props: {
-    usersdata: String,
-    salariesdata: String,
+    // salariesdata: String,
     daysdata: [String, Number],
     monthdata: [String, Number],
     yeardata: [String, Number],
@@ -2068,6 +2138,21 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -2161,44 +2246,39 @@ __webpack_require__.r(__webpack_exports__);
       isChanged: false
     };
   },
-  created: function created() {// this.$watch("salary", this.formUpdated, {
-    //     deep: true
-    // });
-  },
-  watch: {// salary() {
-    //     this.change();
-    // }
-  },
+  created: function created() {},
+  watch: {},
   methods: {
-    // formUpdated: function(newV, oldV) {
-    //     if (newV != oldV) {
-    //         this.change();
-    //     }
-    // },
     update: function update() {
-      var _this = this;
-
       var self = this;
+
+      if (self.salary.chamcong === true) {
+        self.salary.chamcong = 1;
+      }
+
       this.salary.post(this.router).then(function (response) {
-        _this.isChanged = false;
+        self.isChanged = false;
         var salaryResponse = response.data.salary;
-        _this.salary.ngay = salaryResponse.ngay;
-        _this.salary.thang = salaryResponse.thang;
-        _this.salary.nam = salaryResponse.nam;
-        _this.salary.ten = salaryResponse.ten;
-        _this.salary.chamcong = salaryResponse.chamcong;
-        _this.salary.diadiem = salaryResponse.diadiem;
-        _this.salary.doanhso = salaryResponse.doanhso;
-        _this.salary.chono = salaryResponse.chono;
-        _this.salary.thuno = salaryResponse.thuno;
-        _this.salary.tile = salaryResponse.tile;
-        self.$emit("updateItem", _this.salary);
+        self.salary.ngay = salaryResponse.ngay;
+        self.salary.thang = salaryResponse.thang;
+        self.salary.nam = salaryResponse.nam;
+        self.salary.ten = salaryResponse.ten;
+        self.salary.chamcong = salaryResponse.chamcong;
+        self.salary.diadiem = salaryResponse.diadiem;
+        self.salary.doanhso = salaryResponse.doanhso;
+        self.salary.chono = salaryResponse.chono;
+        self.salary.thuno = salaryResponse.thuno;
+        self.salary.tile = salaryResponse.tile; // self.$emit("updateItem", this.salary);
       });
     },
     change: function change() {
       var self = this;
-      this.isChanged = true;
-      self.$emit("updateItem", this.salary);
+      self.isChanged = true;
+
+      if (!self.salary.chamcong && self.salary.diadiem && self.salary.doanhso) {
+        self.salary.chamcong = 1;
+      } // self.$emit("updateItem", this.salary);
+
     } // getAutocompleteArray() {
     //     console.log(salaries);
     //     return [];
@@ -2313,8 +2393,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   props: {
     salaryitem: Object,
-    router: String // salaries: Array
-
+    router: String
   }
 });
 
@@ -2395,6 +2474,18 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   mounted: function mounted() {
     try {
@@ -2407,7 +2498,7 @@ __webpack_require__.r(__webpack_exports__);
    * @return {[type]} [description]
    */
   data: function data() {
-    if (this.salaryuser.ten == "tu") console.log(this.salaryuser);
+    // if (this.salaryuser.ten == "hai") console.log(this.salaryuser.tile);
     return {
       componentKey: 0,
       salary: new Form({
@@ -2417,6 +2508,7 @@ __webpack_require__.r(__webpack_exports__);
         nam: this.nam,
         ten: this.salaryuser.ten,
         luongcoban: this.salaryuser.luongcoban,
+        congthang: this.salaryuser.congthang,
         baohiem: this.salaryuser.baohiem,
         chitieu: this.salaryuser.chitieu,
         heso: this.salaryuser.heso,
@@ -2435,17 +2527,15 @@ __webpack_require__.r(__webpack_exports__);
       this.salary.post(this.router).then(function (response) {
         _this.isChanged = false;
         var salaryResponse = response.data.user;
-        _this.salary.ngay = salaryResponse.ngay;
         _this.salary.thang = salaryResponse.thang;
         _this.salary.nam = salaryResponse.nam;
         _this.salary.ten = salaryResponse.ten;
-        _this.salary.chamcong = salaryResponse.chamcong;
-        _this.salary.diadiem = salaryResponse.diadiem;
-        _this.salary.doanhso = salaryResponse.doanhso;
-        _this.salary.chono = salaryResponse.chono;
-        _this.salary.thuno = salaryResponse.thuno;
-        _this.salary.tile = salaryResponse.tile;
-        self.$emit("updateUser", _this.salary);
+        _this.salary.luongcoban = salaryResponse.luongcoban;
+        _this.salary.congthang = salaryResponse.congthang;
+        _this.salary.baohiem = salaryResponse.baohiem;
+        _this.salary.chitieu = salaryResponse.chitieu;
+        _this.salary.heso = salaryResponse.heso;
+        _this.salary.tile = salaryResponse.tile; // self.$emit("updateUser", this.salary);
       });
     },
     change: function change() {
@@ -7187,7 +7277,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.salary-item .salary-name {\n    text-indent: 10px;\n    display: inline-block;\n}\n.salary-item label {\n    text-indent: 10px;\n}\n.salary-item input:-moz-placeholder-shown {\n}\n.salary-item input:-ms-input-placeholder {\n}\n.salary-item input:placeholder-shown {\n}\n.check {\n    display: inline-block;\n    transform: rotate(45deg);\n    height: 22px;\n    width: 10px;\n    border-bottom: 4px solid #78b13f;\n    border-right: 4px solid #78b13f;\n    margin-left: 15px;\n}\n.autocomplete-items {\n    position: absolute;\n    border: 1px solid #d4d4d4;\n    border-bottom: none;\n    border-top: none;\n    z-index: 99;\n    /*position the autocomplete items to be the same width as the container:*/\n    top: 100%;\n    left: 0;\n    right: 0;\n}\n.autocomplete-items div {\n    padding: 10px;\n    cursor: pointer;\n    background-color: #fff;\n    border-bottom: 1px solid #d4d4d4;\n}\n.autocomplete-items div:hover {\n    /*when hovering an item:*/\n    background-color: #e9e9e9;\n}\n.autocomplete-active {\n    /*when navigating through the items using the arrow keys:*/\n    background-color: DodgerBlue !important;\n    color: #ffffff;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.salary-item .salary-name {\n    text-indent: 10px;\n    display: inline-block;\n}\n.salary-item label {\n    text-indent: 10px;\n}\n.salary-item input:-moz-placeholder-shown {\n}\n.salary-item input:-ms-input-placeholder {\n}\n.salary-item input:placeholder-shown {\n}\n.salary-item input[type=\"radio\"],\n.salary-item input[type=\"checkbox\"] {\n    box-sizing: border-box;\n    padding: 0;\n    display: inline;\n    float: left;\n    margin-left: 0;\n    margin-top: 0.4rem;\n}\n.check {\n    display: inline-block;\n    transform: rotate(45deg);\n    height: 22px;\n    width: 10px;\n    border-bottom: 4px solid #78b13f;\n    border-right: 4px solid #78b13f;\n    margin-left: 15px;\n}\n.autocomplete-items {\n    position: absolute;\n    border: 1px solid #d4d4d4;\n    border-bottom: none;\n    border-top: none;\n    z-index: 99;\n    /*position the autocomplete items to be the same width as the container:*/\n    top: 100%;\n    left: 0;\n    right: 0;\n}\n.autocomplete-items div {\n    padding: 10px;\n    cursor: pointer;\n    background-color: #fff;\n    border-bottom: 1px solid #d4d4d4;\n}\n.autocomplete-items div:hover {\n    /*when hovering an item:*/\n    background-color: #e9e9e9;\n}\n.autocomplete-active {\n    /*when navigating through the items using the arrow keys:*/\n    background-color: DodgerBlue !important;\n    color: #ffffff;\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -7211,7 +7301,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.salary-item .salary-name {\n    text-indent: 10px;\n    display: inline-block;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.salary-item .salary-name {\n    color: black;\n    display: inline-block;\n    font-size: 1.1em;\n    text-indent: 10px;\n    text-decoration: none;\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -39859,9 +39949,11 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "col-12" }, [
-    !_vm.renderComponent ? _c("h3", [_vm._v("Loading...")]) : _vm._e(),
+    !_vm.renderComponent || _vm.renderComponent !== 1
+      ? _c("div", { attrs: { id: "loader" } })
+      : _vm._e(),
     _vm._v(" "),
-    _vm.renderComponent
+    _vm.renderComponent == 1
       ? _c(
           "table",
           {
@@ -39875,7 +39967,7 @@ var render = function() {
                 _c("td", [_vm._v(_vm._s(_vm.month) + "/" + _vm._s(_vm.year))]),
                 _vm._v(" "),
                 _vm._l(_vm.users, function(user) {
-                  return _vm.renderComponent
+                  return _vm.renderComponent == 1
                     ? _c(
                         "td",
                         [
@@ -39894,7 +39986,7 @@ var render = function() {
                     : _vm._e()
                 }),
                 _vm._v(" "),
-                _vm.renderComponent
+                _vm.renderComponent == 1
                   ? _c(
                       "td",
                       [
@@ -39914,15 +40006,15 @@ var render = function() {
               2
             ),
             _vm._v(" "),
-            _vm._l(_vm.days, function(index) {
-              return _vm.renderComponent
+            _vm._l(_vm.days, function(ngay) {
+              return _vm.renderComponent == 1
                 ? _c(
                     "tr",
-                    { key: index },
+                    { key: ngay },
                     [
                       _c("td", [
                         _vm._v(
-                          _vm._s(index) +
+                          _vm._s(ngay) +
                             "/" +
                             _vm._s(_vm.month) +
                             "/" +
@@ -39931,13 +40023,15 @@ var render = function() {
                       ]),
                       _vm._v(" "),
                       _vm._l(_vm.users, function(user) {
-                        return _vm.renderComponent
+                        return _vm.renderComponent == 1
                           ? _c(
                               "td",
                               [
                                 _c("salaryitem", {
                                   attrs: {
-                                    salaryitem: _vm.getSalary(index, user.ten),
+                                    salaryitem: _vm.salaries[ngay + user.ten]
+                                      ? _vm.salaries[ngay + user.ten]
+                                      : _vm.getSalary(ngay, user.ten),
                                     router: _vm.routersalary
                                   },
                                   on: { updateItem: _vm.updateItem }
@@ -40080,9 +40174,66 @@ var render = function() {
           }
         }),
         _vm._v(" "),
-        _c("b", { staticClass: "salary-name" }, [
-          _vm._v(_vm._s(_vm.salary.ten))
-        ]),
+        _c("input", {
+          directives: [
+            {
+              name: "model",
+              rawName: "v-model",
+              value: _vm.salary.chamcong,
+              expression: "salary.chamcong"
+            }
+          ],
+          staticClass: "form-check-input",
+          attrs: { type: "checkbox" },
+          domProps: {
+            checked: Array.isArray(_vm.salary.chamcong)
+              ? _vm._i(_vm.salary.chamcong, null) > -1
+              : _vm.salary.chamcong
+          },
+          on: {
+            change: [
+              function($event) {
+                var $$a = _vm.salary.chamcong,
+                  $$el = $event.target,
+                  $$c = $$el.checked ? true : false
+                if (Array.isArray($$a)) {
+                  var $$v = null,
+                    $$i = _vm._i($$a, $$v)
+                  if ($$el.checked) {
+                    $$i < 0 &&
+                      _vm.$set(_vm.salary, "chamcong", $$a.concat([$$v]))
+                  } else {
+                    $$i > -1 &&
+                      _vm.$set(
+                        _vm.salary,
+                        "chamcong",
+                        $$a.slice(0, $$i).concat($$a.slice($$i + 1))
+                      )
+                  }
+                } else {
+                  _vm.$set(_vm.salary, "chamcong", $$c)
+                }
+              },
+              _vm.update
+            ]
+          }
+        }),
+        _vm._v(" "),
+        _c(
+          "a",
+          {
+            staticClass: "salary-name",
+            attrs: {
+              href:
+                _vm.salary.thang + "-" + _vm.salary.nam + "/" + _vm.salary.ten
+            }
+          },
+          [
+            _c("b", { staticClass: "salary-name" }, [
+              _vm._v(_vm._s(_vm.salary.ten))
+            ])
+          ]
+        ),
         _vm._v(" "),
         _vm.isChanged
           ? _c("div", { staticClass: "check", on: { click: _vm.update } })
@@ -40231,10 +40382,10 @@ var render = function() {
         _c("input", {
           staticClass: "form-control form-control-sm",
           attrs: { type: "number", placeholder: "tile" },
-          domProps: { value: _vm.salary.tile * 100 },
+          domProps: { value: Math.round(_vm.salary.tile * 100) },
           on: {
             input: function(e) {
-              return (_vm.salary.tile = e.target.value * 0.01)
+              return (_vm.salary.tile = Math.round(e.target.value) * 0.01)
             }
           }
         })
@@ -40343,9 +40494,18 @@ var render = function() {
           }
         }),
         _vm._v(" "),
-        _c("b", { staticClass: "salary-name" }, [
-          _vm._v(_vm._s(_vm.salary.ten))
-        ]),
+        _c(
+          "a",
+          {
+            staticClass: "salary-name",
+            attrs: { href: _vm.thang + "-" + _vm.nam + "/" + _vm.salary.ten }
+          },
+          [
+            _c("b", { staticClass: "salary-name" }, [
+              _vm._v(_vm._s(_vm.salary.ten))
+            ])
+          ]
+        ),
         _vm._v(" "),
         _vm.isChanged
           ? _c(
@@ -40409,12 +40569,34 @@ var render = function() {
             {
               name: "model",
               rawName: "v-model",
+              value: _vm.salary.congthang,
+              expression: "salary.congthang"
+            }
+          ],
+          staticClass: "form-control form-control-sm",
+          attrs: { type: "text", placeholder: "công tháng" },
+          domProps: { value: _vm.salary.congthang },
+          on: {
+            input: function($event) {
+              if ($event.target.composing) {
+                return
+              }
+              _vm.$set(_vm.salary, "congthang", $event.target.value)
+            }
+          }
+        }),
+        _vm._v(" "),
+        _c("input", {
+          directives: [
+            {
+              name: "model",
+              rawName: "v-model",
               value: _vm.salary.baohiem,
               expression: "salary.baohiem"
             }
           ],
           staticClass: "form-control form-control-sm",
-          attrs: { type: "number", placeholder: "bảo hiểm" },
+          attrs: { type: "text", placeholder: "bảo hiểm" },
           domProps: { value: _vm.salary.baohiem },
           on: {
             input: function($event) {

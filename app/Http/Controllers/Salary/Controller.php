@@ -8,8 +8,6 @@ namespace App\Http\Controllers\Salary;
 
 class Controller extends \App\Http\Controllers\Controller
 {
-
-
     /**
      * List all month in year.
      *
@@ -19,7 +17,10 @@ class Controller extends \App\Http\Controllers\Controller
      */
     public function months(string $year = null)
     {
-        return array_diff(scandir((new \App\Data)->datadir($year)), ['.', '..']);
+        return array_diff(scandir((new \App\Data())->datadir($year)), [
+            ".",
+            "..",
+        ]);
     }
 
     /**
@@ -29,7 +30,7 @@ class Controller extends \App\Http\Controllers\Controller
      */
     public function years()
     {
-        return array_diff(scandir((new \App\Data)->datadir()), ['.', '..']);
+        return array_diff(scandir((new \App\Data())->datadir()), [".", ".."]);
     }
 
     /**
@@ -43,12 +44,15 @@ class Controller extends \App\Http\Controllers\Controller
     public function link(string $year = null, string $month = null)
     {
         if (!$year) {
-            return route('salary.index');
+            return route("salary.index");
         }
         if (!$month) {
-            return route('salary.index', ['year' => $year]);
+            return route("salary.index", ["year" => $year]);
         }
 
-        return route('salary.index', ['year' => $year, 'month' => sprintf("%02d", $month)]);
+        return route("salary.index", [
+            "year" => $year,
+            "month" => sprintf("%02d", $month),
+        ]);
     }
 }
