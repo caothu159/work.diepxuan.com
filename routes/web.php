@@ -3,6 +3,7 @@
  * Copyright © DiepXuan, Ltd. All rights reserved.
  */
 
+use App\Http\Controllers\PWAController;
 use App\Http\Controllers\Salary\SalaryController;
 use App\Http\Controllers\Salary\SalaryUserController;
 use App\Http\Controllers\Work\BanhangController;
@@ -68,27 +69,32 @@ Route::get("/debug-sentry", function () {
 
 Route::domain("work.diepxuan.com")->group(function () {
     Route::middleware([ClearCache::class])->group(function () {
-        Route::get("/", function () {
-            return redirect()->route("tonghop");
-        })->name("work.home");
+        Route::get("/{any}", [PWAController::class, "index"])->where(
+            "any",
+            ".*"
+        );
 
-        Route::get("tonghop/{from?}/{to?}", [
-            TonghopController::class,
-            "index",
-        ])->name("tonghop");
-        Route::resource("tonghop", TonghopController::class);
+        // Route::get("/", function () {
+        //     return redirect()->route("tonghop");
+        // })->name("work.home");
 
-        Route::get("banhang/{from?}/{to?}", [
-            BanhangController::class,
-            "index",
-        ])->name("banhang");
-        Route::resource("banhang", BanhangController::class);
+        // Route::get("tonghop/{from?}/{to?}", [
+        //     TonghopController::class,
+        //     "index",
+        // ])->name("tonghop");
+        // Route::resource("tonghop", TonghopController::class);
 
-        Route::get("muahang/{from?}/{to?}", [
-            MuahangController::class,
-            "index",
-        ])->name("muahang");
-        Route::resource("muahang", MuahangController::class);
+        // Route::get("banhang/{from?}/{to?}", [
+        //     BanhangController::class,
+        //     "index",
+        // ])->name("banhang");
+        // Route::resource("banhang", BanhangController::class);
+
+        // Route::get("muahang/{from?}/{to?}", [
+        //     MuahangController::class,
+        //     "index",
+        // ])->name("muahang");
+        // Route::resource("muahang", MuahangController::class);
     });
 });
 

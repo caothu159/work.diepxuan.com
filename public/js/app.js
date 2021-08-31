@@ -2644,7 +2644,7 @@ try {
 
 
 window.axios = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
-window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+window.axios.defaults.headers.common["X-Requested-With"] = "XMLHttpRequest";
 /**
  * Next we will register the CSRF Token as a common header with Axios so that
  * all outgoing HTTP requests automatically have it attached. This is just
@@ -2654,9 +2654,9 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 var token = document.head.querySelector('meta[name="csrf-token"]');
 
 if (token) {
-  window.axios.defaults.headers.common['X-CSRF-TOKEN'] = token.content;
+  window.axios.defaults.headers.common["X-CSRF-TOKEN"] = token.content;
 } else {
-  console.error('CSRF token not found: https://laravel.com/docs/csrf#csrf-x-csrf-token');
+  console.error("CSRF token not found: https://laravel.com/docs/csrf#csrf-x-csrf-token");
 }
 /**
  * Echo exposes an expressive API for subscribing to channels and listening
@@ -2672,6 +2672,31 @@ if (token) {
 //     forceTLS: true
 // });
 
+
+__webpack_require__(/*! ./lib */ "./resources/js/lib.js");
+
+/***/ }),
+
+/***/ "./resources/js/lib.js":
+/*!*****************************!*\
+  !*** ./resources/js/lib.js ***!
+  \*****************************/
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
+
+__webpack_require__(/*! ./libs/array */ "./resources/js/libs/array.js");
+
+__webpack_require__(/*! ./libs/userdisable */ "./resources/js/libs/userdisable.js");
+
+__webpack_require__(/*! ./libs/pwa */ "./resources/js/libs/pwa.js");
+
+/***/ }),
+
+/***/ "./resources/js/libs/array.js":
+/*!************************************!*\
+  !*** ./resources/js/libs/array.js ***!
+  \************************************/
+/***/ (() => {
+
 /**
  * A simple forEach() implementation for Arrays, Objects and NodeLists
  * @private
@@ -2679,10 +2704,8 @@ if (token) {
  * @param {Function} callback Callback function for each iteration
  * @param {Array|Object|NodeList} scope Object/NodeList/Array that forEach is iterating over (aka `this`)
  */
-
-
 function forEach(collection, callback, scope) {
-  if (Object.prototype.toString.call(collection) === '[object Object]') {
+  if (Object.prototype.toString.call(collection) === "[object Object]") {
     for (var prop in collection) {
       if (Object.prototype.hasOwnProperty.call(collection, prop)) {
         callback.call(scope, collection[prop], prop, collection);
@@ -2703,10 +2726,10 @@ function forEach(collection, callback, scope) {
 
 
 if (!Object.prototype.forEach) {
-  Object.defineProperty(Object.prototype, 'forEach', {
+  Object.defineProperty(Object.prototype, "forEach", {
     value: function value(callback, thisArg) {
       if (this == null) {
-        throw new TypeError('Not an object');
+        throw new TypeError("Not an object");
       }
 
       thisArg = thisArg || window;
@@ -2718,24 +2741,7 @@ if (!Object.prototype.forEach) {
       }
     }
   });
-}
-
-(function ($) {
-  $.fn.disableSelection = function () {
-    return this.attr('unselectable', 'on').css('user-select', 'none').on('selectstart dragstart', false);
-  };
-
-  $(document).on("contextmenu", function (event) {
-    event.preventDefault();
-  }).on('copy', function (e) {
-    e.preventDefault();
-    return false;
-  });
-  $('body').on('copy', function (e) {
-    e.preventDefault();
-    return false;
-  });
-})(jQuery); // Production steps of ECMA-262, Edition 5, 15.4.4.19
+} // Production steps of ECMA-262, Edition 5, 15.4.4.19
 // Reference: https://es5.github.io/#x15.4.4.19
 
 
@@ -2746,7 +2752,7 @@ if (!Array.prototype.map) {
     var T, A, k;
 
     if (this == null) {
-      throw new TypeError('this is null or not defined');
+      throw new TypeError("this is null or not defined");
     } // 1. Let O be the result of calling ToObject passing the |this|
     //    value as the argument.
 
@@ -2758,8 +2764,8 @@ if (!Array.prototype.map) {
     var len = O.length >>> 0; // 4. If IsCallable(callback) is false, throw a TypeError exception.
     // See: https://es5.github.com/#x9.11
 
-    if (typeof callback !== 'function') {
-      throw new TypeError(callback + ' is not a function');
+    if (typeof callback !== "function") {
+      throw new TypeError(callback + " is not a function");
     } // 5. If thisArg was supplied, let T be thisArg; else let T be undefined.
 
 
@@ -2816,6 +2822,85 @@ if (!Array.prototype.map) {
     return A;
   };
 }
+
+/***/ }),
+
+/***/ "./resources/js/libs/pwa.js":
+/*!**********************************!*\
+  !*** ./resources/js/libs/pwa.js ***!
+  \**********************************/
+/***/ (() => {
+
+/**
+ * Get's the cached forecast data from the caches object.
+ *
+ * @param {string} coords Location object to.
+ * @return {Object} The weather forecast, if the request fails, return null.
+ */
+function getForecastFromCache(coords) {
+  // CODELAB: Add code to get weather forecast from the caches object.
+  // kiểm tra trước khi thực hiện những việc tiếp theo
+  if (!('caches' in window)) {
+    return null;
+  }
+
+  var url = "".concat(window.location.origin, "/").concat(coords);
+  return caches.match(url).then(function (response) {
+    if (response) {
+      return response.json();
+    }
+
+    return null;
+  })["catch"](function (err) {
+    console.error('Error getting data from cache', err);
+    return null;
+  });
+}
+
+window.addEventListener('load', function () {
+  var base = document.querySelector('base');
+  var baseUrl = base && base.href || '';
+
+  if (!baseUrl.endsWith('/')) {
+    baseUrl = "".concat(baseUrl, "/");
+  }
+
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register("".concat(baseUrl, "sw.js")).then(function (registration) {
+      // Registration was successful
+      console.log('ServiceWorker registration successful with scope: ', registration.scope);
+      registration.update();
+    })["catch"](function (err) {
+      // registration failed :(
+      console.log('ServiceWorker registration failed: ', err);
+    });
+  }
+});
+
+/***/ }),
+
+/***/ "./resources/js/libs/userdisable.js":
+/*!******************************************!*\
+  !*** ./resources/js/libs/userdisable.js ***!
+  \******************************************/
+/***/ (() => {
+
+(function ($) {
+  $.fn.disableSelection = function () {
+    return this.attr("unselectable", "on").css("user-select", "none").on("selectstart dragstart", false);
+  };
+
+  $(document).on("contextmenu", function (event) {
+    event.preventDefault();
+  }).on("copy", function (e) {
+    e.preventDefault();
+    return false;
+  });
+  $("body").on("copy", function (e) {
+    e.preventDefault();
+    return false;
+  });
+})(jQuery);
 
 /***/ }),
 

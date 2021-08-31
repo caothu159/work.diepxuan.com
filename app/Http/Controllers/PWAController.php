@@ -6,6 +6,11 @@ use Illuminate\Http\Request;
 
 class PWAController extends Controller
 {
+    public function index()
+    {
+        return view('work');
+    }
+
     /**
      * Handle the incoming request.
      *
