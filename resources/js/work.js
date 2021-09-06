@@ -25,8 +25,6 @@ Vue.config.silent = true;
 
 const app = new Vue({
     el: '#app',
-    // components: { App },
     router,
     render: (h) => h(App),
 });
-// app.$mount('#app');

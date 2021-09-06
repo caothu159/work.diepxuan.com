@@ -1,6 +1,6 @@
 @media print {
     #work-content {
-        > .timer {
+        >.timer {
             display: none;
         }
     }
@@ -8,4 +8,36 @@
 
 .isPointer {
     cursor: pointer;
+}
+
+.work {
+    .navbar {
+
+        &.fixed-left {
+            overflow: auto;
+        }
+
+        .dropdown-item,
+        .dropdown-item {
+            color: rgba(0, 0, 0, 1);
+
+            &:hover,
+            &:focus {
+                background-color: transparent;
+            }
+        }
+    }
+
+    .navbar-nav .navbar-nav {
+        // padding-left: 15px;
+    }
+
+    .navbar-light {
+        .navbar-nav {
+
+            .nav-link {
+                color: rgba(0, 0, 0, 1);
+            }
+        }
+    }
 }

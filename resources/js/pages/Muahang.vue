@@ -1,9 +1,8 @@
 <template>
     <div class="container">
-        Banhang
+        Mua hang
     </div>
 </template>
-
 <script>
 export default {
     data() {
@@ -16,4 +15,5 @@ export default {
 
     },
 };
+
 </script>

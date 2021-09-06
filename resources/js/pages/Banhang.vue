@@ -1,9 +1,13 @@
 <template>
-    <div class="container">
-        Banhang
+    <div class="row">
+        <div class="col-12">
+            Banhang
+        </div>
+        <div class="container">
+            <router-view />
+        </div>
     </div>
 </template>
-
 <script>
 export default {
     data() {
@@ -16,4 +20,5 @@ export default {
 
     },
 };
+
 </script>
