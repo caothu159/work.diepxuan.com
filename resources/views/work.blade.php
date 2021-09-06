@@ -28,14 +28,14 @@
     {{-- <link href="https://fonts.googleapis.com/css?family=Arimo&family=Poppins" rel="stylesheet" type="text/css"> --}}
 
     <!-- Styles -->
-    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/app.css') . '?v=' . uniqid() }}" rel="stylesheet">
 </head>
 
-<body class="d-none">
+<body class="d-none work">
     <div id="app"></div>
 
     <!-- Scripts -->
-    <script src="{{ mix('js/work.js') }}" defer></script>
+    <script src="{{ mix('js/work.js') . '?v=' . uniqid() }}" defer></script>
 </body>
 
 </html>
