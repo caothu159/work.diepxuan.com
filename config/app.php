@@ -170,6 +170,8 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
 
+        // Custom Service Providers...
+        App\Modules\ModuleServiceProvider::class,
         App\Providers\DatafileServiceProvider::class,
         App\Providers\HelperServiceProvider::class,
     ],

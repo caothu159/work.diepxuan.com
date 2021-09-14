@@ -69,10 +69,10 @@ Route::get("/debug-sentry", function () {
 
 Route::domain("work.diepxuan.com")->group(function () {
     Route::middleware([ClearCache::class])->group(function () {
-        Route::get("/{any}", [PWAController::class, "index"])->where(
-            "any",
-            ".*"
-        );
+        // Route::get("/{any}", [PWAController::class, "index"])->where(
+        //     "any",
+        //     ".*"
+        // );
 
         // Route::get("/", function () {
         //     return redirect()->route("tonghop");

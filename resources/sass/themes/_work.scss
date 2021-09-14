@@ -12,6 +12,7 @@
 
 .work {
     .navbar {
+        background-color: rgb(227, 242, 253);
 
         &.fixed-left {
             overflow: auto;
@@ -39,5 +40,34 @@
                 color: rgba(0, 0, 0, 1);
             }
         }
+    }
+
+    .ctubanhang-container {
+        //     height: 100vh;
+
+        >.col-12 {
+            @include v-space;
+        }
+
+        .ctubanhang-content {
+            max-height: 35vh;
+            overflow: auto;
+        }
+
+        tr {
+            &.selected {
+                font-weight: bolder;
+            }
+        }
+    }
+
+    // .ctubanhang-content {
+    //     min-height: 40vh;
+    //     max-height: 40vh;
+    //     overflow: auto;
+    // }
+
+    .ctubanhangvt-container {
+        // @include v-space;
     }
 }

@@ -7,7 +7,8 @@
         "laravel"
     ],
     "license": "MIT",
-    "require": {
+    "require":
+    {
         "php": "^7.3|^8.0",
         "awobaz/compoships": "^2.1",
         "barryvdh/laravel-debugbar": "^3.5",
@@ -20,7 +21,8 @@
         "laravel/ui": "^3.1",
         "phpoffice/phpspreadsheet": "^1.15"
     },
-    "require-dev": {
+    "require-dev":
+    {
         "facade/ignition": "^2.5",
         "fakerphp/faker": "^1.9.1",
         "laravel/sail": "^0.0.5",
@@ -28,31 +30,40 @@
         "nunomaduro/collision": "^5.0",
         "phpunit/phpunit": "^9.3.3"
     },
-    "config": {
+    "config":
+    {
         "optimize-autoloader": true,
         "preferred-install": "dist",
         "sort-packages": true
     },
-    "extra": {
-        "laravel": {
+    "extra":
+    {
+        "laravel":
+        {
             "dont-discover": []
         }
     },
-    "autoload": {
-        "psr-4": {
+    "autoload":
+    {
+        "psr-4":
+        {
             "App\\": "app/",
             "Database\\Factories\\": "database/factories/",
-            "Database\\Seeders\\": "database/seeders/"
+            "Database\\Seeders\\": "database/seeders/",
+            "Modules\\": "app/Modules/"
         }
     },
-    "autoload-dev": {
-        "psr-4": {
+    "autoload-dev":
+    {
+        "psr-4":
+        {
             "Tests\\": "tests/"
         }
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
-    "scripts": {
+    "scripts":
+    {
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
             "@php artisan package:discover --ansi"

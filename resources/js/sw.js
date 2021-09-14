@@ -1,22 +1,32 @@
 'use strict';
 
 // DXLAB: Update cache names any time any of the cached files change.
-const CACHE_NAME = 'static-cache-v1.01';
+const CACHE_NAME = 'static-cache-v1.02';
 
 // DXLAB: Add list of files to cache here.
-const FILES_TO_CACHE = ['/', '/js/work.js', '/css/app.css'];
+const FILES_TO_CACHE = [
+    '/',
+    '/js/work.js',
+    '/css/app.css'
+];
+const FILES_NOT_CACHE = [
+    '/token',
+    '/css/app.css',
+    '/js/work.js',
+    '/api/v1/hdbh',
+];
 
 self.addEventListener('install', (event) => {
     // console.log("[Service Worker] Installing Service Worker ", event);
     // DXLAB: Precache static resources here.
-    event.waitUntil(
-        caches.open(CACHE_NAME).then((cache) => {
-            // console.log("[Service Worker] Pre-caching page");
-            return cache.addAll(FILES_TO_CACHE);
-        })
-    );
+    // event.waitUntil(
+    //     caches.open(CACHE_NAME).then((cache) => {
+    //         // console.log("[Service Worker] Pre-caching page");
+    //         return cache.addAll(FILES_TO_CACHE);
+    //     })
+    // );
 
-    // event.waitUntil(self.skipWaiting());
+    event.waitUntil(self.skipWaiting());
 });
 
 self.addEventListener('activate', (event) => {
@@ -26,13 +36,11 @@ self.addEventListener('activate', (event) => {
         caches.keys().then((keyLst) => {
             return Promise.all(
                 keyLst
-                    .filter((key) => {
-                        return key !== CACHE_NAME;
-                    })
-                    .map((key) => {
-                        // console.log("[Service Worker] Removing old cache", key);
-                        return caches.delete(key);
-                    })
+                .filter(key => key !== CACHE_NAME)
+                .map((key) => {
+                    // console.log("[Service Worker] Removing old cache", key);
+                    return caches.delete(key);
+                })
             );
         })
     );
@@ -41,42 +49,78 @@ self.addEventListener('activate', (event) => {
 });
 
 self.addEventListener('fetch', (event) => {
-    // This fixes a weird bug in Chrome when you open the Developer Tools
     if (event.request.cache === 'only-if-cached' && event.request.mode !== 'same-origin') {
         return;
     }
 
     if (new URL(event.request.url).hostname !== 'work.diepxuan.com') {
-        event.respondWith(fetch(event.request));
+        event.respondWith(fetch(event.request).catch((err) => {}));
         return;
     }
 
     // DXLAB: Add fetch event handler here.
+    if (FILES_NOT_CACHE.includes(new URL(event.request.url).pathname)) {
+        event.respondWith(fetch(event.request));
+        return;
+    }
 
-    //DXLAB: cache first
+
+    // DXLAB: cache first
     // event.respondWith(
-    //     caches.match(event.request).then(function (response) {
-    //         return response || fetch(event.request);
+    //     caches.open(CACHE_NAME).then((cache) => {
+    //         return cache.match(event.request).then((response) => {
+    //             return response || fetch(event.request).then((response) => {
+    //                 if (!response || response.status !== 200 || response.type !== 'basic') {
+    //                     return response;
+    //                 }
+
+    //                 if (FILES_NOT_CACHE.includes(new URL(event.request.url).pathname)) {
+    //                     return response;
+    //                 }
+    //                 // [1, 2, 3].includes(2);
+
+    //                 cache.put(event.request, response.clone());
+    //                 return response;
+    //             });
+    //         });
+    //     })
+    // );
+    // event.respondWith(
+    //     caches.open(CACHE_NAME).then((cache) => {
+    //         return cache.match(event.request).then((response) => {
+    //             return response;
+    //         });
     //     })
     // );
 
-    // DXLAB: request first
     event.respondWith(
-        fetch(event.request)
-            .then((response) => {
-                caches.open(CACHE_NAME).then((cache) => {
-                    console.log('[Service Worker] Pre-caching', new URL(event.request.url).pathname);
-                    return cache.add(new URL(event.request.url).pathname);
-                });
-                return response;
-            })
-            .catch(() => {
-                return caches.open(CACHE_NAME).then((cache) => {
-                    return cache.match(event.request).then((response) => {
-                        console.log('[Service Worker] Load from cache ', event.request.url);
+        caches.open(CACHE_NAME).then(function(cache) {
+            return cache.match(event.request).then(function(response) {
+                return response || fetch(event.request).then((response) => {
+                    if (!response || response.status !== 200 || response.type !== 'basic') {
                         return response;
-                    });
+                    }
+
+                    cache.put(event.request, response.clone());
+                    return response;
                 });
-            })
+            });
+        })
     );
+
+    // DXLAB: request first
+    // event.respondWith(
+    //     caches.open(CACHE_NAME).then(function(cache) {
+    //         return fetch(event.request).then(function(response) {
+    //                 cache.put(event.request, response.clone());
+    //                 return response;
+    //             })
+    //             .catch(() => {
+    //                 return cache.match(event.request).then((response) => {
+    //                     return response;
+    //                 });
+    //             });
+    //     })
+    // );
+
 });

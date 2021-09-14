@@ -27,14 +27,14 @@ function forEach(collection, callback, scope) {
  */
 if (!Object.prototype.forEach) {
     Object.defineProperty(Object.prototype, "forEach", {
-        value: function (callback, thisArg) {
+        value: function(callback, thisArg) {
             if (this == null) {
                 throw new TypeError("Not an object");
             }
             thisArg = thisArg || window;
             for (var key in this) {
                 if (this.hasOwnProperty(key)) {
-                    callback.call(thisArg, this[key], key, this);
+                    this[key] = callback.call(thisArg, this[key], key, this);
                 }
             }
         },
@@ -44,7 +44,7 @@ if (!Object.prototype.forEach) {
 // Production steps of ECMA-262, Edition 5, 15.4.4.19
 // Reference: https://es5.github.io/#x15.4.4.19
 if (!Array.prototype.map) {
-    Array.prototype.map = function (callback /*, thisArg*/) {
+    Array.prototype.map = function(callback /*, thisArg*/ ) {
         var T, A, k;
 
         if (this == null) {
@@ -125,4 +125,23 @@ if (!Array.prototype.map) {
         // 9. return A
         return A;
     };
+}
+
+if (!String.prototype.trimRight) {
+    String.prototype.trimRight = function(charlist) {
+        if (charlist === undefined)
+            charlist = "\s";
+
+        return this.replace(new RegExp("[" + charlist + "]+$"), "");
+    };
+}
+
+if (!Array.prototype.sum) {
+    Array.prototype.sum = function(prop) {
+        var total = 0;
+        for (var i = 0, _len = this.length; i < _len; i++) {
+            total += this[i][prop];
+        }
+        return total;
+    }
 }

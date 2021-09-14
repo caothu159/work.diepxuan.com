@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright © DiepXuan, Ltd. All rights reserved.
  */
@@ -21,9 +22,6 @@ class Controller extends BaseController
      */
     public function isAdmin()
     {
-        return auth()->check() &&
-            auth()
-                ->user()
-                ->isAdmin();
+        return auth()->check() && auth()->user()->isAdmin();
     }
 }

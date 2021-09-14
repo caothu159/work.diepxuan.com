@@ -21,7 +21,7 @@ function getForecastFromCache(coords) {
             return null;
         })
         .catch((err) => {
-            console.error('Error getting data from cache', err);
+            // console.error('Error getting data from cache', err);
             return null;
         });
 }
@@ -35,15 +35,15 @@ window.addEventListener('load', () => {
 
     if ('serviceWorker' in navigator) {
         navigator.serviceWorker
-            .register(`${baseUrl}sw.js`)
+            .register(`${baseUrl}sw.js`, { scope: '/' })
             .then((registration) => {
                 // Registration was successful
-                console.log('ServiceWorker registration successful with scope: ', registration.scope);
+                // console.log('ServiceWorker registration successful with scope: ', registration.scope);
                 registration.update();
             })
             .catch((err) => {
                 // registration failed :(
-                console.log('ServiceWorker registration failed: ', err);
+                // console.log('ServiceWorker registration failed: ', err);
             });
     }
 });

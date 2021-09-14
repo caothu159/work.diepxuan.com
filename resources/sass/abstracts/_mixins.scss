@@ -1,35 +1,40 @@
 @import "~bootstrap/scss/mixins";
 
 @mixin navbar-sidebar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: $zindex-fixed;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: $zindex-fixed;
 
-  @include media-breakpoint-up($navbar-sidebar-breakpoint) {
-    bottom: 0;
-    width: $navbar-sidebar-width;
-    flex-flow: column nowrap;
-    align-items: flex-start;
+    @include media-breakpoint-up($navbar-sidebar-breakpoint) {
+        bottom: 0;
+        width: $navbar-sidebar-width;
+        flex-flow: column nowrap;
+        align-items: flex-start;
 
-    .navbar-collapse {
-      flex-grow: 0;
-      flex-direction: column;
-      width: 100%;
+        .navbar-collapse {
+            flex-grow: 0;
+            flex-direction: column;
+            width: 100%;
 
-      .navbar-nav {
-        flex-direction: column;
-        width: 100%;
+            .navbar-nav {
+                flex-direction: column;
+                width: 100%;
 
-        .nav-item {
-          width: 100%;
+                .nav-item {
+                    width: 100%;
 
-          .dropdown-menu {
-            top: 0;
-          }
+                    .dropdown-menu {
+                        top: 0;
+                    }
+                }
+            }
         }
-      }
     }
-  }
+}
+
+@mixin v-space {
+    border-top: 10px solid rgb(227, 242, 253);
+    box-shadow: 0px 0px 10px 1px rgba(0, 0, 0, 0.25) inset;
 }
